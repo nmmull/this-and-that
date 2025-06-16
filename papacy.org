@@ -46,15 +46,15 @@ Take, for example, this argument:
 am the Pope./
 #+end_quote
 
-This argument clearly lacks the disarming wit of the Russell's
-argument and is unlikely to persuade an individual who /doubts/ the
-principle in the first place, but it does beg the question: what did
-Russell accomplish with his argument over this one? He avoids
-referring to the principle of explosion directly, but to what end? Is
-he making a claim about [[https://en.wikipedia.org/wiki/Paraconsistent_logic][paraconsistent]] or [[https://en.wikipedia.org/wiki/Minimal_logic][minimal]] logic?  Is he
-attempting to demonstrate the naturalness of the principle (perhaps by
-obfuscating its use)?[fn::It goes without saying (but I'll say it
-anyway) that he's doing none of these things, it's just a quip.]
+It clearly lacks the disarming wit of the Russell's argument and is
+unlikely to persuade an individual who /doubts/ the principle in the
+first place, but it does beg the question: what did Russell accomplish
+with his argument over this one? He avoids referring to the principle
+of explosion directly, but to what end? Is he making a claim about
+[[https://en.wikipedia.org/wiki/Paraconsistent_logic][paraconsistent]] or [[https://en.wikipedia.org/wiki/Minimal_logic][minimal]] logic?  Is he attempting to demonstrate the
+naturalness of the principle (perhaps by obfuscating its use)?[fn::It
+goes without saying (but I'll say it anyway) that he's doing none of
+these things, it's just a quip.]
 
 In order to analyze this simple theorem to death, I'll consider
 several formalizations of it in [[https://docs.racket-lang.org/pie/index.html][Pie]], a dependently typed programming
