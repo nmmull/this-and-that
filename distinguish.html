@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-06-15 Sun 15:30 -->
+<!-- 2025-06-16 Mon 11:18 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Distinguishers and Explosives</title>
@@ -18,18 +18,18 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org68253b4">Absurdity</a></li>
-<li><a href="#org821c3e8">Congruence</a></li>
-<li><a href="#org63dbe2b">Explosiveness</a></li>
-<li><a href="#org5ce1fc0">Intermission</a></li>
-<li><a href="#orgf112fe1">Vectors</a></li>
-<li><a href="#org41ef70a">Lists</a></li>
-<li><a href="#org477a9f2">Finite Sets</a></li>
+<li><a href="#orgb80a018">Absurdity</a></li>
+<li><a href="#org8c3871c">Congruence</a></li>
+<li><a href="#org4d96719">Explosiveness</a></li>
+<li><a href="#org9b6c048">Intermission</a></li>
+<li><a href="#orgca21671">Vectors</a></li>
+<li><a href="#org86dacc9">Lists</a></li>
+<li><a href="#org62a3079">Finite Sets</a></li>
 </ul>
 </div>
 </div>
 <p>
-<i><b>Abstract.</b> TODO</i>
+<i><b>Abstract.</b> TODO</i> Testing
 </p>
 
 <p>
@@ -84,7 +84,21 @@ that anything follows from it within the minimal fragment of Pie.
 <p>
 This means that we can do away with <code>Absurd</code> all together and instead
 use <code>(= Nat 0 1)</code>.  This is a standard result of constructive
-mathematics, e.g., see Proposition TODO in TODO
+mathematics, e.g., see Proposition TODO in TODO.
+</p>
+
+<p>
+This result genearlizes easily to any equality of unequal natural numbers:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">
+</pre>
+</div>
+
+<p>
+This leads naturally
+to the primary question of this piece: /what other types admit
 </p>
 
 <p>
@@ -177,9 +191,9 @@ Pie.  I realize this severely limits the scope of this piece, but also
 I don't really care (sorry). That said, please read The Little Typer!
 It's great!
 </p>
-<div id="outline-container-org68253b4" class="outline-2">
-<h2 id="org68253b4">Absurdity</h2>
-<div class="outline-text-2" id="text-org68253b4">
+<div id="outline-container-orgb80a018" class="outline-2">
+<h2 id="orgb80a018">Absurdity</h2>
+<div class="outline-text-2" id="text-orgb80a018">
 <p>
 The principle of explosion appears in Pie as <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Absurd%29%29"><code>ind-Absurd</code></a>, the
 induction principle for <a href="https://docs.racket-lang.org/pie/index.html#%28part._.Absurd%29"><code>Absurd</code></a> (i.e., the empty type).  We can use
@@ -238,9 +252,9 @@ is the simplest proof of Russell's papacy without any uses of
 </p>
 </div>
 </div>
-<div id="outline-container-org821c3e8" class="outline-2">
-<h2 id="org821c3e8">Congruence</h2>
-<div class="outline-text-2" id="text-org821c3e8">
+<div id="outline-container-org8c3871c" class="outline-2">
+<h2 id="org8c3871c">Congruence</h2>
+<div class="outline-text-2" id="text-org8c3871c">
 <p>
 One crucial feature of natural numbers that they have a distinguished
 element: 0. This number is more than just distinguished (it's the
@@ -376,9 +390,9 @@ from Pie altogether and used <code>(= Nat 0 1)</code> instead.<sup><a id="fnr.8"
 </p>
 </div>
 </div>
-<div id="outline-container-org63dbe2b" class="outline-2">
-<h2 id="org63dbe2b">Explosiveness</h2>
-<div class="outline-text-2" id="text-org63dbe2b">
+<div id="outline-container-org4d96719" class="outline-2">
+<h2 id="org4d96719">Explosiveness</h2>
+<div class="outline-text-2" id="text-org4d96719">
 <p>
 The first thing to observe is just how lucky Russell was in the choice
 of contradiction from which he needed to prove his papacy. It just so
@@ -467,9 +481,9 @@ to the principle of explosion.<sup><a id="fnr.9" class="footref" href="#fn.9" ro
 </p>
 </div>
 </div>
-<div id="outline-container-org5ce1fc0" class="outline-2">
-<h2 id="org5ce1fc0">Intermission</h2>
-<div class="outline-text-2" id="text-org5ce1fc0">
+<div id="outline-container-org9b6c048" class="outline-2">
+<h2 id="org9b6c048">Intermission</h2>
+<div class="outline-text-2" id="text-org9b6c048">
 <p>
 Before continuing, let's take stock.  What was Russell supposed to
 accomplish with his argument? I've presented things up to now as
@@ -497,9 +511,9 @@ depends on a loose interpretation of Russell's meaning of "set."
 </p>
 </div>
 </div>
-<div id="outline-container-orgf112fe1" class="outline-2">
-<h2 id="orgf112fe1">Vectors</h2>
-<div class="outline-text-2" id="text-orgf112fe1">
+<div id="outline-container-orgca21671" class="outline-2">
+<h2 id="orgca21671">Vectors</h2>
+<div class="outline-text-2" id="text-orgca21671">
 <p>
 We begin by putting me and the Pope into a 2-element vector:
 </p>
@@ -627,9 +641,9 @@ But there is a <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%
 </p>
 </div>
 </div>
-<div id="outline-container-org41ef70a" class="outline-2">
-<h2 id="org41ef70a">Lists</h2>
-<div class="outline-text-2" id="text-org41ef70a">
+<div id="outline-container-org86dacc9" class="outline-2">
+<h2 id="org86dacc9">Lists</h2>
+<div class="outline-text-2" id="text-org86dacc9">
 <p>
 Round 2: we begin by putting me and the pope into a 2-element <i>list</i>:
 </p>
@@ -839,9 +853,9 @@ And look! The "add 1 to both sides" part is there!
 </p>
 </div>
 </div>
-<div id="outline-container-org477a9f2" class="outline-2">
-<h2 id="org477a9f2">Finite Sets</h2>
-<div class="outline-text-2" id="text-org477a9f2">
+<div id="outline-container-org62a3079" class="outline-2">
+<h2 id="org62a3079">Finite Sets</h2>
+<div class="outline-text-2" id="text-org62a3079">
 <p>
 What remains is an exercise in taking things too far.  Everything
 above is all fine and good, but the maximalist in me wants to say: but
