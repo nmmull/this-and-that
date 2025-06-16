@@ -1,6 +1,8 @@
 #+TITLE: This ∧ That
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
 #+OPTIONS: html-style:nil H:1 toc:nil num:nil
-Welcome to the weigh station of my half-baked ideas (i.e., [[https://nmmull.github.io][my]] blog).
+This is a weigh station for [[https://nmmull.github.io][my]] half-baked ideas.  Hope you like
+endless parentheticals, unnecessary footnotes, and bad jokes (oh, and
+I guess logic, type theory, computation, etc.).
 * 2025
 ** [[file:papacy.org][On the Papacy of Bertrand Russell]]

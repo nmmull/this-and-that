@@ -1,32 +1,85 @@
-#+TITLE: On the Papacy of Bertrand Russell
+#+TITLE: Distinguishers and Explosives
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
 #+OPTIONS: html-style:nil H:1 num:nil
 #+HTML_LINK_HOME: index.html
 
+/*Abstract.* TODO/
 
-/*Abstract.* I present several Pie formalizations of the claim:/
+I recently spent an unreasonable amount of time thinking about Pie
+formalizations of the following theorem:
 
 #+begin_quote
 /1 = 0 implies I am the Pope./
 #+end_quote
 
-/Some formalizations capture Bertrand Russell's original argument with
-high fidelity, and others are quite different (and in some regards
-simpler). The goal is to highlight the implicit assumptions of the
-various proofs, in particular with respect to explicit invocations of
-the principle of explosion.  This piece is based on an email
+I was interested primarily in proofs that could be carried out in the
+minimal fragment of Pie, i.e., without the use of ~ind-Absurd~.
+
+We begin with a basic observation: 1 = 0 is /explosive/ in the sense
+that anything follows from it within the minimal fragment of Pie.
+
+#+begin_src lisp
+  (claim Not (-> U U))
+  (define Not (lambda (A) (-> A Absurd)))
+
+  (claim <> (Pi ((A U)) (-> A A U)))
+  (define <> (lambda (A x y) (Not (= A x y))))
+
+  (claim explode-1=0
+    (Pi ((A U)) (-> (= Nat 1 0) A)))
+  (define explode-1=0
+    (lambda (A 1=0)
+      (replace
+        ; target
+        1=0
+        ; motive
+        (lambda (a)
+          (which-Nat
+            ; target
+            a
+            ; base
+            A
+            ; step
+            (lambda (_) Trivial)))
+        ; base
+        sole)))
+#+end_src
+
+This means that we can do away with ~Absurd~ all together and instead
+use ~(= Nat 0 1)~.  This is a standard result of constructive
+mathematics, e.g., see Proposition TODO in TODO.
+
+This result genearlizes easily to any equality of unequal natural numbers:
+
+#+begin_src lisp
+#+end_src
+
+This leads naturally
+to the primary question of this piece: /what other types admit
+
+/*Abstract.* I present several Pie formalizations of the theorem:/
+
+#+begin_quote
+
+#+end_quote
+
+/This includes formalizations which capture Russell's argument with
+fairly high fidelity, and others which are quite different and in some
+senses simpler. The goal is to highlight the implicit assumptions of
+the various proofs, in particular with respect to explicit invocations
+of the principle of explosion.  This piece is based on an email
 conversation with [[https://people.cs.uchicago.edu/~stuart/][Stuart Kurtz]] and [[https://people.cs.uchicago.edu/~caldwellb/][Ben Caldwell]], who I consider to be
 co-authors but without the responsibility of answering for my mistakes
 or agreeing with my opinions./
 
 
 Bertrand Russull is said to have proved that he was the Pope given
-that 1 = 0 in order to demonstrate the [[https://en.wikipedia.org/wiki/Principle_of_explosion][principle of explosion]]
-a.k.a. /ex falso quodlibet/.[fn::The exact source of this story seems
-to be lost.  An [[https://www.reddit.com/r/math/comments/814cpi/bertrand_russell_is_the_pope/][old reddit post]] claims it's in the introduction to the
-second edition of Russell's Principles of Mathematics, but unless I
-have a false copy, this is not the case.]  This principle states that
-any proposition follows from a contradiction.  The argument in it's
+that 1 = 0 in order to demonstrate the [[https://en.wikipedia.org/wiki/Principle_of_explosion][principle of explosion]] or /ex
+falso quodlibet/.[fn::The exact source of this story seems to be lost.
+An [[https://www.reddit.com/r/math/comments/814cpi/bertrand_russell_is_the_pope/][old reddit post]] claims it's in the introduction to the second
+edition of Russell's Principles of Mathematics, but unless I have a
+false copy, this is not the case.]  This principle states that any
+proposition follows from a contradiction.  The argument in it's
 [[https://www.nku.edu/~longa/classes/mat385_resources/docs/russellpope.html][currently most cited form]] goes:
 
 #+begin_quote
@@ -35,7 +88,7 @@ containing just me and the Pope has 2 members. But 2 = 1, so it has
 only 1 member; therefore, I am the Pope./
 #+end_quote
 
-It's a clever argument, but is often presented aphoristically, leaving
+It's a charming story, but is often presented aphoristically, leaving
 just enough room for a chuckle, but not enough for rigorous analysis.
 The purpose of this piece is to make some room.
 
@@ -49,29 +102,29 @@ am the Pope./
 This argument clearly lacks the disarming wit of the Russell's
 argument and is unlikely to persuade an individual who /doubts/ the
 principle in the first place, but it does beg the question: what did
-Russell accomplish with his argument over this one? He avoids
+Russell accomplish with his argument over this one? Yes, he avoids
 referring to the principle of explosion directly, but to what end? Is
 he making a claim about [[https://en.wikipedia.org/wiki/Paraconsistent_logic][paraconsistent]] or [[https://en.wikipedia.org/wiki/Minimal_logic][minimal]] logic?  Is he
 attempting to demonstrate the naturalness of the principle (perhaps by
 obfuscating its use)?[fn::It goes without saying (but I'll say it
-anyway) that he's doing none of these things, it's just a quip.]
+anyway) that he's doing none of these things, it's just a clever
+quip.]
 
 In order to analyze this simple theorem to death, I'll consider
-several formalizations of it in [[https://docs.racket-lang.org/pie/index.html][Pie]], a dependently typed programming
-language created for the book [[https://thelittletyper.com][The Little Typer]] (which I recommend to
-anyone interested in learning about dependent type theory).  The
-motivation for this is threefold.
+several formalizations of it in [[https://docs.racket-lang.org/pie/index.html][Pie]], a pedagogical dependently typed
+programming language created for the book [[https://thelittletyper.com][The Little Typer]] (which I
+recommend to anyone interested in learning about dependent type
+theory).  The motivation for this is threefold.
 
-1. The Little Typer is used at UChicago by [[https://people.cs.uchicago.edu/~stuart/][Stuart Kurtz]] in his course
-   on type theory, and I'd like this piece to be approachable to
-   anyone who's taken the course (and is willing to do a bit of
-   keyboard head-banging).
-2. Pie is very explicit. This makes is easier (for me) to ensure I
-   haven't done anything sneaky.[fn::Dependent pattern matching and
-   implicit arguments are beautiful features, but using them sometimes
-   feels like a riding finely-tuned motorcycle (not that I'd actually
-   know, but I think the analogy stands). Pie is the steel frame bike
-   you had in college, clunky and simple and gets the job done.]
+1. The Little Typer is used at UChicago by [[https://people.cs.uchicago.edu/~stuart/][Stuart Kurtz]] in his course on
+   type theory, and I'd this piece to be approachable to anyone who's
+   taken the course (and is willing to do a bit of keyboard
+   head-banging).
+2. Pie is incredibly explicit. This makes is easier (for me) to ensure
+   I haven't done anything sneaky.[fn::Dependent pattern matching is
+   beautiful, but sometimes feels like a finely tuned motorcycle. Pie
+   is the steel frame bike you had in college, clunky and simple and
+   gets the job done.]
 3. I like it.
 
 *Disclaimer:* This is /not/ a tutorial on dependent type theory or
@@ -86,17 +139,15 @@ induction principle for [[https://docs.racket-lang.org/pie/index.html#%28part._.
 this to formalize the second, less witty argument above given a proof
 that 1 is, in fact, not equal to 0.[fn:: A version of ~1<>0~ is given
 in The Little Typer.]  In what follows, I use atoms to represent me
-and the Pope.[fn::It's fair to question this choice. That said, using
-atoms has some nice properties. For one, it allows me to avoid
-postulating a ~Person~ type.  It would have also been possible to use
-a different type as a proxy for ~Person~, e.g. ~Nat~, but ~Atom~ is a
-nice because it doesn't admit decidable equality, so using it makes
-fewer philosophical assumptions about the nature of personhood.]  Also
-note the standard encoding of negation as implication of absurdity.
+and the Pope.[fn::It's fair to question choice. That said, using atoms
+has some nice properties. For one, it allows me to avoid postulating a
+~Person~ type.  It would have also been possible to use a different
+type as a proxy for ~Person~, e.g. ~Nat~, but ~Atom~ is a nice because
+it doesn't admit decidable equality, so using it makes fewer
+philosophical assumptions about the nature of personhood.]  Also note
+the standard encoding of negation as implication of absurdity.
 
 #+begin_src lisp
-  # lang pie
-
   (claim Not (-> U U))
   (define Not (lambda (A) (-> A Absurd)))
 
@@ -136,16 +187,16 @@ There's nothing wrong with this proof mathematically speaking; the
 principle of explosion is an axiom in most standard logical
 systems.[fn::That is, excluding paraconsistent and minimal systems.]
 But it's not the proof that Russell gave.  He chooses to bring in some
-pretty heavy artillery: sets.[fn::To call this heavy artillery is
-somewhat anachronistic.  At the time, set theory was a fairly
-lightweight mathematical foundations, and it would be several decades
-before we feel comfortable leaving the "paradise" of set theory (to
-quote Hilbert) and spend more time in the "playgrounds" of weaker
-foundational systems (to quote Shore).  It's also a bit unfair: set
-theory is only heavy if you're not already doing set theory, e.g., if
-you're doing type theory.  But no matter, we forge ahead.]  We'll come
-back to this. But before formalizing Russell's argument, an interlude
-on what I believe is the simplest papacy proof that doesn't use
+pretty heavy artillery: sets.[fn::To call this heavy artillery may be
+anachronistic.  At the time, set theory was a fairly lightweight
+mathematical foundations, and it several decade before we would leave
+the "paradise" of set theory (to quote Hilbert) and spend more time in
+the "playgrounds" of weaker foundational systems (to quote Shore).
+It's also a bit unfair: set theory is only heavy if you're not already
+doing set theory, e.g., if you're doing type theory.  But no matter,
+we forge ahead.]  We'll come back to this. But before attempting to
+directly formalize Russell's argument, an interlude on what I believe
+is the simplest proof of Russell's papacy without any uses of
 ~ind-Absurd~.
 
 * Congruence
@@ -154,24 +205,24 @@ One crucial feature of natural numbers that they have a distinguished
 element: 0. This number is more than just distinguished (it's the
 smallest with respect to the standard ordering, it's an additive
 identity and a multiplicative annihilator) but at the moment it's
-distinguished status is all we need.  We can easily determine if any
-number is or is not 0.  In Pie, this is witnessed by a simplified
-recursor (already featured above) called [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._which-.Nat%29%29][~which-Nat~]], with which we
-can make values (and types!) that depend on whether or not a given
-number is 0.
+distinguished status is all I care to note about it.  We can easily
+determine if any number is or is not 0.  In Pie, this is witnessed by
+a simplified recursor (already featured above) called [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._which-.Nat%29%29][~which-Nat~]],
+with which we can make values (and types!) that depend on whether or
+not a given number is 0.
 
-Consider this simple (though still less clever) papacy proof:
+Consider this simple (though still less clever) papacy argument:
 
 #+begin_quote
 /Suppose we give the Pope a sticker with the number 0 on it, and give
 all other persons a sticker with the number 1 on it.  It follows that
-if a person has a 0 sticker, then they are the Pope.  Since 1 = 0, I
-have a 0 sticker, so I am the Pope./
+if a person has the 0 sticker, then they are the Pope.  Since 1 = 0, I
+have the 0 sticker, so I am the Pope./
 #+end_quote
 
 In fact, everyone is the pope (that's kind of the point).  This
-argument can be formalized in Pie with [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._cong%29%29][~cong~]], which allows us to
-prove f(x) = f(y) given x = y.
+argument can be formalized in Pie with the [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._cong%29%29][~cong~]] constructor, which
+allows us to prove that f(x) = f(y) given x = y and a function f.
 
 #+begin_src lisp
   (claim 1=0-implies-i-am-the-pope-1
@@ -229,14 +280,13 @@ nothing!
       (1=0-implies-any-equality Atom 'me 'pope 1=0)))
 #+end_src
 
-But wait, there's more! With a little more finesse we can derive
-/anything/ from 1 = 0. Rather than using congruence, we can use
-[[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._replace%29%29][~replace~]], which for any predicate[fn::Note that Pie uses the term
-/motive/ for a predicate used in an induction principle.]  P and
-equality x = y, allows us to /prove/ P(x) and /conclude/ P(y).
-Because 0 is a distinguished number, we can design a predicate P such
-that P(1) easy to prove (e.g., [[https://docs.racket-lang.org/pie/index.html#%28part._.Trivial%29][~Trivial~]]) and P(0) is anything we
-want.
+But wait, there's more! With a bit more trickery (of the same form as
+what is used in the proof of ~1<>0~) we can derive /anything/ from 1
+= 0. Rather than using congruence, we can use [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._replace%29%29][~replace~]], which for any
+predicate P and equality x = y, allows us to proof P(x) and conclude
+P(y).  Because 0 is a distinguished number, we can design a predicate
+P such that P(1) easy to prove (e.g., [[https://docs.racket-lang.org/pie/index.html#%28part._.Trivial%29][~Trivial~]]) and P(0) is /anything
+we want/.
 
 #+begin_src lisp
   (claim explode-1=0
@@ -264,15 +314,15 @@ want.
     (explode-1=0 (= Atom 'me 'pope)))
 #+end_src
 
-In other words, the claim 1 = 0 is /explosive/.  In fact, we could
-/define/ ~Absurd~ using the type ~(= Nat 0 1)~, i.e., we could do away
-with ~Absurd~ altogether and used ~(= Nat 0 1)~ instead.[fn::This is a
-standard fact of constructive mathematics.  See, e.g., Proposition 3.2
+In other words, the claim 1 = 0 is /explosive/.  We can even define
+~Absurd~ using the type ~(= Nat 0 1)~, i.e., we could remove ~Absurd~
+from Pie altogether and used ~(= Nat 0 1)~ instead.[fn::This is a
+standard fact of constructive mathematics, e.g., see Proposition 3.2
 of Constructivism in Mathematics by Troelstra and van Dalen.  I most
-recently came across this argument in a [[https://github.com/lawrencecpaulson/lawrencecpaulson.github.io/issues/43#issuecomment-1944264835][comment]] by [[https://hermesmarc.github.io][Marc Hermes]] on a
-[[https://lawrencecpaulson.github.io/2024/02/14/Contradiction.html][blog post]] by [[https://www.cl.cam.ac.uk/~lp15/][Lawrence C. Paulson]] on the same topic as this one.]
+recently came across in a [[https://github.com/lawrencecpaulson/lawrencecpaulson.github.io/issues/43#issuecomment-1944264835][comment]] by [[https://hermesmarc.github.io][Marc Hermes]] on a [[https://lawrencecpaulson.github.io/2024/02/14/Contradiction.html][blog post]] by
+[[https://www.cl.cam.ac.uk/~lp15/][Lawrence C. Paulson]] on the same topic as this one.]
 
-* Explosives
+* Explosiveness
 
 The first thing to observe is just how lucky Russell was in the choice
 of contradiction from which he needed to prove his papacy. It just so
@@ -281,91 +331,94 @@ fair amount power to come up with a proof.  We can even re-imagine
 Russell's argument as a sort of magic trick:
 
 #+begin_quote
-/Here I have here an ordinary sheet of paper. On one side I've written
-the number 1, and on the other the number 0.  May I have a volunteer
-write a proposition on the side with 0?/
+/Here I have here an ordinary sheet of paper. One side has written on
+it the number 1 and the other side the number 0.  May I have a
+volunteer write a proposition on the side with 0?/
 
 /Ah, "Bertrand Russell is the Pope", very good./
 
 /I will now, before your very eyes, prove to you that I am the Pope
-assuming that 1 = 0.  I begin by writing on my sheet of paper, the
-side with the number 1: "My name is Bertrand Russell."  We all accept
-this to be true, yes?  Then it is certainly the case that the side
-with 1 has written on it a true fact, yes? Very good. Now, suppose 1
-= 0.  Then you must confess that the side with 0 has written on it a
-true fact! For, 1 or 0, what difference does it make if they are
-equal? But that true fact is ... Presto! I am the Pope!/
+assuming that 1 = 0.  I begin by writing on the opposite side of my
+sheet of paper, the side with the number 1: "My name is Bertrand
+Russell."  We all accept this to be true, yes?  Then it is certainly
+the case that the side with 1 has written on it a true fact, yes? Very
+good. Now, suppose 1 = 0.  Then you must confess that the side with 0
+has written on it a true fact! For if it has a 1 or a 0, what
+difference does it make if they are equal? But that true fact is
+... Presto! "Bertrand Russell is the Pope!"/
 
 #+end_quote
 
 In the presence of the principle of explosion, everything provably
 false is explosive, and this can be witnessed within Pie (without
-using ~ind-Absurd~).  In fact, that everything provably false is
-explosive is /equivalent/ to the principle of explosion.
+using ~ind-Absurd~).  We could even replace the principle of explosion
+with this negation-elimination-like rule, they're logically equivalent
+(again, within Pie without ~ind-Absurd~).
 
 #+begin_src lisp
-  (claim ind-absurd-implies-explode
-    (-> (Pi ((A U)) (-> Absurd A))
-      (Pi ((A U)) (-> (Not A) (Pi ((B U)) (-> A B))))))
-  (define ind-absurd-implies-explode
-    (lambda (ind-absurd A not-a B a)
-      (ind-absurd B (not-a a))))
-
   (claim explode-implies-ind-absurd
     (-> (Pi ((A U)) (-> (Not A) (Pi ((B U)) (-> A B))))
       (Pi ((A U)) (-> Absurd A))))
   (define explode-implies-ind-absurd
     (lambda (explode A)
       (explode Absurd (lambda (x) x) A)))
+
+  (claim ind-absurd-implies-explode
+    (-> (Pi ((A U)) (-> Absurd A))
+      (Pi ((A U)) (-> (Not A) (Pi ((B U)) (-> A B))))))
+  (define ind-absurd-implies-explode
+    (lambda (ind-absurd A not-a B a)
+      (ind-absurd B (not-a a))))
 #+end_src
 
 
 
-But what we're saying about 1 = 0 is stronger than this: let's say
-that a type ~A~ is *truly explosive* if we can derive anything from
-~A~ without ~ind-Absurd~.  Any equality between unequal natural
-numbers is truly explosive. So is ~(Pi ((A U)) A)~ (which expresses
-that everything is true).
+But what we're saying about 1 = 0 is actually stronger than this:
+let's say that a type ~A~ is *truly explosive* if we can derive
+anything from ~A~ without ~ind-Absurd~.  Any equality between
+unequal natural numbers is truly explosive, as well as the other
+standard definition of ~Absurd~ of the form ~(Pi ((A U)) A)~, which
+simply expresses that everything is true.
 
 There are also many claims which are provably false and not truly
-explosive, e.g., ~Pair Absurd Absurd~ and ~Either Absurd (= Nat 13
-5)~.  Also, just ~Absurd~.  Imagine if Russell's interlocutor in the
-original story had said:
+explosive, e.g., ~Pair Absurd Absurd~ and just ~Absurd~.  Imagine if
+Russell's interlocutor, in the original story, had said:
 
 #+begin_quote
   /You're telling me that anything follows from a contradiction? Well
   then, prove that you're the Pope from the false proposition!/
 #+end_quote
 
-I'm sure Russull would come up with a more intelligent response than I
+I'm sure Russull would formulate a more intelligent response than I
 could, but he couldn't succeed in proving his papacy without appealing
 to the principle of explosion.[fn::There's much more to say about
 this. For example, it's outside the scope of this piece to prove that
-the principle of explosion isn't a theorem in Pie without
+the principle of explosion is not a theorem in Pie without
 ~ind-Absurd~. There are also some interesting semi-classical
 principles that arise from looking more carefully at the notion of
-explosion.  I may come back to these questions in another piece.]
+explosion.  I may come back to these questions, but for now we move on.]
 
 * Intermission
 
-Let's take stock.  What was Russell supposed to accomplish with his
-argument? I've presented things up to now as though our imagined
-interlocutor /doubted/ the principle of explosion.  We've shown that
-we can use a form of explosion to prove Russell's papacy without
-appealing to the principle proper.
+Before continuing, let's take stock.  What was Russell supposed to
+accomplish with his argument? I've presented things up to now as
+though our imagined interlocutor /doubted/ the principle of explosion.
+We've shown that we can use a form of explosion to prove Russell's
+papacy without appealing to the principle proper.
 
 But perhaps our imagined interlocutor was just challenging the
-naturalness of the principle. Maybe they didn't doubt the principle
-/per se/ but wanted a demonstration of its use in "normal" discourse.
+naturalness of the principle. Maybe they didn't doubt the principle,
+per se, but wanted a demonstration of its use in "normal" discourse.
 In this sense, the use of ~explode-1=0~ is also likely to be not all
-too satisfying; it has the feeling of a magic trick.  And the
-congruence proof has an equality-twiddling flavor which is
-mathematically acceptable, but not necessarily intuitive.
+too satisfying; it has the feeling of a magic trick.
+And the congruence proof has an equality-twiddling flavor that may
+seem mathematically acceptable, but not necessarily
+intuitive.[fn::This is far more subjective.]
 
-In what remains, we look at a few formalization which are closer to
-Russell's argument, and hence more natural. I believe the first one
-(using vectors) is the "correct" one, but it depends on a loose
-interpretation of Russell's meaning of "set."
+In what remains, we look at a few formalization which are more similar
+to Russell's argument in the hopes of capturing its naturalness. I
+believe the first attempt (using vectors) is the "correct" one, but it
+depends on a loose interpretation of Russell's meaning of "set."
 
 * Vectors
 
@@ -378,17 +431,18 @@ We begin by putting me and the Pope into a 2-element vector:
 
 We'd like to argue that if we extract 2 elements from a 1-element
 vector then they're the same element.  But in order to identify me and
-the Pope, it must be that if we extract 2 elements in the same way
-from a 2-element vector, then they're different.
+the Pope, it must be that if we extract these 2 elements in the same
+way from a 2-element vector, then they're different.
 
-We already have one way of extracting an element from a vector: [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._head%29%29][~head~]]
-grabs the first one.  We need another way of extracting an element
-which gives the head element of a singleton, and a non-head element of
-a 2-element vector. So we define a ~next~ function, which grabs the
-/second/ element of a vector, if it exists, and otherwise, falls back
-to the head.  This will be more convenient if we pre-destruct the
-given vector; in other words, we're really defining a head function
-with a default value for the empty case.
+We already have one way of extracting an element from a vector:
+[[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._head%29%29][~head~]], which grabs the first element.  We need another way of
+extracting an element which always gives the head element of a
+singleton, and a non-head element of any other vector. So we define a
+~next~ function, which grabs the /second/ element of a vector, if it
+exists, and otherwise, falls back to the head.  This will be slightly
+more convenient if we pre-destruct the given vector, or in other
+words, if we really define a head function with a default return
+value in the empty case.
 
 #+begin_src lisp
   (claim next
@@ -410,10 +464,10 @@ with a default value for the empty case.
         (lambda (_ a _ _) a))))
 #+end_src
 
-We then show that if the tail of our vector is empty (i.e., the vector is
+Finally, we show that if the tail of our vector is empty (i.e., the vector is
 a singleton), then the head element is the same as the next element.
 We express the emptiness of the tail in terms of its length because
-this will make using the hypothesis 1 = 0 easier.
+this will make using the hypothesis 1 = 0 more convenient.
 
 #+begin_src lisp
   (claim empty-tail-implies-head=next
@@ -460,17 +514,17 @@ head element (~'me~) is the same as the next element (~'pope~).
 #+end_src
 
 Presto! (just kidding) I believe this proof captures the spirit of
-Russell's argument while remaining simple.  And it doesn't appeal to
-the principle of explosion, just our ability to fool our type system
-into thinking that a 2-element vector only has 1 element.  It's only
-real knock is that it doesn't use to any set-theoretic language (and
-this is isn't a true knock in my opinion).  Also, and this super
-nitpicky, it doesn't use the "add 1 to both sides" part of the
-argument.
+Russell's proof without being too complicated.  And it doesn't appeal
+to the principle of explosion, just our ability to fool our type
+system into thinking that a vector with 2 elements actually has 1
+element.  It's only real knock is that it doesn't use to any
+set-theoretic language (and this is isn't a true knock in my opinion).
+Also, and this super nitpicky, it doesn't use the "add 1 to both
+sides" part of the argument.
 
 But we're not here to stop at a reasonable stopping point, we're here
 to overdo things. So let's suppose we /do/ want to use set-theoretic
-language (and add 1 to both sides).  The first thing we'll have to
+language, and add 1 to both sides.  The first thing we'll have to
 figure out is how to talk about /membership/. It's not possible to
 define a membership predicate for vectors directly because of the
 (somewhat surprising) absence of a ~rec-Vec~ recursor.[fn::This isn't
@@ -478,7 +532,7 @@ a limitation of dependent type theory in general, just a limitation of
 Pie: it doesn't have a universe hierarchy.  Without a recursor (as
 opposed to an inductor) we'd get the dreaded "U is a type, but it does
 not have a type" error when defining the motive ~(lambda (_ _) U)~.]
-But there is [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._rec-.List%29%29][~rec-List~]]!
+But there is a [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._rec-.List%29%29][~rec-List~]]!
 
 * Lists
 
@@ -513,7 +567,7 @@ We can use ~rec-List~ to recursively define a membership predicate on
 lists.  This predicate says (albeit more verbosely in the Pie version):
 
 + x ∉ []
-+ x ∈ (y ∷ ys) if x = y or x ∈ ys
++ x ∈ (y ∷ ys) if and only if x = y or x ∈ ys
 
 #+begin_src lisp
   (claim Elem-List
@@ -539,12 +593,8 @@ lists.  This predicate says (albeit more verbosely in the Pie version):
 
 Now, the kicker: we can prove a natural looking lemma which says that
 any 2 elements of a singleton list are the same.  The proof is hairy,
-so I won't go into the details, but it goes as you would expect:
-
-#+begin_quote
-if x ∈ [a] and y ∈ [a] then x = a and y = a, so x = y.
-#+end_quote
-
+so I'll elide the details, but it's as you would expect: if x ∈ [a]
+and y ∈ [a] then x = a and y = a, so x = y.
 
 #+begin_src lisp
   (claim singleton-has-unique-element-List
@@ -648,45 +698,10 @@ if x ∈ [a] and y ∈ [a] then x = a and y = a, so x = y.
 
 Those of you keeping score at home may have noticed: we snuck in a
 couple uses of ~ind-Absurd~!  According to the somewhat artificial
-rules we're playing, this is /necessary/. We can demonstrate this
-formally by deriving the principle of explosion from the above lemma
-without using ~ind-Absurd~.  This works by applying our lemma to a
-1-element list [1], using our false assumption to prove that 0 ∈ [1],
-and then exploding the resulting prove of 1 = 0.
-
-#+begin_src lisp
-  (claim singleton-has-unique-element-List-implies-ind-absurd
-    (-> (Pi ((A U)
-             (x A)
-             (y A)
-             (l (List A)))
-          (-> (= Nat (length A l) 1)
-              (Elem-List A x l)
-              (Elem-List A y l)
-            (= A x y)))
-      (Pi ((A U)) (-> Absurd A))))
-  (define singleton-has-unique-element-List-implies-ind-absurd
-    (lambda (prf A absurd)
-      (explode-1=0
-        A
-        (prf
-          Nat
-          1
-          0
-          (:: 1 nil)
-          (same 1)
-          (left (same 1))
-          (right absurd)))))
-#+end_src
-
-Okay, fine.[fn::This is where things get a bit finicky.  Technically
-we /can/ prove everything in this section without ~ind-Absurd~ but
-we've have to use something explosive like ~(= Nat 1 0)~ in place of
-~Absurd~ in ~Elem-List~. But this is cheating. We could make the
-nature of this cheating more formal, but I'm satisfied with simply
-stipulating that, in this game we're playing, we're not allowed to
-replace ~Absurd~ in predicates we define.]  But we do get this nice
-papacy proof:
+rules we're playing, this is necessary.[fn::This will be the topic of
+another piece, so as to keep this already long piece more contained.]
+If we want to start talking about list membership, we /need/ to use
+~ind-Absurd~.  But we do get this nice papacy proof:
 
 #+begin_src lisp
   (claim 1=0-implies-i-am-the-pope-5
@@ -713,7 +728,7 @@ And look! The "add 1 to both sides" part is there!
 
 * Finite Sets
 
-What remains is an exercise in taking things too far.  What we've done
+What remains is an exercise in taking things too far.  Everything
 above is all fine and good, but the maximalist in me wants to say: but
 what about /actual/ sets? So without further ado, a version of
 Russell's argument using an encoding of finite sets in Pie.[fn::When I
@@ -721,7 +736,7 @@ was a TA for Stu's type theory course I made it a tradition to do at
 least one over-the-top proof in Pie each quarter. I'd like to think
 this proof continues the tradition.]  I won't dwell on the details,
 it's for the most part ugly. But, to loosely quote Barendregt: "the
-attentive reader that has worked through the proofs in this [piece]
+attentive reader that has worked through the proofs in this [article]
 may experience a free association of the whirling details."
 
 The first step is to define an encoding of finite sets.  We use a
@@ -729,8 +744,8 @@ pretty standard one: an n-element finite set is a n-stack of ~Sigma~
 types that keep track of an element and a proof that it's not equal to
 any of the other elements in the set.  We have to define the set type
 and it's membership predicate simultaneously, and then extract each
-part /a posteriori/.  Note one important feature of this encoding that
-will come back later: it depends on equality.
+part /a posteriori/.  Note one very important feature of this encoding
+that will come back later: it depends on equality.
 
 #+begin_src lisp
   (claim FiniteSetAndElem
@@ -805,19 +820,20 @@ elements are not equal.
 
 Let's take a look again at the language of the argument: "the set
 containing me and the Pope has 2 members." How do we know this? The
-only way to be sure is if we already know /I'm not the Pope/.  We
-don't know this either, but if I'm the Pope, there's nothing to prove.
-The point: /there's a hidden non-constructive assumption in Russell's
-argument./ Or rather, Russell is assuming something perhaps
-non-obvious: that /people/ admit decidable equality.[fn::This means
-accepting that for any two people, either they are the same person or
-not the same person.  Apropos of nothing, at the time of writing, the
-film [[https://en.wikipedia.org/wiki/Mickey_17][Mickey 17]] just came out.]
+only way to be sure is if we already know Bertrand Russell /isn't the
+Pope/.  We technically don't know this either.  But if Bertrand
+Russell is the already the Pope, there's nothing to prove.  The point:
+/there's a hidden non-constructive assumption in Russell's argument./
+Or rather, Russell is assuming something perhaps non-obvious: that
+/people/ admit decidable equality.[fn::This means accepting that for
+any two people, either they are the same person or not the same
+person.  Apropos of nothing, at the time of writing, the film [[https://en.wikipedia.org/wiki/Mickey_17][Mickey
+17]] just came out.]
 
-Now for the key lemma:
+Now for the key lemma, which states:
 
 #+begin_quote
-if x ∈ S and y ∈ S and |S| = 1, then x = y.
+x ∈ S and y ∈ S and |S| = 1, then x = y.
 #+end_quote
 
 The proof is similar to that of the analogous lemma for lists.
@@ -929,16 +945,14 @@ The proof is similar to that of the analogous lemma for lists.
 
 As in the list proof, we have to use ~ind-Absurd~, but at this point
 we've given up on that battle.  Maybe what Russell accomplished was
-not giving an argument independent of ~ind-Absurd~, but rather giving
-one so obfuscatory in it's use of ~ind-Absurd~ that it's somehow more
-natural than many of the proofs that avoid it.
+not an argument independent of ~ind-Absurd~, but rather one so
+obfuscatory in it's use of ~ind-Absurd~ that it's somehow more natural than
+the proofs that avoid it.
 
-Finally addressing the aforementioned elephant: we can't construct the
+Finally addressing the aforementioned issue: we can't construct the
 set containing just me and the Pope without already knowing that I am
-not the Pope.  Note that we didn't have to deal with this for vectors
-and lists because there's nothing stopping me from create a list
-containing me and myself, or the pope and the pope.  If we /assume/
-I'm not the Pope then the proof goes through.
+not the Pope.  If we /assume/ I'm not the Pope then the proof goes
+through.
 
 #+begin_src lisp
   (claim 1=0-implies-i-am-the-pope-kind-of
@@ -964,10 +978,10 @@ As a skeptic of intuitionism, Russell likely wouldn't consider this a
 legitimate roadblock.  If we accept the law of excluded middle, we can
 work with the premise that either I am or am not the Pope, and the
 proof goes through as expected, though the trivial branch of the
-disjunction is elided in the original argument. We conclude with a
-simple generalization of the above result, which demonstrates that
-this argument works for equating any two values of a type which admits
-decidable equality.
+disjunction is swept under the rug in the original argument. We
+conclude with a simple generalization of the above result, which
+demonstrates that this argument works for equating any two values of a
+type which admits decidable equality.
 
 #+begin_src lisp
   (claim Dec-= (-> U U))
@@ -1029,6 +1043,11 @@ decidable equality.
 So if you're a staunch intuitionist who believes that people admit
 decidable equality, then rest assured you can still carry out
 Russell's argument in this contrived form, but you're gonna need the
-principle of explosion (and doesn't this beg the question)?
+principle of explosion (and doesn't the beg the question)?
+
+One last thing: A hardcore Russellian may take issue with this
+entire game on the grounds that the Principia in a sense does away
+with numbers altogether.  All I can say is: that's fair, but I'm
+tired.
 
 /June 14, 2025/
