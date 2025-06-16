@@ -1031,4 +1031,4 @@ decidable equality, then rest assured you can still carry out
 Russell's argument in this contrived form, but you're gonna need the
 principle of explosion (and doesn't this beg the question)?
 
-/June 14, 2025/
+/June 16, 2025/
