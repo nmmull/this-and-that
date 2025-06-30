@@ -1,0 +1,565 @@
+#lang pie
+
+(claim Not (-> U U))
+(define Not (lambda (A) (-> A Absurd)))
+
+(claim <> (Pi ((A U)) (-> A A U)))
+(define <> (lambda (A x y) (Not (= A x y))))
+
+(claim 1<>0 (<> Nat 1 0))
+(define 1<>0
+  (lambda (1=0)
+    (replace
+      ; target
+      1=0
+      ; motive
+      (lambda (n)
+        (which-Nat
+          ; target
+          n
+          ; base
+          Absurd
+          ; step
+          (lambda (_) Trivial)))
+      ; base
+      sole)))
+
+(claim 1=0-implies-i-am-the-pope-0
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-0
+  (lambda (1=0)
+    (ind-Absurd
+      ; target
+      (1<>0 1=0)
+      ; motive
+      (= Atom 'me 'pope))))
+
+(claim 1=0-implies-i-am-the-pope-1
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-1
+  (lambda (1=0)
+    (cong
+      ; target
+      1=0
+      ; fun
+      (the (-> Nat Atom)
+        (lambda (n)
+          (which-Nat
+            ; target
+            n
+            ; base
+            'pope
+            ; step
+            (lambda (_) 'me)))))))
+
+(claim 1=0-implies-any-equality
+  (Pi ((A U) (x A) (y A))
+    (-> (= Nat 1 0) (= A x y))))
+(define 1=0-implies-any-equality
+  (lambda (A x y 1=0)
+    (cong
+      ; target
+      1=0
+      ; fun
+      (the (-> Nat A)
+        (lambda (n)
+          (which-Nat
+            ; target
+            n
+            ; base
+            y
+            ; step
+            (lambda (_) x)))))))
+
+(claim 1=0-implies-i-am-the-pope-2
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-2
+  (lambda (1=0)
+    (1=0-implies-any-equality Atom 'me 'pope 1=0)))
+
+(claim explode-1=0
+  (Pi ((A U)) (-> (= Nat 1 0) A)))
+(define explode-1=0
+  (lambda (A 1=0)
+    (replace
+      ; target
+      1=0
+      ; motive
+      (lambda (a)
+        (which-Nat
+          ; target
+          a
+          ; base
+          A
+          ; step
+          (lambda (_) Trivial)))
+      ; base
+      sole)))
+
+(claim 1=0-implies-i-am-the-pope-3
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-3
+  (explode-1=0 (= Atom 'me 'pope)))
+
+(claim explode-implies-ind-absurd
+  (-> (Pi ((A U)) (-> (Not A) (Pi ((B U)) (-> A B))))
+    (Pi ((A U)) (-> Absurd A))))
+(define explode-implies-ind-absurd
+  (lambda (explode A)
+    (explode Absurd (lambda (x) x) A)))
+
+(claim ind-absurd-implies-explode
+  (-> (Pi ((A U)) (-> Absurd A))
+    (Pi ((A U)) (-> (Not A) (Pi ((B U)) (-> A B))))))
+(define ind-absurd-implies-explode
+  (lambda (ind-absurd A not-a B a)
+    (ind-absurd B (not-a a))))
+
+(claim me-and-the-pope-Vec (Vec Atom 2))
+(define me-and-the-pope-Vec
+  (vec:: 'me (vec:: 'pope vecnil)))
+
+(claim next
+  (Pi ((A U)
+       (n Nat))
+    (-> A (Vec A n) A)))
+(define next
+  (lambda (A n a v)
+    (ind-Vec
+      ; target-1
+      n
+      ; target-2
+      v
+      ; motive
+      (lambda (_ _) A)
+      ; base
+      a
+      ; step
+      (lambda (_ a _ _) a))))
+
+(claim empty-tail-implies-head=next
+  (Pi ((A U)
+       (n Nat)
+       (n=0 (= Nat n 0))
+       (v (Vec A (add1 n))))
+    (= A
+       (head v)
+       (next A n (head v) (tail v)))))
+(define empty-tail-implies-head=next
+  (lambda (A n n=0)
+    (replace
+      ; target
+      (symm n=0)
+      ; motive
+      (lambda (k)
+        (Pi ((v (Vec A (add1 k))))
+          (= A (head v) (next A k (head v) (tail v)))))
+      ; base
+      (lambda (v)
+        (replace
+          ; target
+          (the (= (Vec A 0) vecnil (tail v)) (same vecnil))
+          ; motive
+          (lambda (a) (= A (head v) (next A 0 (head v) a)))
+          ; base
+          (same (head v)))))))
+
+(claim 1=0-implies-i-am-the-pope-4
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-4
+  (lambda (1=0)
+    (empty-tail-implies-head=next
+      Atom
+      1
+      1=0
+      me-and-the-pope-Vec)))
+
+(claim me-and-the-pope-List (List Atom))
+(define me-and-the-pope-List (:: 'me (:: 'pope nil)))
+
+(claim length
+  (Pi ((A U))
+    (-> (List A) Nat)))
+(define length
+  (lambda (A l)
+    (rec-List
+      ; target
+      l
+      ; base
+      0
+      ; step
+      (lambda (_ _ length-tail)
+        (add1 length-tail)))))
+
+(claim Elem-List
+  (Pi ((A U)
+       (x A)
+       (l (List A)))
+    U))
+(define Elem-List
+  (lambda (A x l)
+    ((rec-List
+       ; target
+       l
+       ; base
+       (the (-> A U) (lambda (_) Absurd))
+       ; step
+       (lambda (x xs elem-xs)
+         (lambda (y)
+           (Either
+             (= A x y)
+             (elem-xs y))))) x)))
+
+(claim singleton-has-unique-element-List
+  (Pi ((A U)
+       (x A)
+       (y A)
+       (l (List A)))
+    (-> (= Nat (length A l) 1)
+        (Elem-List A x l)
+        (Elem-List A y l)
+      (= A x y))))
+(define singleton-has-unique-element-List
+  (lambda (A x y l)
+    (ind-List
+      ; target
+      l
+      ; motive
+      (lambda (l)
+        (-> (= Nat (length A l) 1)
+            (Elem-List A x l)
+            (Elem-List A y l)
+          (= A x y)))
+      ; base
+      (lambda (0=1)
+        (explode-1=0
+          (-> Absurd
+              Absurd
+            (= A x y))
+          (symm 0=1)))
+      ; step
+      (lambda (a as almost)
+        (ind-List
+          ; target
+          as
+          ; motive
+          (lambda (l)
+            (-> (= Nat (length A (:: a l)) 1)
+                (Elem-List A x (:: a l))
+                (Elem-List A y (:: a l))
+              (= A x y)))
+          ; base
+          (lambda (_ x-in-a y-in-a)
+            (ind-Either
+              ; target
+              x-in-a
+              ; motive
+              (lambda (_) (= A x y))
+              ; on-left
+              (lambda (a=x)
+                (ind-Either
+                  ; target
+                  y-in-a
+                  ; motive
+                  (lambda (_) (= A x y))
+                  ; on-left
+                  (lambda (a=y)
+                    (trans
+                      (symm a=x)
+                      a=y))
+                  ; on-right
+                  (lambda (false)
+                    (ind-Absurd
+                      ; target
+                      false
+                      ; motive
+                      (= A x y)))))
+              (lambda (false)
+                (ind-Absurd
+                  ; target
+                  false
+                  ; motive
+                  (= A x y)))))
+          ; step
+          (lambda (b bs _ SSk=1)
+            (explode-1=0
+              (-> (Elem-List A x (:: a (:: b bs)))
+                  (Elem-List A y (:: a (:: b bs)))
+                (= A x y))
+              (cong
+                ; target
+                SSk=1
+                ; fun
+                (the (-> Nat Nat)
+                  (lambda (n)
+                    (which-Nat
+                      ; target
+                      n
+                      ; base
+                      0
+                      ; step
+                      (lambda (n-1)
+                        (which-Nat
+                          ; target
+                          n-1
+                          ; base
+                          0
+                          ; target
+                          (lambda (_) 1))))))))))))))
+
+(claim 1=0-implies-i-am-the-pope-5
+  (-> (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-5
+  (lambda (1=0)
+    (singleton-has-unique-element-List
+      Atom
+      'me
+      'pope
+      me-and-the-pope-List
+      (cong
+        ; target
+        1=0
+        ; fun
+        (the (-> Nat Nat)
+          (lambda (n)
+            (add1 n))))
+      (left (same 'me))              ; 'me is in the list
+      (right (left (same 'pope)))))) ; 'pope is in the list
+
+(claim FiniteSetAndElem
+  (Pi ((A U)
+       (n Nat))
+    (Sigma ((B U)) (-> A B U))))
+(define FiniteSetAndElem
+  (lambda (A n)
+    (rec-Nat
+      ; target
+      n
+      ; base
+      (the (Sigma ((B U)) (-> A B U))
+        (cons Trivial (lambda (x empty) Absurd)))
+      ; step
+      (lambda (n-1 set-and-elem)
+        (cons
+          (Sigma ((y A)
+                  (set (car set-and-elem)))
+            (-> ((cdr set-and-elem) y set) Absurd))
+          (lambda (x set)
+            (Either
+              (= A x (car set))
+              ((cdr set-and-elem) x (car (cdr set))))))))))
+
+(claim FiniteSet (-> U Nat U))
+(define FiniteSet (lambda (A n) (car (FiniteSetAndElem A n))))
+
+(claim Elem-FiniteSet
+  (Pi ((A U)
+       (n Nat))
+    (-> A (FiniteSet A n) U)))
+(define Elem-FiniteSet (lambda (A n) (cdr (FiniteSetAndElem A n))))
+
+(claim empty (Pi ((A U)) (FiniteSet A 0)))
+(define empty (lambda (A) sole))
+
+(claim singleton (Pi ((A U) (x A)) (FiniteSet A 1)))
+(define singleton
+  (lambda (A x)
+    (cons x (cons sole (lambda (false) false)))))
+
+(claim pair
+  (Pi ((A U)
+       (x A)
+       (y A)
+       (x<>y (-> (= A x y) Absurd)))
+    (FiniteSet A 2)))
+(define pair
+  (lambda (A x y x<>y)
+    (cons
+      x
+      (cons
+        (singleton A y)
+        (lambda (x=y-or-false)
+          (ind-Either
+            ; target
+            x=y-or-false
+            ; motive
+            (lambda (_) Absurd)
+            ; on-left
+            (lambda (x=y) (x<>y x=y))
+            ; on-right
+            (lambda (false) false)))))))
+
+(claim singleton-has-unique-element-FiniteSet
+  (Pi ((A U)
+       (n Nat)
+       (x A)
+       (y A)
+       (s (FiniteSet A n)))
+    (-> (= Nat n 1)
+        (Elem-FiniteSet A n x s)
+        (Elem-FiniteSet A n y s)
+      (= A x y))))
+(define singleton-has-unique-element-FiniteSet
+  (lambda (A n x y)
+    (ind-Nat
+      ; target
+      n
+      ; motive
+      (lambda (k)
+        (Pi ((s (FiniteSet A k)))
+          (-> (= Nat k 1)
+              (Elem-FiniteSet A k x s)
+              (Elem-FiniteSet A k y s)
+            (= A x y))))
+      ; base
+      (lambda (_ 0=1 _ _)
+        (cong
+          ; target
+          0=1
+          ; fun
+          (the (-> Nat A)
+            (lambda (m)
+              (which-Nat
+                ; target
+                m
+                ; base
+                x
+                ; step
+                (lambda (_) y))))))
+      ; step
+      (lambda (n-1 _)
+        (ind-Nat
+          ; target
+          n-1
+          ; motive
+          (lambda (k)
+            (Pi ((s (FiniteSet A (add1 k))))
+              (-> (= Nat (add1 k) 1)
+                  (Elem-FiniteSet A (add1 k) x s)
+                  (Elem-FiniteSet A (add1 k) y s)
+                (= A x y))))
+          ; base
+          (lambda (s _ x-in-s y-in-s)
+            (ind-Either
+              ; target
+              x-in-s
+              ; motive
+              (lambda (_) (= A x y))
+              ; on-left
+              (lambda (x=r)
+                (ind-Either
+                  ; target
+                  y-in-s
+                  ; motive
+                  (lambda (_) (= A x y))
+                  ; on-left
+                  (lambda (y=r) (trans x=r (symm y=r)))
+                  ; on-right
+                  (lambda (false)
+                    (ind-Absurd
+                      ; target
+                      false
+                      ; motive
+                      (= A x y)))))
+              ; on-right
+              (lambda (false)
+                (ind-Absurd
+                  ; target
+                  false
+                  ; motive
+                  (= A x y)))))
+          ; step
+          (lambda (n-2 _)
+            (lambda (_ SSk=1 _ _)
+              (cong
+                ; target
+                SSk=1
+                ; fun
+                (the (-> Nat A)
+                  (lambda (m)
+                    (which-Nat
+                      ; target
+                      m
+                      ; base
+                      x
+                      ; step
+                      (lambda (m-1)
+                        (which-Nat
+                          ; target
+                          m-1
+                          ; base
+                          y
+                          ; step
+                          (lambda (_) x))))))))))))))
+
+(claim 1=0-implies-i-am-the-pope-kind-of
+  (-> (<> Atom 'me 'pope) (= Nat 1 0) (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-kind-of
+  (lambda (me<>pope 1=0)
+    (singleton-has-unique-element-FiniteSet
+      Atom
+      2
+      'me
+      'pope
+      (pair Atom 'me 'pope me<>pope)
+      (cong
+        ; target
+        1=0
+        ; fun
+        (the (-> Nat Nat)
+          (lambda (k) (add1 k))))
+      (left (same 'me))              ; 'me is in the set
+      (right (left (same 'pope)))))) ; 'pope is in the set
+
+(claim Dec-= (-> U U))
+(define Dec-=
+  (lambda (A)
+    (Pi ((x A)
+         (y A))
+      (Either
+       (= A x y)
+       (<> A x y)))))
+
+(claim 1=0-implies-x=y-given-dec-=
+  (Pi ((A U) (x A) (y A))
+    (-> (Dec-= A)
+        (= Nat 1 0)
+      (= A x y))))
+(define 1=0-implies-x=y-given-dec-=
+  (lambda (A x y dec-= 1=0)
+    (ind-Either
+      ; target
+      (dec-= x y)
+      ; motive
+      (lambda (_) (= A x y))
+      ; on-left
+      (lambda (x=y) x=y)
+      ; on-right
+      (lambda (x<>y)
+        (singleton-has-unique-element-FiniteSet
+          A
+          2
+          x
+          y
+          (pair A x y x<>y)
+          (cong
+            ; target
+            1=0
+            ; fun
+            (the (-> Nat Nat)
+              (lambda (k) (add1 k))))
+          (left (same x))
+          (right (left (same y))))))))
+
+(claim 1=0-implies-i-am-the-pope-classical
+  (-> (Pi ((A U)) (Either A (Not A)))
+      (= Nat 1 0)
+    (= Atom 'me 'pope)))
+(define 1=0-implies-i-am-the-pope-classical
+  (lambda (lem 1=0)
+    (1=0-implies-x=y-given-dec-=
+      Atom
+      'me
+      'pope
+      (lambda (x y) (lem (= Atom x y)))
+      1=0)))

@@ -66,7 +66,7 @@ motivation for this is threefold.
    on type theory, and I'd like this piece to be approachable to
    anyone who's taken the course (and is willing to do a bit of
    keyboard head-banging).
-2. Pie is very explicit. This makes is easier (for me) to ensure I
+2. Pie is very explicit. This makes it easier (for me) to ensure I
    haven't done anything sneaky.[fn::Dependent pattern matching and
    implicit arguments are beautiful features, but using them sometimes
    feels like a riding finely-tuned motorcycle (not that I'd actually
@@ -89,7 +89,7 @@ in The Little Typer.]  In what follows, I use atoms to represent me
 and the Pope.[fn::It's fair to question this choice. That said, using
 atoms has some nice properties. For one, it allows me to avoid
 postulating a ~Person~ type.  It would have also been possible to use
-a different type as a proxy for ~Person~, e.g. ~Nat~, but ~Atom~ is a
+a different type as a proxy for ~Person~, e.g. ~Nat~, but ~Atom~ is
 nice because it doesn't admit decidable equality, so using it makes
 fewer philosophical assumptions about the nature of personhood.]  Also
 note the standard encoding of negation as implication of absurdity.
@@ -464,7 +464,7 @@ Russell's argument while remaining simple.  And it doesn't appeal to
 the principle of explosion, just our ability to fool our type system
 into thinking that a 2-element vector only has 1 element.  It's only
 real knock is that it doesn't use to any set-theoretic language (and
-this is isn't a true knock in my opinion).  Also, and this super
+this isn't a true knock in my opinion).  Also, and this super
 nitpicky, it doesn't use the "add 1 to both sides" part of the
 argument.
 
@@ -681,7 +681,7 @@ and then exploding the resulting prove of 1 = 0.
 
 Okay, fine.[fn::This is where things get a bit finicky.  Technically
 we /can/ prove everything in this section without ~ind-Absurd~ but
-we've have to use something explosive like ~(= Nat 1 0)~ in place of
+we'd have to use something explosive like ~(= Nat 1 0)~ in place of
 ~Absurd~ in ~Elem-List~. But this is cheating. We could make the
 nature of this cheating more formal, but I'm satisfied with simply
 stipulating that, in this game we're playing, we're not allowed to

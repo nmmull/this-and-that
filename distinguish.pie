@@ -1,0 +1,1056 @@
+#lang pie
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ⊥ U)
+(define ⊥ Absurd)
+
+(claim ⊤ U)
+(define ⊤ Trivial)
+
+(claim ¬ (→ U U))
+(define ¬ (λ (A) (→ A ⊥)))
+
+(claim ∧ (→ U U U))
+(define ∧ (λ (A B) (Pair A B)))
+
+(claim ∨ (→ U U U))
+(define ∨ (λ (A B) (Either A B)))
+
+(claim ↔ (→ U U U))
+(define ↔ (λ (A B) (∧ (→ A B) (→ B A))))
+
+(claim ≠ (Π ((A U)) (→ A A U)))
+(define ≠ (λ (A x y) (¬ (= A x y))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim explode-1=0
+  (→ (= Nat 1 0) (Π ((A U)) A)))
+(define explode-1=0
+  (λ (1=0 A)
+     (replace
+       1=0
+       (λ (a) (which-Nat a A (λ (_) ⊤)))
+       sole)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim sub1 (→ Nat Nat))
+(define sub1
+  (λ (n)
+     (which-Nat n 0 (λ (n-1) n-1))))
+
+(claim ∸ (→ Nat Nat Nat))
+(define ∸
+  (λ (m n)
+     (iter-Nat n m sub1)))
+
+(claim 5=7→1=0
+  (→ (= Nat 5 7) (= Nat 1 0)))
+(define 5=7→1=0
+  (λ (5=7)
+     (symm
+       (cong
+         5=7
+	 (the
+	   (→ Nat Nat)
+	   (λ (n) (∸ n 6)))))))
+
+(claim explode-5=7
+  (→ (= Nat 5 7) (Π ((A U)) A)))
+(define explode-5=7
+  (λ (5=7)
+     (explode-1=0 (5=7→1=0 5=7))))
+
+(claim 1≠0 (≠ Nat 1 0))
+(define 1≠0 (λ (1=0) (explode-1=0 1=0 ⊥)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim Bool U)
+(define Bool (Either ⊤ ⊤))
+
+(claim true Bool)
+(define true (left sole))
+
+(claim false Bool)
+(define false (right sole))
+
+(claim ind-Bool
+  (Π ((target Bool)
+      (motive (→ Bool U))
+      (true-case (motive true))
+      (false-case (motive false)))
+     (motive target)))
+(define ind-Bool
+  (λ (target motive true-case false-case)
+     (ind-Either
+       target
+       motive
+       (λ (_) true-case)
+       (λ (_) false-case))))
+
+(claim bool→nat (→ Bool Nat))
+(define bool→nat
+  (λ (b) (ind-Bool b (λ (_) Nat) 1 0)))
+
+(claim true=false→1=0
+  (→ (= Bool true false) (= Nat 1 0)))
+(define true=false→1=0
+  (λ (true=false) (cong true=false bool→nat)))
+
+(claim explode-true=false
+  (→ (= Bool true false) (Π ((A U)) A)))
+(define explode-true=false
+  (λ (true=false)
+     (explode-1=0 (true=false→1=0 true=false))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim Distinguishes
+  (Π ((A U)
+      (f (→ A Bool)))
+     (→ A A U)))
+(define Distinguishes
+  (λ (_ f x y)
+     (∧ (= Bool (f x) true)
+        (= Bool (f y) false))))
+
+(claim ◇
+  (Π ((A U))
+     (→ A A U)))
+(define ◇
+  (λ (A x y)
+     (Σ ((f (→ A Bool)))
+        (Distinguishes A f x y))))
+
+(claim distinguisher-◇
+  (Π ((A U)
+      (x A)
+      (y A)
+      (x◇y (◇ A x y)))
+     (→ A Bool)))
+(define distinguisher-◇
+  (λ (_ _ _ x◇y)
+     (car x◇y)))
+
+; the following are getters for ◇
+
+(claim distinguishes-fst
+  (Π ((A U)
+      (x A)
+      (y A)
+      (x◇y (◇ A x y)))
+     (= Bool
+        (distinguisher-◇ A x y x◇y x)
+        true)))
+(define distinguishes-fst
+  (λ (_ _ _ x◇y)
+     (car (cdr x◇y))))
+
+(claim distinguishes-snd
+  (Π ((A U)
+      (x A)
+      (y A)
+      (x◇y (◇ A x y)))
+     (= Bool
+        (distinguisher-◇ A x y x◇y y)
+        false)))
+(define distinguishes-snd
+  (λ (_ _ _ x◇y)
+     (cdr (cdr x◇y))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ◇→explode⁼
+  (Π ((A U)
+      (x A)
+      (y A))
+     (→ (◇ A x y)
+        (= A x y)
+        (Π ((B U)) B))))
+(define ◇→explode⁼
+  (λ (A x y x◇y x=y)
+    (explode-true=false
+      (trans
+        ; true = f x
+        (symm (distinguishes-fst A x y x◇y))
+        (trans
+          ; f x = f y
+          (cong x=y (distinguisher-◇ A x y x◇y))
+          ; f y = false
+          (distinguishes-snd A x y x◇y))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ◇→≠
+  (Π ((A U)
+      (x A)
+      (y A))
+     (→ (◇ A x y)
+        (≠ A x y))))
+(define ◇→≠
+  (λ (A x y x◇y x=y)
+     (◇→explode⁼ A x y x◇y x=y ⊥)))
+
+(claim ⟨≠→◇⟩→ind-⊥
+  (→ (Π ((A U)
+         (x A)
+         (y A))
+        (→ (≠ A x y)
+           (◇ A x y)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨≠→◇⟩→ind-⊥
+  (λ (≠→◇ absurd)
+     (◇→explode⁼
+       ⊤
+       sole
+       sole
+       (≠→◇
+         ⊤
+	 sole
+	 sole
+	 (λ (_) absurd))
+       (same sole))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim Dec (→ U U))
+(define Dec
+  (λ (A) (∨ A (¬ A))))
+
+(claim Decᴾ
+  (Π ((A U)
+      (P (→ A U)))
+     U))
+(define Decᴾ
+  (λ (A P)
+     (Π ((x A)) (Dec (P x)))))
+
+(claim Uncurryᴾ
+  (Π ((A U)
+      (B U)
+      (P (→ A B U)))
+     (→ (Pair A B) U)))
+(define Uncurryᴾ
+  (λ (_ _ P p)
+     (P (car p) (cdr p))))
+
+(claim Decᴾ²
+  (Π ((A U)
+      (B U)
+      (P (→ A B U)))
+     U))
+(define Decᴾ²
+  (λ (A B P)
+     (Decᴾ (Pair A B) (Uncurryᴾ A B P))))
+
+(claim Dec⁼ (→ U U))
+(define Dec⁼
+  (λ (A)
+     (Decᴾ²
+       A
+       A
+       (λ (x y) (= A x y)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim left?
+  (Π ((A U)
+      (B U))
+     (→ (Either A B)
+        Bool)))
+(define left?
+  (λ (_ _ e)
+     (ind-Either
+       e
+       (λ (_) Bool)
+       (λ (_) true)
+       (λ (_) false))))
+
+(claim ?
+  (Π ((A U)
+      (P (→ A U)))
+     (→ (Decᴾ A P) A Bool)))
+(define ?
+  (λ (_ P decᴾ x)
+     (left?
+       (P x)
+       (¬ (P x))
+       (decᴾ x))))
+
+(claim ?₂
+  (Π ((A U)
+      (B U)
+      (P (→ A B U))
+      (decᴾ² (Decᴾ² A B P)))
+     (→ A B Bool)))
+(define ?₂
+  (λ (A B P decᴾ² x y)
+     (?
+       (Pair A B)
+       (Uncurryᴾ A B P)
+       decᴾ²
+       (cons x y))))
+
+(claim ≟
+  (Π ((A U))
+     (→ (Dec⁼ A) A A Bool)))
+(define ≟
+  (λ (A) (?₂ A A (λ (x y) (= A x y)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ind-⊥→dec⁼→≠→◇
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (dec⁼ (Dec⁼ A))
+         (x A)
+         (y A))
+        (→ (≠ A x y) (◇ A x y)))))
+(define ind-⊥→dec⁼→≠→◇
+  (λ (ind-⊥ A dec⁼ x y x≠y)
+     (cons
+       (≟ A dec⁼ x)
+       (cons
+         (ind-Either
+	   (dec⁼ (cons x x))
+	   (λ (e)
+	      (= Bool
+	         (left?
+		   (= A x x)
+		   (≠ A x x)
+		   e)
+		 true))
+           (λ (_) (same true))
+	   (λ (x≠x)
+	      (ind-⊥
+	        (x≠x (same x))
+	        (= Bool false true))))
+	 (ind-Either
+	   (dec⁼ (cons x y))
+	   (λ (e)
+	      (= Bool
+	         (left?
+		   (= A x y)
+		   (≠ A x y)
+		   e)
+		 false))
+            (λ (x=y) (ind-⊥ (x≠y x=y) (= Bool true false)))
+	    (λ (_) (same false)))))))
+
+(claim ⟨dec⁼→≠→◇⟩→ind-⊥
+  (→ (Π ((A U)
+         (dec⁼ (Dec⁼ A))
+         (x A)
+         (y A))
+        (→ (≠ A x y) (◇ A x y)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨dec⁼→≠→◇⟩→ind-⊥
+  (λ (dec⁼→≠→◇ absurd)
+     (◇→explode⁼
+       ⊤
+       sole
+       sole
+       (dec⁼→≠→◇
+         ⊤
+         (λ (_) (right (λ (_) absurd)))
+         sole
+         sole
+         (λ (_) absurd))
+       (same sole))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim dec⁼→≠→◇-constructive
+  (Π ((A U)
+      (dec⁼ (Dec⁼ A))
+      (x A)
+      (y A))
+     (→ (≠ A x y) (◇ A x y))))
+(define dec⁼→≠→◇-constructive
+  (λ (A dec⁼ x y x≠y)
+     (ind-⊥→dec⁼→≠→◇
+       (λ (absurd A) (ind-Absurd absurd A))
+       A
+       dec⁼
+       x
+       y
+       x≠y)))
+
+;(claim lem (Π ((A U)) (∨ A (¬ A))))
+;(define lem TODO)
+;
+;(claim dec⁼→≠→◇-classical
+;  (Π ((A U)
+;      (x A)
+;      (y A))
+;     (→ (≠ A x y) (◇ A x y))))
+;(define dec⁼→≠→◇-classical
+;  (λ (A x y x≠y)
+;     (dec⁼→≠→◇-constructive
+;       A
+;       (λ (p) (lem (= A (car p) (cdr p))))
+;       x
+;       y
+;       x≠y)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim Decides
+  (Π ((A U)
+      (f (→ A Bool))
+      (P (→ A U)))
+     U))
+(define Decides
+  (λ (A f P)
+     (Π ((x A))
+        (↔ (P x)
+	   (= Bool (f x) true)))))
+
+(claim Decider
+  (Π ((A U)
+      (P (→ A U)))
+     U))
+(define Decider
+  (λ (A P)
+     (Σ ((f (→ A Bool)))
+        (Decides A f P))))
+
+(claim uncurry
+  (Π ((A U)
+      (B U)
+      (C U))
+     (→ (→ A B C)
+        (→ (Pair A B) C))))
+(define uncurry
+  (λ (_ _ _ f p)
+     (f (car p) (cdr p))))
+
+(claim Decides₂
+  (Π ((A U)
+      (B U)
+      (f (→ A B Bool))
+      (P (→ A B U)))
+     U))
+(define Decides₂
+  (λ (A B f P)
+     (Decides
+       (Pair A B)
+       (uncurry A B Bool f)
+       (Uncurryᴾ A B P))))
+
+(claim Decider₂
+  (Π ((A U)
+      (B U)
+      (P (→ A B U)))
+     U))
+(define Decider₂
+  (λ (A B P)
+     (Σ ((f (→ A B Bool)))
+        (Decides₂ A B f P))))
+
+(claim Decides⁼
+  (Π ((A U)
+      (f (→ A A Bool)))
+     U))
+(define Decides⁼
+  (λ (A f)
+     (Decides₂
+       A
+       A
+       f
+       (λ (x y) (= A x y)))))
+
+(claim Decider⁼ (→ U U))
+(define Decider⁼
+  (λ (A)
+     (Σ ((f (→ A A Bool)))
+        (Decides⁼ A f))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim decides→decᴾ-helper
+  (Π ((A U)
+      (f (→ A Bool))
+      (P (→ A U))
+      (x A))
+     (→ (↔ (P x) (= Bool (f x) true))
+        (Dec (P x)))))
+(define decides→decᴾ-helper
+  (λ (_ f P x)
+     (ind-Bool
+       (f x)
+       (λ (b)
+          (→ (↔ (P x) (= Bool b true))
+	     (Dec (P x))))
+       (λ (prf)
+          (left ((cdr prf) (same true))))
+       (λ (prf)
+          (right
+	    (λ (px)
+	       (explode-true=false
+	         (symm ((car prf) px))
+		 ⊥)))))))
+
+(claim decider→decᴾ
+  (Π ((A U)
+      (P (→ A U)))
+     (→ (Decider A P)
+        (Decᴾ A P))))
+(define decider→decᴾ
+  (λ (A P decider x)
+     (decides→decᴾ-helper
+       A
+       (car decider)
+       P
+       x
+       ((cdr decider) x))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim p?=true→p
+  (Π ((A U)
+      (P (→ A U))
+      (decᴾ (Decᴾ A P))
+      (x A))
+     (→ (= Bool (? A P decᴾ x) true)
+        (P x))))
+(define p?=true→p
+  (λ (_ P decᴾ x)
+     (ind-Either
+       (decᴾ x)
+       (λ (e)
+          (→ (= Bool
+	        (left? (P x) (¬ (P x)) e)
+	        true)
+             (P x)))
+       (λ (px _) px)
+       (λ (_ false=true)
+          (explode-true=false
+	    (symm false=true)
+	    (P x))))))
+
+(claim p?=false→¬p
+  (Π ((A U)
+      (P (→ A U))
+      (decᴾ (Decᴾ A P))
+      (x A))
+     (→ (= Bool
+           (? A P decᴾ x)
+	   false)
+        (¬ (P x)))))
+(define p?=false→¬p
+  (λ (_ P decᴾ x)
+     (ind-Either
+       (decᴾ x)
+       (λ (e)
+          (→ (= Bool
+	        (left? (P x) (¬ (P x)) e)
+		false)
+             (¬ (P x))))
+       (λ (_ true=false)
+          (explode-true=false
+	    true=false
+	    (¬ (P x))))
+       (λ (¬px _) ¬px))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ind-⊥→p→p?=true
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P))
+	 (x A))
+	(→ (P x)
+	   (= Bool
+	      (? A P decᴾ x)
+	      true)))))
+(define ind-⊥→p→p?=true
+  (λ (ind-⊥ _ P decᴾ x px)
+     (ind-Either
+       (decᴾ x)
+       (λ (e)
+          (= Bool
+	     (left? (P x) (¬ (P x)) e)
+	     true))
+       (λ (_) (same true))
+       (λ (¬px)
+          (ind-⊥
+	    (¬px px)
+	    (= Bool false true))))))
+
+(claim ⟨p→p?=true⟩→ind-⊥
+  (→ (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P))
+	 (x A))
+	(→ (P x)
+	   (= Bool
+	      (? A P decᴾ x)
+	      true)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨p→p?=true⟩→ind-⊥
+  (λ (p→p?=true absurd)
+     (explode-true=false
+       (symm
+         (p→p?=true
+           ⊤
+           (λ (_) ⊤)
+           (λ (_) (right (λ (_) absurd)))
+           sole
+           sole)))))
+
+(claim ind-⊥→¬p→p?=false
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P))
+	 (x A))
+	(→ (¬ (P x))
+	   (= Bool
+	      (? A P decᴾ x)
+	      false)))))
+(define ind-⊥→¬p→p?=false
+  (λ (ind-⊥ _ P decᴾ x ¬px)
+     (ind-Either
+       (decᴾ x)
+       (λ (e)
+          (= Bool
+	     (left? (P x) (¬ (P x)) e)
+	     false))
+       (λ (px)
+          (ind-⊥
+	    (¬px px)
+	    (= Bool true false)))
+       (λ (_) (same false)))))
+
+(claim ⟨¬p→p?=false⟩→ind-⊥
+  (→ (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P))
+	 (x A))
+	(→ (¬ (P x))
+	   (= Bool
+	      (? A P decᴾ x)
+	      false)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨¬p→p?=false⟩→ind-⊥
+  (λ (¬p→p?=false absurd)
+     (explode-true=false
+       (¬p→p?=false
+         ⊤
+	 (λ (_) ⊥)
+	 (λ (_) (left absurd))
+	 sole
+	 (λ (absurd) absurd)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ind-⊥→decᴾ→decides
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P)))
+	(Decides A (? A P decᴾ) P))))
+(define ind-⊥→decᴾ→decides
+  (λ (ind-⊥ A P decᴾ x)
+     (cons
+       (ind-⊥→p→p?=true
+         ind-⊥
+	 A
+	 P
+	 decᴾ
+	 x)
+       (p?=true→p
+         A
+	 P
+	 decᴾ
+	 x))))
+
+(claim ind-⊥→decᴾ→decider
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P)))
+	(Decider A P))))
+(define ind-⊥→decᴾ→decider
+  (λ (ind-⊥ A P decᴾ)
+     (cons
+       (? A P decᴾ)
+       (ind-⊥→decᴾ→decides
+         ind-⊥
+	 A
+	 P
+	 decᴾ))))
+
+(claim ⟨decᴾ→decides⟩→ind-⊥
+  (→ (Π ((A U)
+         (P (→ A U))
+	 (decᴾ (Decᴾ A P)))
+	(Decides A (? A P decᴾ) P))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨decᴾ→decides⟩→ind-⊥
+  (λ (decᴾ→decides absurd)
+     (explode-true=false
+       (symm
+         ((car
+	    ((decᴾ→decides
+	       ⊤
+	       (λ (_) ⊤)
+	       (λ (_) (right (λ (_) absurd))))
+	      sole))
+	    sole)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim ⟨decider⁼→≠→◇⟩→ind-⊥
+  (→ (Π ((A U)
+         (decider⁼ (Decider⁼ A))
+	 (x A)
+	 (y A))
+	(→ (≠ A x y) (◇ A x y)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨decider⁼→≠→◇⟩→ind-⊥
+  (λ (decider⁼→≠→◇ absurd)
+     (◇→explode⁼
+       Trivial
+       sole
+       sole
+       (decider⁼→≠→◇
+         Trivial
+	 (cons
+	   (λ (_ _) true)
+	   (λ (p)
+  	     (cons
+  	       (λ (_) (same true))
+  	       (λ (_) (same sole)))))
+	 sole
+	 sole
+	 (λ (_) absurd))
+       (same sole))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(claim Distinguishability (→ U U))
+(define Distinguishability
+  (λ (A)
+     (Π ((x A)
+         (y A))
+	(∨ (= A x y)
+	   (◇ A x y)))))
+
+(claim =true∨=false
+  (Π ((b Bool))
+     (∨ (= Bool b true)
+        (= Bool b false))))
+(define =true∨=false
+  (λ (b)
+     (ind-Bool
+       b
+       (λ (b)
+          (∨ (= Bool b true)
+             (= Bool b false)))
+      (left (same true))
+      (right (same false)))))
+
+(claim decider⁼→dist
+  (Π ((A U))
+     (→ (Decider⁼ A)
+        (Distinguishability A))))
+(define decider⁼→dist
+  (λ (A decider⁼ x y)
+     (ind-Either
+       (=true∨=false ((car decider⁼) x y))
+       (λ (_)
+          (∨ (= A x y)
+	     (◇ A x y)))
+       (λ (fxy=true)
+          (left
+	    ((cdr ((cdr decider⁼) (cons x y))) fxy=true)))
+       (λ (fxy=false)
+          (right
+	    (cons
+	      ((car decider⁼) x)
+	      (cons
+	        ((car ((cdr decider⁼) (cons x x))) (same x))
+		fxy=false)))))))
+
+(claim ==
+  (Π ((A U))
+     (→ (Distinguishability A) A A Bool)))
+(define ==
+  (λ (A dist x y)
+     (left?
+       (= A x y)
+       (◇ A x y)
+       (dist x y))))
+
+(claim dist→=→==true
+  (Π ((A U)
+      (dist (Distinguishability A))
+      (x A)
+      (y A))
+     (→ (= A x y)
+        (= Bool
+	   (== A dist x y)
+	   true))))
+(define dist→=→==true
+  (λ (A dist x y x=y)
+     (replace
+       x=y
+       (λ (a)
+          (= Bool
+	     (== A dist x a)
+	     true))
+       (ind-Either
+         (dist x x)
+	 (λ (e)
+	    (= Bool
+	       (left?
+	         (= A x x)
+		 (◇ A x x)
+		 e)
+	       true))
+	 (λ (_) (same true))
+	 (λ (x◇x)
+	    (trans
+	      ; false = f x
+	      (symm (cdr (cdr x◇x)))
+	      ; f x = true
+	      (car (cdr x◇x))))))))
+
+(claim dist→==true→=
+  (Π ((A U)
+      (dist (Distinguishability A))
+      (x A)
+      (y A))
+     (→ (= Bool
+	   (== A dist x y)
+	   true)
+	(= A x y))))
+(define dist→==true→=
+  (λ (A dist x y)
+     (ind-Either
+       (dist x y)
+       (λ (e)
+          (→ (= Bool
+	       (left?
+	         (= A x y)
+	         (◇ A x y)
+	         e)
+	       true)
+	     (= A x y)))
+       (λ (x=y _) x=y)
+       (λ (_ false=true)
+          (explode-true=false
+	    (symm false=true)
+	    (= A x y))))))
+
+(claim dist→decider⁼
+  (Π ((A U))
+     (→ (Distinguishability A)
+        (Decider⁼ A))))
+(define dist→decider⁼
+  (λ (A dist)
+     (cons
+       (== A dist)
+       (λ (p)
+          (cons
+            (dist→=→==true A dist (car p) (cdr p))
+            (dist→==true→= A dist (car p) (cdr p)))))))
+
+(claim Strong-Decides
+  (Π ((A U)
+      (f (→ A Bool))
+      (P (→ A U)))
+     U))
+(define Strong-Decides
+  (λ (A f P)
+     (Π ((x A))
+        (∧ (→ (P x) (= Bool (f x) true))
+           (→ (¬ (P x)) (= Bool (f x) false))))))
+
+(claim Strong-Decider
+  (Π ((A U)
+      (P (→ A U)))
+     U))
+(define Strong-Decider
+  (λ (A P)
+     (Σ ((f (→ A Bool)))
+        (Strong-Decides A f P))))
+
+(claim Strong-Decides₂
+  (Π ((A U)
+      (B U)
+      (f (→ A B Bool))
+      (P (→ A B U)))
+     U))
+(define Strong-Decides₂
+  (λ (A B f P)
+     (Strong-Decides
+       (Pair A B)
+       (uncurry A B Bool f)
+       (Uncurryᴾ A B P))))
+
+(claim Strong-Decider₂
+  (Π ((A U)
+      (B U)
+      (P (→ A B U)))
+     U))
+(define Strong-Decider₂
+  (λ (A B P)
+     (Σ ((f (→ A B Bool)))
+        (Strong-Decides₂ A B f P))))
+
+(claim Strong-Decides⁼
+  (Π ((A U)
+      (f (→ A A Bool)))
+     U))
+(define Strong-Decides⁼
+  (λ (A f)
+     (Strong-Decides₂
+       A
+       A
+       f
+       (λ (x y) (= A x y)))))
+
+(claim Strong-Decider⁼ (→ U U))
+(define Strong-Decider⁼
+  (λ (A)
+     (Σ ((f (→ A A Bool)))
+        (Strong-Decides⁼ A f))))
+
+
+(claim dec⁼∧strong-decider⁼→decider⁼
+  (Π ((A U))
+     (→ (Dec⁼ A)
+        (Strong-Decider⁼ A)
+        (Decider⁼ A))))
+(define dec⁼∧strong-decider⁼→decider⁼
+  (λ (A dec⁼ strong-decider⁼)
+     (cons
+       (car strong-decider⁼)
+       (λ (p)
+         (cons
+           (car ((cdr strong-decider⁼) p))
+           (λ (fxy=true)
+              (ind-Either
+	        (dec⁼ p)
+	        (λ (_) (= A (car p) (cdr p)))
+	        (λ (x=y) x=y)
+	        (λ (x≠y)
+	           (explode-true=false
+	             (trans
+		       ; true = f (car p) (cdr p)
+		       (symm fxy=true)
+		       ; f (car p) (cdr p) = false
+		       ((cdr ((cdr strong-decider⁼) p)) x≠y))
+		     (= A (car p) (cdr p)))))))))))
+
+(claim ind-⊥→≠true→=false
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((b Bool))
+        (→ (≠ Bool b true)
+	   (= Bool b false)))))
+(define ind-⊥→≠true→=false
+  (λ (ind-⊥ b b≠true)
+     (ind-Either
+       (=true∨=false b)
+       (λ (_) (= Bool b false))
+       (λ (b=true)
+          (ind-⊥
+	    (b≠true b=true)
+	    (= Bool b false)))
+       (λ (b=false) b=false))))
+
+(claim ⟨≠true→=false⟩→ind-⊥
+  (→ (Π ((b Bool))
+        (→ (≠ Bool b true)
+	   (= Bool b false)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨≠true→=false⟩→ind-⊥
+  (λ (≠true→=false absurd)
+     (explode-true=false
+       (≠true→=false
+         true
+	 (λ (_) absurd)))))
+
+(claim ind-⊥→decides⁼→strong-decides⁼
+  (→ (→ ⊥ (Π ((A U)) A))
+     (Π ((A U)
+         (f (→ A A Bool)))
+        (→ (Decides⁼ A f)
+           (Strong-Decides⁼ A f)))))
+(define ind-⊥→decides⁼→strong-decides⁼
+  (λ (ind-⊥ A f decides⁼ p)
+     (cons
+       (car (decides⁼ p))
+       (λ (x≠y)
+          (ind-⊥→≠true→=false
+            ind-⊥
+            (f (car p) (cdr p))
+            (λ (fxy=true)
+               (x≠y ((cdr (decides⁼ p)) fxy=true))))))))
+
+(claim ⟨decides⁼→strong-decides⁼⟩→ind-⊥
+  (→ (Π ((A U)
+         (f (→ A A Bool)))
+        (→ (Decides⁼ A f)
+           (Strong-Decides⁼ A f)))
+     (→ ⊥ (Π ((A U)) A))))
+(define ⟨decides⁼→strong-decides⁼⟩→ind-⊥
+  (λ (decides⁼→strong-decides⁼ absurd)
+     (explode-true=false
+       ((cdr
+          (decides⁼→strong-decides⁼
+            ⊤
+ 	    (λ (_ _) true)
+ 	    (λ (_)
+ 	       (cons
+ 	         (λ (_) (same true))
+ 	         (λ (_) (same sole))))
+            (cons sole sole)))
+         (λ (_) absurd)))))
+
+(claim nonempty∧strong-decides⁼→ind-⊥
+  (Π ((A U)
+      (f (→ A A Bool))
+      (x A))
+     (→ (Strong-Decides⁼ A f)
+        (→ ⊥ (Π ((A U)) A)))))
+(define	nonempty∧strong-decides⁼→ind-⊥
+  (λ (A f x strong-decides⁼ absurd)
+     (explode-true=false
+       (trans
+         ; true = f x x
+	 (symm ((car (strong-decides⁼ (cons x x))) (same x)))
+	 ; f x x = false
+	 ((cdr (strong-decides⁼ (cons x x))) (λ (_) absurd))))))
+
+(claim strong-decider⁼→≠→◇
+  (Π ((A U)
+      (strong-decider⁼ (Strong-Decider⁼ A))
+      (x A)
+      (y A))
+     (→ (≠ A x y) (◇ A x y))))
+(define strong-decider⁼→≠→◇
+  (λ (A strong-decider⁼ x y x≠y)
+     (cons
+       ((car strong-decider⁼) x)
+       (cons
+         ((car ((cdr strong-decider⁼) (cons x x))) (same x))
+	 ((cdr ((cdr strong-decider⁼) (cons x y))) x≠y)))))
+
+(claim Very-Strong-Decides
+  (Π ((A U)
+      (f (→ A Bool))
+      (P (→ A U)))
+     U))
+(define Very-Strong-Decides
+  (λ (A f P)
+     (Π ((x A))
+        (∧ (↔ (P x) (= Bool (f x) true))
+	   (↔ (¬ (P x)) (= Bool (f x) false))))))
