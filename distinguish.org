@@ -222,7 +222,7 @@ distinguisher for them.
        (cdr (cdr x◇y))))
 #+end_src
 
-Being distinguishable captures more generally what's going on in the
+Distinguishability captures more generally what's going on in the
 case of 5 = 7 and true = false.
 
 #+begin_src lisp
@@ -250,7 +250,7 @@ In other words, /any equality of distinguishable terms is explosive./
 
 * Inequality
 
-Being distinguishable is a strictly stronger relation than inquality
+Distinguishability is a strictly stronger relation than inequality
 minimal Pie.[fn::Moving forward, we'll take advantage of the fact that
 the principle of explosion is not a theorem of minimal Pie: to show
 that any other claim is not a theorem, it suffices to show that it
