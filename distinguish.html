@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-06-30 Mon 19:45 -->
+<!-- 2025-07-01 Tue 16:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Explosives and Distinguishers</title>
@@ -18,25 +18,42 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org29574ed">Distinguishers</a></li>
-<li><a href="#org9156980">Inequality</a></li>
-<li><a href="#org4e4a0c8">Decidability</a></li>
-<li><a href="#org8824855">Deciders</a></li>
-<li><a href="#org6e133f2">Distinguishability</a></li>
-<li><a href="#org2098e4e">Strong Deciders</a></li>
-<li><a href="#org2036d90">Concluding Remarks</a></li>
+<li><a href="#org3c2e68e">Distinguishers</a></li>
+<li><a href="#org7f21cbe">Inequality</a></li>
+<li><a href="#org4c8bc21">Decidability</a></li>
+<li><a href="#org3e1d332">Deciders</a></li>
+<li><a href="#orgad5bc3c">Distinguishability</a></li>
+<li><a href="#org0fe8d0b">Strong Deciders</a></li>
+<li><a href="#orgbdf440b">Conclusions</a></li>
 </ul>
 </div>
 </div>
 <p>
-<i><b>Abstract.</b> TODO</i> Testing
+<i><b>Abstract.</b> I examine the relationship between decidable equality,
+inequality, and distinguishability in the minimal fragment of <a href="https://docs.racket-lang.org/pie/index.html">Pie</a>. I
+prove that the statement:</i>
+</p>
+
+<blockquote>
+<p>
+<i>If 𝐴 admits decidable equality, then unequal terms of type 𝐴 are
+distinguishable</i>
+</p>
+</blockquote>
+
+<p>
+<i>holds in Pie, its minimal fragment and its paraconsistent variant,
+but with necessarily different notions of decidable equality.  An
+auxiliary goal of this piece is to present formal proofs which
+demonstrate the ways in which basic claims about decidability depend
+on the principle of explosion.</i>
 </p>
 
 <p>
-<i>Quick interjection:</i> This piece contains (too) many proofs in <a href="https://docs.racket-lang.org/pie/index.html">Pie</a>, a simple, beautiful, but
-verbose dependently typed programming language.  Before getting
-Here's a small logical interface used throughout to make
-proofs more readable:
+<b>Quick Preamble:</b> This piece contains (too) many proofs in <a href="https://docs.racket-lang.org/pie/index.html">Pie</a>, a
+simple, beautiful, but verbose dependently typed programming language.
+Here's a small logical interface used throughout to make proofs more
+readable:
 </p>
 
 <div class="org-src-container">
@@ -66,12 +83,13 @@ proofs more readable:
 </div>
 
 <p>
-<i>Interjection over.</i>
+<b>Preamble over.</b>
 </p>
 
 <p>
-I recently spent an inordinate amount of time thinking about <a href="https://docs.racket-lang.org/pie/index.html">Pie</a>
-formalizations of the following theorem:
+I recently spent an inordinate amount of time thinking about
+Pie<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>  formalizations of the
+following theorem:
 </p>
 
 <blockquote>
@@ -84,13 +102,14 @@ formalizations of the following theorem:
 I was interested primarily in proofs that could be carried out in the
 minimal fragment of Pie, i.e., without the use of <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Absurd%29%29"><code>ind-Absurd</code></a>, the
 induction principle for the empty type which expresses the <a href="https://en.wikipedia.org/wiki/Principle_of_explosion">principle
-of explosion</a>.
+of explosion</a>.  I'll call this fragment <b>minimal Pie</b> throughout, and
+will try to use <b>vanilla Pie</b> otherwise for emphasis.
 </p>
 
 <p>
-Thinking about this long enough leads invariably to a standard fact of
-constructive mathematics: 1 = 0 is <i>explosive</i> in the sense that
-anything follows from it in the minimal fragment of Pie.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+Thinking about this problem long enough leads invariably to a standard
+fact of constructive mathematics: 1 = 0 is <i>explosive</i> in the sense
+that anything follows from it in minimal Pie.<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>
 </p>
 
 <div class="org-src-container">
@@ -106,12 +125,12 @@ anything follows from it in the minimal fragment of Pie.<sup><a id="fnr.1" class
 </div>
 
 <p>
-And thinking about for too long leads to a natural enough question:
-<i>which equalities are explosive?</i>
+Thinking about this problem for too long leads to a natural enough
+question: <i>which equalities are explosive?</i>
 </p>
-<div id="outline-container-org29574ed" class="outline-2">
-<h2 id="org29574ed">Distinguishers</h2>
-<div class="outline-text-2" id="text-org29574ed">
+<div id="outline-container-org3c2e68e" class="outline-2">
+<h2 id="org3c2e68e">Distinguishers</h2>
+<div class="outline-text-2" id="text-org3c2e68e">
 <p>
 Its straightforward to generalize the above proof to any fixed pair of
 natural numbers.
@@ -194,12 +213,12 @@ type encoding of Booleans.
 </div>
 
 <p>
-All we're doing here is bootstrapping; if an equality implies that 1 =
-0 then it's explosive.  This condition is a tad clunky, but it hints
-at a definition: let's say boolean function 𝑓 : 𝐴 → Bool
-<i>distinguishes</i> two values 𝑎 and 𝑏 if 𝑓 𝑎 is true and 𝑓 𝑏 is false.
-Let's also say 𝑎 and 𝑏 are <i>distinguishable</i>, written 𝑎 ◇ 𝑏, if there
-is a distinguisher for them.
+All we're doing here is bootstrapping; if an equality implies 1 = 0
+then it's explosive.  This condition is clunky, but it hints at a
+definition: let's say boolean function 𝑓 <i>distinguishes</i> two values
+𝑎 and 𝑏 if 𝑓(𝑎) is true and 𝑓(𝑏) is false.  Let's also say
+𝑎 and 𝑏 are <i>distinguishable</i>, written 𝑎 ◇ 𝑏, if there is a
+distinguisher for them.
 </p>
 
 <div class="org-src-container">
@@ -220,7 +239,7 @@ is a distinguisher for them.
      (&#931; ((f (&#8594; A Bool)))
         (Distinguishes A f x y))))
 
-<span style="color: #b22222;">; </span><span style="color: #b22222;">the following are getters for &#9671;</span>
+<span style="color: #b22222;">; </span><span style="color: #b22222;">these are just getters for &#9671;</span>
 
 (claim distinguisher-&#9671;
   (&#928; ((A U)
@@ -290,12 +309,12 @@ In other words, <i>any equality of distinguishable terms is explosive.</i>
 </p>
 </div>
 </div>
-<div id="outline-container-org9156980" class="outline-2">
-<h2 id="org9156980">Inequality</h2>
-<div class="outline-text-2" id="text-org9156980">
+<div id="outline-container-org7f21cbe" class="outline-2">
+<h2 id="org7f21cbe">Inequality</h2>
+<div class="outline-text-2" id="text-org7f21cbe">
 <p>
 Being distinguishable is a strictly stronger relation than inquality
-in the minimal fragment of Pie.<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>
+minimal Pie.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
 </p>
 
 <div class="org-src-container">
@@ -315,7 +334,7 @@ in the minimal fragment of Pie.<sup><a id="fnr.2" class="footref" href="#fn.2" r
          (y A))
         (&#8594; (&#8800; A x y)
            (&#9671; A x y)))
-     (&#8594; &#8869; &#928; ((A U)) A))))
+     (&#8594; &#8869; (&#928; ((A U)) A))))
 (define &#10216;&#8800;&#8594;&#9671;&#10217;&#8594;ind-&#8869;
   (&#955; (&#8800;&#8594;&#9671; absurd)
      (&#9671;&#8594;explode&#8316;
@@ -332,18 +351,18 @@ in the minimal fragment of Pie.<sup><a id="fnr.2" class="footref" href="#fn.2" r
 </div>
 
 <p>
-The principle ≠→◇ has the flavor of many well-studied semi-classical
-principles: it expresses the ability to extract something constructive
-from a negation proof.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>  So it's not surprising that we
-can't prove ≠→◇ in Pie<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> but we also can't disprove it.  This
-is because ≠→◇ is a theorem in the classical extension of Pie (which
-is consistent).
+≠→◇ has the flavor of many semi-classical principles: it expresses
+that we can extract something constructive from a negation
+proof.<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>  So it's not surprising that we can't prove ≠→◇ in vanilla
+Pie<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>
+but we also can't disprove it.  This is because ≠→◇ is a theorem in
+the classical extension of Pie (which is consistent).<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup>
 </p>
 
 <p>
 That ≠→◇ holds classically is not immediately obivous, but becomes
-more clear through the lens of <i>decidable equality</i>.  In Pie, <b>if 𝐴
-admits decidable equality, then unequal values of type 𝐴 are
+more clear through the lens of <a href="https://ncatlab.org/nlab/show/decidable%20equality">decidable equality</a>.  In vanilla Pie,
+<b>if 𝐴 admits decidable equality, then unequal terms of type 𝐴 are
 distinguishable.</b>
 </p>
 
@@ -354,14 +373,14 @@ theory, has its origins in computability theory.
 </p>
 </div>
 </div>
-<div id="outline-container-org4e4a0c8" class="outline-2">
-<h2 id="org4e4a0c8">Decidability</h2>
-<div class="outline-text-2" id="text-org4e4a0c8">
+<div id="outline-container-org4c8bc21" class="outline-2">
+<h2 id="org4c8bc21">Decidability</h2>
+<div class="outline-text-2" id="text-org4c8bc21">
 <p>
-A type 𝐴 admits <b>decidable equality</b> if for any two values 𝑎₁ and 𝑎₂
-of type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This can be seen as a
-restriction of the law of excluded middle, so all types admit
-decidable equality in the classical extension of Pie.
+A type 𝐴 admits <b>decidable equality</b> if for any two terms 𝑎₁ and 𝑎₂ of
+type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This is a restriction of the <a href="https://en.wikipedia.org/wiki/Law_of_excluded_middle">law
+of excluded middle</a>, so all types admit decidable equality in classical
+Pie.
 </p>
 
 <p>
@@ -371,32 +390,32 @@ function 𝑓 such that 𝑓(𝑥) = 1 if and only if 𝑃(𝑥) holds.
 </p>
 
 <p>
-<i>How do these two notions correspond?</i> Answering this question
-requires putting on our Curry-Howard glasses: a term 𝑓 of type
+<i>How do these two notions correspond?</i> We just need to put on our
+<a href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence">Curry-Howard</a> glasses: a term 𝑓 of type
 </p>
 
 <blockquote>
 <p>
-<code>(Π ((x A) (y A)) (∨ (= 𝐴 𝑎₁ 𝑎₂) (≠ 𝐴 𝑎₁ 𝑎₁)))</code>
+(Π ((𝑥 𝐴) (𝑥 𝐴)) (∨ (= 𝐴 𝑥 𝑦) (≠ 𝐴 𝑥 𝑦)))
 </p>
 </blockquote>
 
 <p>
 on the one hand is a prove that 𝐴 admits decidable equality.  On the
-other hand, it's a <i>computable function</i> where (𝑓 𝑎 𝑏) evaluates to a
+other hand, it's a <i>computable function</i> where 𝑓(𝑎, 𝑏) evaluates to a
 left term if 𝑎 = 𝑏 and a right term otherwise.  Since we can determine
-leftness versus rightness programmatically, the term 𝑓 can be made a
-decider for equality in the computability theoretic sense.
+leftness versus rightness programmatically (using <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Either%29%29"><code>ind-Either</code></a>), the
+term 𝑓 can be made an equality decider in the computability theoretic
+sense.
 </p>
 
 <p>
-We'll formalize this observation, but first, a bit more on the general
-framework of decidability.  A type 𝐴 (viewed through the Curry-Howard
-lens) is <b>decidable</b> if either 𝐴 or ¬𝐴 holds.  The law of excluded
-middle is equivalent to every type being decidable.  We can lift this
-notion of decidability to binary predicates, but if we want to use
-those predicates in their Curried form, we'll need to uncurry when
-reasoning about their decidability.
+More generally, a type 𝐴 (viewed through the Curry-Howard lens) is
+<b>decidable</b> if either 𝐴 or ¬𝐴 holds.  The law of excluded middle is
+equivalent to every type being decidable.  We can lift this notion of
+decidability to binary predicates, but if we want to use those
+predicates in their Curried form, we'll need to uncurry when reasoning
+about their decidability.<sup><a id="fnr.7" class="footref" href="#fn.7" role="doc-backlink">7</a></sup>
 </p>
 
 <div class="org-src-container">
@@ -443,7 +462,7 @@ reasoning about their decidability.
 <p>
 We express the computability theoretic notion of decidability as
 having a decider, i.e., a function that witnesses the truth value of
-the predicate (we'll use <code>true</code> and <code>false</code> instead of <code>1</code> and <code>0</code>).
+the predicate.
 </p>
 
 <div class="org-src-container">
@@ -573,10 +592,11 @@ As noted above, types that admit decidable equalities have an
 </div>
 
 <p>
-We can convert the equality decider into an <i>distinguisher</i> by
-partially applying it: if (𝑓 𝑎 𝑏) is true if and only if 𝑎 = 𝑏, then
-((𝑓 𝑎) 𝑥) is true if 𝑥 = 𝑎 and false otherwise.  But the fact that
-this holds depends crucially on the principle of explosion.
+And we can convert the equality decider into an <i>distinguisher</i> by
+partially applying it: if 𝑓(𝑎, 𝑏) is true if and only if 𝑎 = 𝑏, then
+if 𝑎 ≠ 𝑏 we have we (λ𝑥.𝑓(𝑎, 𝑥))(𝑎) is true and (λ𝑥.𝑓(𝑎, 𝑥))(b) is
+false.  But, our first "interesting" observation: that this holds
+depends crucially on the principle of explosion.
 </p>
 
 <div class="org-src-container">
@@ -643,16 +663,15 @@ this holds depends crucially on the principle of explosion.
 </div>
 
 <p>
-Another theme is made visible here: in almost all cases, the <code>Trivial</code>
-type is sufficient to find a counterexample in the minimal fragment
-Pie of a given principle.  And usually this comes down to an
-artificial proof of a negation using our <code>Absurd</code> assumption (see
-above).
+Another theme is made visible here: in nearly cases, the <code>Trivial</code>
+type is sufficient to find a counterexample in minimal Pie of a given
+principle.  And usually this comes down to an artificial proof of a
+negation using our <code>Absurd</code> assumption (see above).
 </p>
 
 <p>
-As a corollary, we can prove ≠→◇ in the classical and constructive
-(i.e., vanilla Pie) settings.
+As a corollary, we can prove versions of ≠→◇ in classical Pie and
+vanilla Pie.
 </p>
 
 <div class="org-src-container">
@@ -694,22 +713,26 @@ As a corollary, we can prove ≠→◇ in the classical and constructive
 </div>
 </div>
 </div>
-<div id="outline-container-org8824855" class="outline-2">
-<h2 id="org8824855">Deciders</h2>
-<div class="outline-text-2" id="text-org8824855">
+<div id="outline-container-org3e1d332" class="outline-2">
+<h2 id="org3e1d332">Deciders</h2>
+<div class="outline-text-2" id="text-org3e1d332">
 <p>
-But what about the minimal fragment?  We can't prove ≠→◇ from
-decidable equality, but we also can't even prove that the obvious
-decider is <i>actually</i> a decider.  In minimal Pie, having a decider (in
-the sense that the obvious decider is, in fact, a decider) is a
-stronger condition than admitting decidable equality.
+But what about minimal Pie?  We've demonstrated that we can't prove
+≠→◇ from decidable equality, but is there a <i>stronger</i> notion of
+decidable equality that holds in minimal Pie?  The short answer: yes.
+In minimal pie, <i>we can't even prove that the obvious decider is
+actually a decider.</i> That is, having a decider in minimal Pie (in the
+sense that the obvious decider is, in fact, a decider) is a stronger
+condition than admitting decidable equality.  The long answer: read
+on, that's the point of the piece.
 </p>
 
 <p>
-One direction is easy: if a predicate 𝑃 has a decider, then it's
-decidable.  The proof: given 𝑥, ask the decider if 𝑃(𝑥) or ¬𝑃(𝑥).  We
-break the proof up into two parts because working with Σ-types in Pie
-isn't so ergonomic.
+One direction of the claim in the previous paragraph is fairly easy:
+if a predicate 𝑃 has a decider, then it's decidable, even in minimal
+Pie.  The proof: given 𝑥, ask the decider if 𝑃(𝑥) or ¬𝑃(𝑥).  We break
+the proof up into two parts because working with Σ-types in Pie isn't
+ergonomic.
 </p>
 
 <div class="org-src-container">
@@ -732,8 +755,9 @@ isn't so ergonomic.
        (λ (prf)
           (right
             (λ (px)
-               (true≠false
-                 (symm ((car prf) px)))))))))
+               (explode-true=false
+                 (symm ((car prf) px))
+                 ⊥)))))))
 
 (claim decider→decᴾ
   (Π ((A U)
@@ -754,14 +778,14 @@ isn't so ergonomic.
 <p>
 The more difficult direction is to show that if 𝑃 is decidable then it
 has a decider.  Though difficult is not quite right.  The proof is
-very natural: the obvious decider for 𝑃 is a decider. But within the
-minimal fragment, we can't prove this.
+very natural: the obvious decider for 𝑃 is a decider. But in minimal
+Pie, <i>we can't prove this.</i>
 </p>
 
 <p>
-Let's break this into two observations: within the minimal fragment,
-if we know the value of the obvious decider on 𝑎, then we <i>can</i> derive
-proofs of the 𝑃(𝑎) or ¬𝑃(𝑎), depending on that value.
+Let's break this into two observations: in minimal Pie, if we know the
+value of the obvious decider on 𝑎, then we <i>can</i> derive proofs of the
+𝑃(𝑎) or ¬𝑃(𝑎), depending on the value.
 </p>
 
 <div class="org-src-container">
@@ -814,17 +838,18 @@ proofs of the 𝑃(𝑎) or ¬𝑃(𝑎), depending on that value.
 </div>
 
 <p>
-What we <i>can't</i> do within the minimal fragment is determine the value
-of the decider itself given 𝑃(𝑎) or ¬𝑃(𝑎), e.g., 𝑃(𝑎) implies the
-equality (? 𝑃 𝑎) = true given the principle of explosion, but this
-implication also <i>implies</i> the principle of explosion.  This
-ultimately comes down to the fact that there isn't much we can do in
-the ¬𝑃(𝑎) branch of the decidability of 𝑃 except explode it with our
-assumption 𝑃(𝑎).
+What we <i>can't</i> do within minimal Pie is determine the value of the
+decider itself given 𝑃(𝑎) or ¬𝑃(𝑎), e.g., 𝑃(𝑎) implies the 𝑃?(𝑎) is
+true given the principle of explosion, but this implication also
+<i>implies</i> the principle of explosion.  This ultimately comes down to
+the fact that there isn't a whole lot we can do in the ¬𝑃(𝑎) branch of
+the 𝑃-decidability invocation except explode it with our assumption
+𝑃(𝑎).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">(claim ind-&#8869;&#8594;p&#8594;p?=true
+<pre class="src src-lisp">
+(claim ind-&#8869;&#8594;p&#8594;p?=true
   (&#8594; (&#8594; &#8869; (&#928; ((A U)) A))
      (&#928; ((A U)
          (P (&#8594; A U))
@@ -844,11 +869,8 @@ assumption 𝑃(𝑎).
              true))
        (&#955; (_) (same true))
        (&#955; (&#172;px)
-          (ind-&#8869;&#8594;explode
-            ind-&#8869;
-            (P x)
-            &#172;px
-            px
+          (ind-&#8869;
+            (&#172;px px)
             (= Bool false true))))))
 
 (claim &#10216;p&#8594;p?=true&#10217;&#8594;ind-&#8869;
@@ -891,11 +913,8 @@ assumption 𝑃(𝑎).
              (left? (P x) (&#172; (P x)) e)
              false))
        (&#955; (px)
-          (ind-&#8869;&#8594;explode
-            ind-&#8869;
-            (P x)
-            &#172;px
-            px
+          (ind-&#8869;
+            (&#172;px px)
             (= Bool true false)))
        (&#955; (_) (same false)))))
 
@@ -985,51 +1004,65 @@ inability to prove that the obvious decider decides.
 </div>
 
 <p>
-But, alas, even though having a decider is stronger condition in
-minimal Pie, it's not sufficient to distinguish unequals.
+I'm under the impression that it's also impossible to prove that
+decidability implies having <i>any</i> decider in minimal Pie, but this is
+out of reach if we want to internalize this fact as we've been
+doing. We need some handle on what the decider is to prove anything
+about it.
+</p>
+
+<p>
+Getting to the point: having an equality decider is a stronger than
+admitting decidable equality in minimal Pie. This makes it a candidate
+condition from which we might prove distinguishability of unequals.
+But, alas, it's not sufficient.  Its easy to build an equality decider
+for the <code>Trivial</code> type, so we can use our artificial negation proof
+trick again.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-nil">(claim ⟨decider⁼→≠→◇⟩→ind-⊥
-  (→ (Π ((A U)
-         (decider⁼ (Decider⁼ A))
+<pre class="src src-lisp">(claim &#10216;decider&#8316;&#8594;&#8800;&#8594;&#9671;&#10217;&#8594;ind-&#8869;
+  (&#8594; (&#928; ((A U)
+         (decider&#8316; (Decider&#8316; A))
          (x A)
          (y A))
-        (→ (≠ A x y) (◇ A x y)))
-     (→ ⊥ (Π ((A U)) A))))
-(define ⟨decider⁼→≠→◇⟩→ind-⊥
-  (λ (decider⁼→≠→◇ absurd)
-     (◇→explode⁼
+        (&#8594; (&#8800; A x y) (&#9671; A x y)))
+     (&#8594; &#8869; (&#928; ((A U)) A))))
+(define &#10216;decider&#8316;&#8594;&#8800;&#8594;&#9671;&#10217;&#8594;ind-&#8869;
+  (&#955; (decider&#8316;&#8594;&#8800;&#8594;&#9671; absurd)
+     (&#9671;&#8594;explode&#8316;
        Trivial
        sole
        sole
-       (decider⁼→≠→◇
+       (decider&#8316;&#8594;&#8800;&#8594;&#9671;
          Trivial
          (cons
-           (λ (_ _) true)
-           (λ (p)
+           (&#955; (_ _) true)
+           (&#955; (p)
              (cons
-               (λ (_) (same true))
-               (λ (_) (same sole)))))
+               (&#955; (_) (same true))
+               (&#955; (_) (same sole)))))
          sole
          sole
-         (λ (_) absurd))
+         <span style="color: #b22222;">; artifical negation proof</span>
+         (&#955; (_) absurd))
        (same sole))))
 </pre>
 </div>
 
 <p>
-So our quest continues.
+Our quest continues.
 </p>
 </div>
 </div>
-<div id="outline-container-org6e133f2" class="outline-2">
-<h2 id="org6e133f2">Distinguishability</h2>
-<div class="outline-text-2" id="text-org6e133f2">
+<div id="outline-container-orgad5bc3c" class="outline-2">
+<h2 id="orgad5bc3c">Distinguishability</h2>
+<div class="outline-text-2" id="text-orgad5bc3c">
 <p>
-But first, a side quest. Let's consider another definition, one that
-seems promising.  We'll say that a type admits <b>complete distinguishability</b> if
-all of its values are equal or distinguishable.
+But first, a side quest. Let's consider another definition which
+implies decidable equality, and seems promising.  We'll say that a
+type admits <b>complete distinguishability</b> if all of its values are
+equal or distinguishable.
 </p>
 
 <div class="org-src-container">
@@ -1045,18 +1078,18 @@ all of its values are equal or distinguishable.
 
 <p>
 It shouldn't be too surprising that having an equality decider is
-equivalent to admitting complete distinguishability in Pie because of
-◇→≠.  What's surprising (at least to me) is that this also holds in
-minimal Pie, i.e., our ability to use construct an equality decider
-from complete distinguishability does not depend on the principle
-explosion.  In this sense, complete distinguishability is the
-"correct" lowering of decidable equality into the minimal fragment so
-if we want to be able to derive equality deciders.
+equivalent to admitting complete distinguishability in vanilla Pie
+(because of ◇→≠).  What's surprising (at least to me) is that this
+also holds in minimal Pie, i.e., <i>the ability to use construct an
+equality decider from complete distinguishability does not depend on
+the principle explosion.</i> In this sense, complete distinguishability
+is the "correct" lowering of decidable equality into minimal Pie if we
+want to be able to derive equality deciders.
 </p>
 
 <p>
 As usual, one direction is easier than the other. If we have an
-equality decider, we can use to distinguish unequals.
+equality decider, we can use it to distinguish unequals.
 </p>
 
 <div class="org-src-container">
@@ -1099,12 +1132,12 @@ equality decider, we can use to distinguish unequals.
 </div>
 
 <p>
-To prove that complete distinguishability implies a we can construct a
-decider, it will be convenient to hand roll a new decider, the
-analogous obvious decider for complete distinguishability.  We can
-this prove that this decider is, in fact, a decider by taking
-advantange of the distinguishability proof, which we can leverage to
-avoid using explosion.
+To derive an equality decider from complete distinguishability, it'll
+be convenient to hand roll a new obvious decider, the analogous one
+for complete distinguishability.  We can prove that this decider is,
+in fact, a decider by taking advantage of the ambient
+distinguishability proof, which we can leverage to avoid using
+explosion.
 </p>
 
 <div class="org-src-container">
@@ -1201,21 +1234,21 @@ I couldn't help but take a detour.
 </p>
 </div>
 </div>
-<div id="outline-container-org2098e4e" class="outline-2">
-<h2 id="org2098e4e">Strong Deciders</h2>
-<div class="outline-text-2" id="text-org2098e4e">
+<div id="outline-container-org0fe8d0b" class="outline-2">
+<h2 id="org0fe8d0b">Strong Deciders</h2>
+<div class="outline-text-2" id="text-org0fe8d0b">
 <p>
-There are probably a couple other intermediate definitions we could
-look at, but let's get to the punchline.  Looking back, our inability
-use the obvious equality decider in minimal Pie came from our
-inability to derive equalities for the output values of the decider.
-A minimal definition of deciability should give us this power so we
+There are likely far more intermediate definitions of decidable
+equality we could look at, but let's get to the punchline.  Looking
+back, our inability to work with the obvious decider in minimal Pie
+came from our inability to derive equalities for its output values.  A
+minimal definition of decidability should give us this power so we
 don't need to appeal to explosion.
 </p>
 
 <p>
 We'll say that a function 𝑓 is a <b>strong decider</b> for the predicate 𝑃
-if (𝑃 𝑎) implies (𝑓 𝑎) = true and ¬(𝑃 𝑎) implies (𝑓 𝑎) = false.
+if 𝑃(𝑎) implies 𝑓(𝑎) is true and ¬𝑃(𝑎) implies 𝑓(𝑎) is false.
 </p>
 
 <div class="org-src-container">
@@ -1285,11 +1318,12 @@ if (𝑃 𝑎) implies (𝑓 𝑎) = true and ¬(𝑃 𝑎) implies (𝑓 𝑎) 
 <p>
 Having a strong decider is equivalent to having a decider in vanilla
 Pie, but we can see the "stress" this new definition puts on the
-minimal fragment.  The only thing that blocks the equivalence in
-minimal Pie is our inability to prove that a Boolean value that not
-true is false.  It may be worth noting that this principle has
-similarities to semi-classical principles like the <a href="https://en.wikipedia.org/wiki/Limited_principle_of_omniscience">Limited Principle
-of Omnipotence</a>.
+minimal Pie (in the sense that we're pushing against the boundary of
+minimal and vanilla Pie).  The only thing that blocks the equivalence
+in minimal Pie is our inability to prove something very simple: a
+Boolean value that not true is false.  It may be worth noting that
+this principle also has similarities to semi-classical principles like
+the <a href="https://en.wikipedia.org/wiki/Limited_principle_of_omniscience">limited principle of omnipotence</a>.
 </p>
 
 <div class="org-src-container">
@@ -1362,8 +1396,8 @@ of Omnipotence</a>.
 
 <p>
 Finally, having a strong decider is not quite stronger than having a
-decider in the minimal fragment, but it is in when taken in addition
-with deciable equality.
+decider in minimal Pie, but it is when taken in tandem with decidable
+equality.
 </p>
 
 <div class="org-src-container">
@@ -1395,17 +1429,17 @@ with deciable equality.
 </pre>
 </div>
 <p>
-This implies that having a strong decider is strictly stronger than
+In particular, having a strong decider is strictly stronger than
 having a decider in the <i>paraconsistent</i> variant of Pie (i.e., with
 excluded middle and without explosion).
 </p>
 </div>
 </div>
-<div id="outline-container-org2036d90" class="outline-2">
-<h2 id="org2036d90">Concluding Remarks</h2>
-<div class="outline-text-2" id="text-org2036d90">
+<div id="outline-container-orgbdf440b" class="outline-2">
+<h2 id="orgbdf440b">Conclusions</h2>
+<div class="outline-text-2" id="text-orgbdf440b">
 <p>
-Despite the convoluted nature of this story, the ending is simple: in
+Despite the circuitous nature of this story, the ending is simple: in
 minimal Pie, if a type 𝐴 has a strong equality decider, then it has
 distinguishable unequals.
 </p>
@@ -1428,18 +1462,24 @@ distinguishable unequals.
 </div>
 
 <p>
-This is certainly one of those cases where the journey is worth more
-than the destination.  The final definition seems <i>right</i>, in the
+And this is certainly one of those cases where the journey is worth
+more than the destination.  The final definition seems <i>right</i>, in the
 sense that the proof uses the data its given exactly as you would
-expect.  But the value of this exercise comes from recognizing that
-strong deciders are tightly connectioned with decidable equality.  And
-this connection illuminates a nuanced heirarchy of possible
-definitions of decidable equality which aren't visible in vanilla
-Pie.
+expect. There's a satisfying beauty to it, like all the piece go where
+they should.  But the true value of this exercise comes from
+recognizing that having strong deciders sits on a spectrum of
+decidable equality that is not really all that visible in vanilla Pie.
 </p>
 
 <p>
-The last thing perhaps worth pointing out is one final definition:
+Generally speaking, I believe that examining the minimal fragments of
+constructive logics in this reverse-mathematical fashion can reveal
+some pretty interesting structures in constructive proofs.  Or maybe
+it just scratches in itch for the proof-twiddlers among us.
+</p>
+
+<p>
+One last thing. It's perhaps worth giving one final definition:
 </p>
 
 <div class="org-src-container">
@@ -1457,11 +1497,28 @@ The last thing perhaps worth pointing out is one final definition:
 </div>
 
 <p>
-If you're at being conscious of explosions, this seems to be the a
-reasonably conservative definition which which yields an equivalent
-definition of decidable equality in vanilla Pie.  The only curiosity
-of this definition is that, in terms of what is <i>necessary</i>, there's
-no need for f(x) = false to imply ¬P(x).
+If you're feeling explosion conscious, having a very strong decider in
+this sense seems to be the "right" way of capturing decidable
+equality.  It's ultimately just an amalgamation of a strong decider
+and a decider, so it's equivalent to decidable equality in vanilla
+Pie.  Its only curiosity is that there's no need to require in the
+definition
+</p>
+
+<blockquote>
+<p>
+(→ (= Bool (f x) false) (¬ (P x)))
+</p>
+</blockquote>
+
+<p>
+because this is implied (in minimal Pie) by the other three
+implications.  But, I'd choose an unnecessary assumption over a lack
+of symmetry any day.
+</p>
+
+<p>
+<i>July 1, 2025</i>
 </p>
 </div>
 </div>
@@ -1469,21 +1526,29 @@ no need for f(x) = false to imply ¬P(x).
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See
-Proposition 3.2 of Constructivism in Mathematics by Trolestra and van
-Dalen.</p></div></div>
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If only the sentence ended there.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Moving forward, we'll take
-advantage of the fact that the principle of explosion is not a theorem
-in the minimal fragment of Pie: to show that any other claim is not a
-theorem, it suffices to show that it implies explosion.</p></div></div>
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See, e.g., Proposition 3.2
+of Constructivism in Mathematics by Trolestra and van Dalen.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See, for example, Proposition 2.1.1 in
-<a href="https://arxiv.org/abs/1804.05495">Constructive Reverse Mathematics</a> by Hannes Diener. Actually, just read
-the whole thing, it's very good.</p></div></div>
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Moving forward, we'll take advantage of the fact that
+the principle of explosion is not a theorem of minimal Pie: to show
+that any other claim is not a theorem, it suffices to show that it
+implies explosion.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Said another way, we can't prove ind-⊥→≠→◇
-in the minimal fragment of Pie.</p></div></div>
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See, e.g., Proposition 2.1.1 in <a href="https://arxiv.org/abs/1804.05495">Constructive Reverse
+Mathematics</a> by Diener. Actually, just read the whole thing, it's very
+good.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Said another way, we can't prove ind-⊥→≠→◇ in minimal Pie.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6" role="doc-backlink">6</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Naturally,
+I'll call this classical Pie.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7" role="doc-backlink">7</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If I were building an interface for
+decidability in Pie, I would <i>not</i> design it this way, but this makes
+proving things easier: there's no need to do intermediate translations
+between equivalent definitions.</p></div></div>
 
 
 </div>

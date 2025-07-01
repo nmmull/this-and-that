@@ -3,12 +3,25 @@
 #+OPTIONS: html-style:nil H:1 num:nil
 #+HTML_LINK_HOME: index.html
 
-/*Abstract.* TODO/ Testing
+/*Abstract.* I examine the relationship between decidable equality,
+inequality, and distinguishability in the minimal fragment of [[https://docs.racket-lang.org/pie/index.html][Pie]]. I
+prove that the statement:/
 
-/Quick interjection:/ This piece contains (too) many proofs in [[https://docs.racket-lang.org/pie/index.html][Pie]], a simple, beautiful, but
-verbose dependently typed programming language.  Before getting
-Here's a small logical interface used throughout to make
-proofs more readable:
+#+begin_quote
+/If 𝐴 admits decidable equality, then unequal terms of type 𝐴 are
+distinguishable/
+#+end_quote
+
+/holds in Pie, its minimal fragment and its paraconsistent variant,
+but with necessarily different notions of decidable equality.  An
+auxiliary goal of this piece is to present formal proofs which
+demonstrate the ways in which basic claims about decidability depend
+on the principle of explosion./
+
+*Quick Preamble:* This piece contains (too) many proofs in [[https://docs.racket-lang.org/pie/index.html][Pie]], a
+simple, beautiful, but verbose dependently typed programming language.
+Here's a small logical interface used throughout to make proofs more
+readable:
 
 #+begin_src lisp
   #lang pie
@@ -35,10 +48,11 @@ proofs more readable:
   (define ≠ (λ (A x y) (¬ (= A x y))))
 #+end_src
 
-/Interjection over./
+*Preamble over.*
 
-I recently spent an inordinate amount of time thinking about [[https://docs.racket-lang.org/pie/index.html][Pie]]
-formalizations of the following theorem:
+I recently spent an inordinate amount of time thinking about
+Pie[fn::If only the sentence ended there.]  formalizations of the
+following theorem:
 
 #+begin_quote
 /1 = 0 implies I am the Pope./
@@ -47,13 +61,13 @@ formalizations of the following theorem:
 I was interested primarily in proofs that could be carried out in the
 minimal fragment of Pie, i.e., without the use of [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Absurd%29%29][~ind-Absurd~]], the
 induction principle for the empty type which expresses the [[https://en.wikipedia.org/wiki/Principle_of_explosion][principle
-of explosion]].
+of explosion]].  I'll call this fragment *minimal Pie* throughout, and
+will try to use *vanilla Pie* otherwise for emphasis.
 
-Thinking about this long enough leads invariably to a standard fact of
-constructive mathematics: 1 = 0 is /explosive/ in the sense that
-anything follows from it in the minimal fragment of Pie.[fn::See
-Proposition 3.2 of Constructivism in Mathematics by Trolestra and van
-Dalen.]
+Thinking about this problem long enough leads invariably to a standard
+fact of constructive mathematics: 1 = 0 is /explosive/ in the sense
+that anything follows from it in minimal Pie.[fn::See, e.g., Proposition 3.2
+of Constructivism in Mathematics by Trolestra and van Dalen.]
 
 #+begin_src lisp
   (claim explode-1=0
@@ -66,8 +80,8 @@ Dalen.]
          sole)))
 #+end_src
 
-And thinking about for too long leads to a natural enough question:
-/which equalities are explosive?/
+Thinking about this problem for too long leads to a natural enough
+question: /which equalities are explosive?/
 
 * Distinguishers
 
@@ -146,12 +160,12 @@ type encoding of Booleans.
        (explode-1=0 (true=false→1=0 true=false))))
 #+end_src
 
-All we're doing here is bootstrapping; if an equality implies that 1 =
-0 then it's explosive.  This condition is a tad clunky, but it hints
-at a definition: let's say boolean function 𝑓 : 𝐴 → Bool
-/distinguishes/ two values 𝑎 and 𝑏 if 𝑓 𝑎 is true and 𝑓 𝑏 is false.
-Let's also say 𝑎 and 𝑏 are /distinguishable/, written 𝑎 ◇ 𝑏, if there
-is a distinguisher for them.
+All we're doing here is bootstrapping; if an equality implies 1 = 0
+then it's explosive.  This condition is clunky, but it hints at a
+definition: let's say boolean function 𝑓 /distinguishes/ two values
+𝑎 and 𝑏 if 𝑓(𝑎) is true and 𝑓(𝑏) is false.  Let's also say
+𝑎 and 𝑏 are /distinguishable/, written 𝑎 ◇ 𝑏, if there is a
+distinguisher for them.
 
 #+begin_src lisp
   (claim Distinguishes
@@ -171,7 +185,7 @@ is a distinguisher for them.
        (Σ ((f (→ A Bool)))
           (Distinguishes A f x y))))
 
-  ; the following are getters for ◇
+  ; these are just getters for ◇
 
   (claim distinguisher-◇
     (Π ((A U)
@@ -237,10 +251,10 @@ In other words, /any equality of distinguishable terms is explosive./
 * Inequality
 
 Being distinguishable is a strictly stronger relation than inquality
-in the minimal fragment of Pie.[fn::Moving forward, we'll take
-advantage of the fact that the principle of explosion is not a theorem
-in the minimal fragment of Pie: to show that any other claim is not a
-theorem, it suffices to show that it implies explosion.]
+minimal Pie.[fn::Moving forward, we'll take advantage of the fact that
+the principle of explosion is not a theorem of minimal Pie: to show
+that any other claim is not a theorem, it suffices to show that it
+implies explosion.]
 
 #+begin_src lisp
   (claim ◇→≠
@@ -259,7 +273,7 @@ theorem, it suffices to show that it implies explosion.]
            (y A))
           (→ (≠ A x y)
              (◇ A x y)))
-       (→ ⊥ Π ((A U)) A))))
+       (→ ⊥ (Π ((A U)) A))))
   (define ⟨≠→◇⟩→ind-⊥
     (λ (≠→◇ absurd)
        (◇→explode⁼
@@ -274,19 +288,19 @@ theorem, it suffices to show that it implies explosion.]
          (same sole))))
 #+end_src
 
-The principle ≠→◇ has the flavor of many well-studied semi-classical
-principles: it expresses the ability to extract something constructive
-from a negation proof.[fn::See, for example, Proposition 2.1.1 in
-[[https://arxiv.org/abs/1804.05495][Constructive Reverse Mathematics]] by Hannes Diener. Actually, just read
-the whole thing, it's very good.]  So it's not surprising that we
-can't prove ≠→◇ in Pie[fn::Said another way, we can't prove ind-⊥→≠→◇
-in the minimal fragment of Pie.] but we also can't disprove it.  This
-is because ≠→◇ is a theorem in the classical extension of Pie (which
-is consistent).
+≠→◇ has the flavor of many semi-classical principles: it expresses
+that we can extract something constructive from a negation
+proof.[fn::See, e.g., Proposition 2.1.1 in [[https://arxiv.org/abs/1804.05495][Constructive Reverse
+Mathematics]] by Diener. Actually, just read the whole thing, it's very
+good.]  So it's not surprising that we can't prove ≠→◇ in vanilla
+Pie[fn::Said another way, we can't prove ind-⊥→≠→◇ in minimal Pie.]
+but we also can't disprove it.  This is because ≠→◇ is a theorem in
+the classical extension of Pie (which is consistent).[fn::Naturally,
+I'll call this classical Pie.]
 
 That ≠→◇ holds classically is not immediately obivous, but becomes
-more clear through the lens of /decidable equality/.  In Pie, *if 𝐴
-admits decidable equality, then unequal values of type 𝐴 are
+more clear through the lens of [[https://ncatlab.org/nlab/show/decidable%20equality][decidable equality]].  In vanilla Pie,
+*if 𝐴 admits decidable equality, then unequal terms of type 𝐴 are
 distinguishable.*
 
 And how does /that/ work?  This is also not immediately obvious.  It's
@@ -295,35 +309,38 @@ theory, has its origins in computability theory.
 
 * Decidability
 
-A type 𝐴 admits *decidable equality* if for any two values 𝑎₁ and 𝑎₂
-of type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This can be seen as a
-restriction of the law of excluded middle, so all types admit
-decidable equality in the classical extension of Pie.
+A type 𝐴 admits *decidable equality* if for any two terms 𝑎₁ and 𝑎₂ of
+type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This is a restriction of the [[https://en.wikipedia.org/wiki/Law_of_excluded_middle][law
+of excluded middle]], so all types admit decidable equality in classical
+Pie.
 
 The computability theoretic notion of decidability is slightly
 different: a predicate 𝑃 is *decidable* if there is a computable
 function 𝑓 such that 𝑓(𝑥) = 1 if and only if 𝑃(𝑥) holds.
 
-/How do these two notions correspond?/ Answering this question
-requires putting on our Curry-Howard glasses: a term 𝑓 of type
+/How do these two notions correspond?/ We just need to put on our
+[[https://en.wikipedia.org/wiki/Curry–Howard_correspondence][Curry-Howard]] glasses: a term 𝑓 of type
 
 #+begin_quote
-~(Π ((x A) (y A)) (∨ (= 𝐴 𝑎₁ 𝑎₂) (≠ 𝐴 𝑎₁ 𝑎₁)))~
+(Π ((𝑥 𝐴) (𝑥 𝐴)) (∨ (= 𝐴 𝑥 𝑦) (≠ 𝐴 𝑥 𝑦)))
 #+end_quote
 
 on the one hand is a prove that 𝐴 admits decidable equality.  On the
-other hand, it's a /computable function/ where (𝑓 𝑎 𝑏) evaluates to a
+other hand, it's a /computable function/ where 𝑓(𝑎, 𝑏) evaluates to a
 left term if 𝑎 = 𝑏 and a right term otherwise.  Since we can determine
-leftness versus rightness programmatically, the term 𝑓 can be made a
-decider for equality in the computability theoretic sense.
+leftness versus rightness programmatically (using [[https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Either%29%29][~ind-Either~]]), the
+term 𝑓 can be made an equality decider in the computability theoretic
+sense.
 
-We'll formalize this observation, but first, a bit more on the general
-framework of decidability.  A type 𝐴 (viewed through the Curry-Howard
-lens) is *decidable* if either 𝐴 or ¬𝐴 holds.  The law of excluded
-middle is equivalent to every type being decidable.  We can lift this
-notion of decidability to binary predicates, but if we want to use
-those predicates in their Curried form, we'll need to uncurry when
-reasoning about their decidability.
+More generally, a type 𝐴 (viewed through the Curry-Howard lens) is
+*decidable* if either 𝐴 or ¬𝐴 holds.  The law of excluded middle is
+equivalent to every type being decidable.  We can lift this notion of
+decidability to binary predicates, but if we want to use those
+predicates in their Curried form, we'll need to uncurry when reasoning
+about their decidability.[fn::If I were building an interface for
+decidability in Pie, I would /not/ design it this way, but this makes
+proving things easier: there's no need to do intermediate translations
+between equivalent definitions.]
 
 #+begin_src
 (claim Dec (→ U U))
@@ -367,7 +384,7 @@ reasoning about their decidability.
 
 We express the computability theoretic notion of decidability as
 having a decider, i.e., a function that witnesses the truth value of
-the predicate (we'll use ~true~ and ~false~ instead of ~1~ and ~0~).
+the predicate.
 
 #+begin_src
 (claim Decides
@@ -491,10 +508,11 @@ As noted above, types that admit decidable equalities have an
   (λ (A) (?₂ A A (λ (x y) (= A x y)))))
 #+end_src
 
-We can convert the equality decider into an /distinguisher/ by
-partially applying it: if (𝑓 𝑎 𝑏) is true if and only if 𝑎 = 𝑏, then
-((𝑓 𝑎) 𝑥) is true if 𝑥 = 𝑎 and false otherwise.  But the fact that
-this holds depends crucially on the principle of explosion.
+And we can convert the equality decider into an /distinguisher/ by
+partially applying it: if 𝑓(𝑎, 𝑏) is true if and only if 𝑎 = 𝑏, then
+if 𝑎 ≠ 𝑏 we have we (λ𝑥.𝑓(𝑎, 𝑥))(𝑎) is true and (λ𝑥.𝑓(𝑎, 𝑥))(b) is
+false.  But, our first "interesting" observation: that this holds
+depends crucially on the principle of explosion.
 
 #+begin_src lisp
 (claim ind-⊥→dec⁼→≠→◇
@@ -558,14 +576,13 @@ this holds depends crucially on the principle of explosion.
        (same sole))))
 #+end_src
 
-Another theme is made visible here: in almost all cases, the ~Trivial~
-type is sufficient to find a counterexample in the minimal fragment
-Pie of a given principle.  And usually this comes down to an
-artificial proof of a negation using our ~Absurd~ assumption (see
-above).
+Another theme is made visible here: in nearly cases, the ~Trivial~
+type is sufficient to find a counterexample in minimal Pie of a given
+principle.  And usually this comes down to an artificial proof of a
+negation using our ~Absurd~ assumption (see above).
 
-As a corollary, we can prove ≠→◇ in the classical and constructive
-(i.e., vanilla Pie) settings.
+As a corollary, we can prove versions of ≠→◇ in classical Pie and
+vanilla Pie.
 
 #+begin_src lisp
   (claim dec⁼→≠→◇
@@ -606,16 +623,20 @@ As a corollary, we can prove ≠→◇ in the classical and constructive
 
 * Deciders
 
-But what about the minimal fragment?  We can't prove ≠→◇ from
-decidable equality, but we also can't even prove that the obvious
-decider is /actually/ a decider.  In minimal Pie, having a decider (in
-the sense that the obvious decider is, in fact, a decider) is a
-stronger condition than admitting decidable equality.
+But what about minimal Pie?  We've demonstrated that we can't prove
+≠→◇ from decidable equality, but is there a /stronger/ notion of
+decidable equality that holds in minimal Pie?  The short answer: yes.
+In minimal pie, /we can't even prove that the obvious decider is
+actually a decider./ That is, having a decider in minimal Pie (in the
+sense that the obvious decider is, in fact, a decider) is a stronger
+condition than admitting decidable equality.  The long answer: read
+on, that's the point of the piece.
 
-One direction is easy: if a predicate 𝑃 has a decider, then it's
-decidable.  The proof: given 𝑥, ask the decider if 𝑃(𝑥) or ¬𝑃(𝑥).  We
-break the proof up into two parts because working with Σ-types in Pie
-isn't so ergonomic.
+One direction of the claim in the previous paragraph is fairly easy:
+if a predicate 𝑃 has a decider, then it's decidable, even in minimal
+Pie.  The proof: given 𝑥, ask the decider if 𝑃(𝑥) or ¬𝑃(𝑥).  We break
+the proof up into two parts because working with Σ-types in Pie isn't
+ergonomic.
 
 #+begin_src
 (claim decides→decᴾ-helper
@@ -637,8 +658,9 @@ isn't so ergonomic.
        (λ (prf)
           (right
 	    (λ (px)
-	       (true≠false
-	         (symm ((car prf) px)))))))))
+	       (explode-true=false
+	         (symm ((car prf) px))
+		 ⊥)))))))
 
 (claim decider→decᴾ
   (Π ((A U)
@@ -657,12 +679,12 @@ isn't so ergonomic.
 
 The more difficult direction is to show that if 𝑃 is decidable then it
 has a decider.  Though difficult is not quite right.  The proof is
-very natural: the obvious decider for 𝑃 is a decider. But within the
-minimal fragment, we can't prove this.
+very natural: the obvious decider for 𝑃 is a decider. But in minimal
+Pie, /we can't prove this./
 
-Let's break this into two observations: within the minimal fragment,
-if we know the value of the obvious decider on 𝑎, then we /can/ derive
-proofs of the 𝑃(𝑎) or ¬𝑃(𝑎), depending on that value.
+Let's break this into two observations: in minimal Pie, if we know the
+value of the obvious decider on 𝑎, then we /can/ derive proofs of the
+𝑃(𝑎) or ¬𝑃(𝑎), depending on the value.
 
 #+begin_src
 (claim p?=true→p
@@ -712,15 +734,16 @@ proofs of the 𝑃(𝑎) or ¬𝑃(𝑎), depending on that value.
        (λ (¬px _) ¬px))))
 #+end_src
 
-What we /can't/ do within the minimal fragment is determine the value
-of the decider itself given 𝑃(𝑎) or ¬𝑃(𝑎), e.g., 𝑃(𝑎) implies the
-equality (? 𝑃 𝑎) = true given the principle of explosion, but this
-implication also /implies/ the principle of explosion.  This
-ultimately comes down to the fact that there isn't much we can do in
-the ¬𝑃(𝑎) branch of the decidability of 𝑃 except explode it with our
-assumption 𝑃(𝑎).
+What we /can't/ do within minimal Pie is determine the value of the
+decider itself given 𝑃(𝑎) or ¬𝑃(𝑎), e.g., 𝑃(𝑎) implies the 𝑃?(𝑎) is
+true given the principle of explosion, but this implication also
+/implies/ the principle of explosion.  This ultimately comes down to
+the fact that there isn't a whole lot we can do in the ¬𝑃(𝑎) branch of
+the 𝑃-decidability invocation except explode it with our assumption
+𝑃(𝑎).
 
 #+begin_src lisp
+
 (claim ind-⊥→p→p?=true
   (→ (→ ⊥ (Π ((A U)) A))
      (Π ((A U)
@@ -741,11 +764,8 @@ assumption 𝑃(𝑎).
 	     true))
        (λ (_) (same true))
        (λ (¬px)
-          (ind-⊥→explode
-	    ind-⊥
-	    (P x)
-            ¬px
-	    px
+          (ind-⊥
+	    (¬px px)
 	    (= Bool false true))))))
 
 (claim ⟨p→p?=true⟩→ind-⊥
@@ -788,11 +808,8 @@ assumption 𝑃(𝑎).
 	     (left? (P x) (¬ (P x)) e)
 	     false))
        (λ (px)
-          (ind-⊥→explode
-	    ind-⊥
-	    (P x)
-	    ¬px
-	    px
+          (ind-⊥
+	    (¬px px)
 	    (= Bool true false)))
        (λ (_) (same false)))))
 
@@ -877,10 +894,20 @@ inability to prove that the obvious decider decides.
 	    sole)))))
 #+end_src
 
-But, alas, even though having a decider is stronger condition in
-minimal Pie, it's not sufficient to distinguish unequals.
+I'm under the impression that it's also impossible to prove that
+decidability implies having /any/ decider in minimal Pie, but this is
+out of reach if we want to internalize this fact as we've been
+doing. We need some handle on what the decider is to prove anything
+about it.
 
-#+begin_src
+Getting to the point: having an equality decider is a stronger than
+admitting decidable equality in minimal Pie. This makes it a candidate
+condition from which we might prove distinguishability of unequals.
+But, alas, it's not sufficient.  Its easy to build an equality decider
+for the ~Trivial~ type, so we can use our artificial negation proof
+trick again.
+
+#+begin_src lisp
 (claim ⟨decider⁼→≠→◇⟩→ind-⊥
   (→ (Π ((A U)
          (decider⁼ (Decider⁼ A))
@@ -904,17 +931,19 @@ minimal Pie, it's not sufficient to distinguish unequals.
   	       (λ (_) (same sole)))))
 	 sole
 	 sole
+         ; artifical negation proof
 	 (λ (_) absurd))
        (same sole))))
 #+end_src
 
-So our quest continues.
+Our quest continues.
 
 * Distinguishability
 
-But first, a side quest. Let's consider another definition, one that
-seems promising.  We'll say that a type admits *complete distinguishability* if
-all of its values are equal or distinguishable.
+But first, a side quest. Let's consider another definition which
+implies decidable equality, and seems promising.  We'll say that a
+type admits *complete distinguishability* if all of its values are
+equal or distinguishable.
 
 #+begin_src
 (claim Distinguishability (→ U U))
@@ -927,16 +956,16 @@ all of its values are equal or distinguishable.
 #+end_src
 
 It shouldn't be too surprising that having an equality decider is
-equivalent to admitting complete distinguishability in Pie because of
-◇→≠.  What's surprising (at least to me) is that this also holds in
-minimal Pie, i.e., our ability to use construct an equality decider
-from complete distinguishability does not depend on the principle
-explosion.  In this sense, complete distinguishability is the
-"correct" lowering of decidable equality into the minimal fragment so
-if we want to be able to derive equality deciders.
+equivalent to admitting complete distinguishability in vanilla Pie
+(because of ◇→≠).  What's surprising (at least to me) is that this
+also holds in minimal Pie, i.e., /the ability to use construct an
+equality decider from complete distinguishability does not depend on
+the principle explosion./ In this sense, complete distinguishability
+is the "correct" lowering of decidable equality into minimal Pie if we
+want to be able to derive equality deciders.
 
 As usual, one direction is easier than the other. If we have an
-equality decider, we can use to distinguish unequals.
+equality decider, we can use it to distinguish unequals.
 
 #+begin_src
 (claim =true∨=false
@@ -976,12 +1005,12 @@ equality decider, we can use to distinguish unequals.
 		fxy=false)))))))
 #+end_src
 
-To prove that complete distinguishability implies a we can construct a
-decider, it will be convenient to hand roll a new decider, the
-analogous obvious decider for complete distinguishability.  We can
-this prove that this decider is, in fact, a decider by taking
-advantange of the distinguishability proof, which we can leverage to
-avoid using explosion.
+To derive an equality decider from complete distinguishability, it'll
+be convenient to hand roll a new obvious decider, the analogous one
+for complete distinguishability.  We can prove that this decider is,
+in fact, a decider by taking advantage of the ambient
+distinguishability proof, which we can leverage to avoid using
+explosion.
 
 #+begin_src
 (claim ==
@@ -1075,15 +1104,15 @@ I couldn't help but take a detour.
 
 * Strong Deciders
 
-There are probably a couple other intermediate definitions we could
-look at, but let's get to the punchline.  Looking back, our inability
-use the obvious equality decider in minimal Pie came from our
-inability to derive equalities for the output values of the decider.
-A minimal definition of deciability should give us this power so we
+There are likely far more intermediate definitions of decidable
+equality we could look at, but let's get to the punchline.  Looking
+back, our inability to work with the obvious decider in minimal Pie
+came from our inability to derive equalities for its output values.  A
+minimal definition of decidability should give us this power so we
 don't need to appeal to explosion.
 
 We'll say that a function 𝑓 is a *strong decider* for the predicate 𝑃
-if (𝑃 𝑎) implies (𝑓 𝑎) = true and ¬(𝑃 𝑎) implies (𝑓 𝑎) = false.
+if 𝑃(𝑎) implies 𝑓(𝑎) is true and ¬𝑃(𝑎) implies 𝑓(𝑎) is false.
 
 #+begin_src
 (claim Strong-Decides
@@ -1150,11 +1179,12 @@ if (𝑃 𝑎) implies (𝑓 𝑎) = true and ¬(𝑃 𝑎) implies (𝑓 𝑎) 
 
 Having a strong decider is equivalent to having a decider in vanilla
 Pie, but we can see the "stress" this new definition puts on the
-minimal fragment.  The only thing that blocks the equivalence in
-minimal Pie is our inability to prove that a Boolean value that not
-true is false.  It may be worth noting that this principle has
-similarities to semi-classical principles like the [[https://en.wikipedia.org/wiki/Limited_principle_of_omniscience][Limited Principle
-of Omnipotence]].
+minimal Pie (in the sense that we're pushing against the boundary of
+minimal and vanilla Pie).  The only thing that blocks the equivalence
+in minimal Pie is our inability to prove something very simple: a
+Boolean value that not true is false.  It may be worth noting that
+this principle also has similarities to semi-classical principles like
+the [[https://en.wikipedia.org/wiki/Limited_principle_of_omniscience][limited principle of omnipotence]].
 
 #+begin_src
 (claim ind-⊥→≠true→=false
@@ -1224,8 +1254,8 @@ of Omnipotence]].
 #+end_src
 
 Finally, having a strong decider is not quite stronger than having a
-decider in the minimal fragment, but it is in when taken in addition
-with deciable equality.
+decider in minimal Pie, but it is when taken in tandem with decidable
+equality.
 
 #+begin_src
 (claim dec⁼→strong-decider⁼→decider⁼
@@ -1254,13 +1284,13 @@ with deciable equality.
 		       ((cdr ((cdr strong-decider⁼) p)) x≠y))
 		     (= A (car p) (cdr p)))))))))))
 #+end_src
-This implies that having a strong decider is strictly stronger than
+In particular, having a strong decider is strictly stronger than
 having a decider in the /paraconsistent/ variant of Pie (i.e., with
 excluded middle and without explosion).
 
-* Concluding Remarks
+* Conclusions
 
-Despite the convoluted nature of this story, the ending is simple: in
+Despite the circuitous nature of this story, the ending is simple: in
 minimal Pie, if a type 𝐴 has a strong equality decider, then it has
 distinguishable unequals.
 
@@ -1280,16 +1310,20 @@ distinguishable unequals.
 	 ((cdr ((cdr strong-decider⁼) (cons x y))) x≠y)))))
 #+end_src
 
-This is certainly one of those cases where the journey is worth more
-than the destination.  The final definition seems /right/, in the
+And this is certainly one of those cases where the journey is worth
+more than the destination.  The final definition seems /right/, in the
 sense that the proof uses the data its given exactly as you would
-expect.  But the value of this exercise comes from recognizing that
-strong deciders are tightly connectioned with decidable equality.  And
-this connection illuminates a nuanced heirarchy of possible
-definitions of decidable equality which aren't visible in vanilla
-Pie.
+expect. There's a satisfying beauty to it, like all the piece go where
+they should.  But the true value of this exercise comes from
+recognizing that having strong deciders sits on a spectrum of
+decidable equality that is not really all that visible in vanilla Pie.
 
-The last thing perhaps worth pointing out is one final definition:
+Generally speaking, I believe that examining the minimal fragments of
+constructive logics in this reverse-mathematical fashion can reveal
+some pretty interesting structures in constructive proofs.  Or maybe
+it just scratches in itch for the proof-twiddlers among us.
+
+One last thing. It's perhaps worth giving one final definition:
 
 #+begin_src
 (claim Very-Strong-Decides
@@ -1304,8 +1338,19 @@ The last thing perhaps worth pointing out is one final definition:
 	   (↔ (¬ (P x)) (= Bool (f x) false))))))
 #+end_src
 
-If you're at being conscious of explosions, this seems to be the a
-reasonably conservative definition which which yields an equivalent
-definition of decidable equality in vanilla Pie.  The only curiosity
-of this definition is that, in terms of what is /necessary/, there's
-no need for f(x) = false to imply ¬P(x).
+If you're feeling explosion conscious, having a very strong decider in
+this sense seems to be the "right" way of capturing decidable
+equality.  It's ultimately just an amalgamation of a strong decider
+and a decider, so it's equivalent to decidable equality in vanilla
+Pie.  Its only curiosity is that there's no need to require in the
+definition
+
+#+begin_quote
+(→ (= Bool (f x) false) (¬ (P x)))
+#+end_quote
+
+because this is implied (in minimal Pie) by the other three
+implications.  But, I'd choose an unnecessary assumption over a lack
+of symmetry any day.
+
+/July 1, 2025/
