@@ -14,7 +14,7 @@ distinguishable/
 
 /holds in Pie, its minimal fragment and its paraconsistent variant,
 but with necessarily different notions of decidable equality.  An
-auxiliary goal of this piece is to present formal proofs which
+auxiliary goal of this piece is to present formal proofs that
 demonstrate the ways in which basic claims about decidability depend
 on the principle of explosion./
 
@@ -162,10 +162,10 @@ type encoding of Booleans.
 
 All we're doing here is bootstrapping; if an equality implies 1 = 0
 then it's explosive.  This condition is clunky, but it hints at a
-definition: let's say boolean function 𝑓 /distinguishes/ two values
-𝑎 and 𝑏 if 𝑓(𝑎) is true and 𝑓(𝑏) is false.  Let's also say
-𝑎 and 𝑏 are /distinguishable/, written 𝑎 ◇ 𝑏, if there is a
-distinguisher for them.
+definition: let's say a Boolean function 𝑓 /distinguishes/ two values
+𝑎 and 𝑏 if 𝑓(𝑎) is true and 𝑓(𝑏) is false.  Let's also say 𝑎 and 𝑏 are
+/distinguishable/, written 𝑎 ◇ 𝑏, if there is a distinguisher for
+them.
 
 #+begin_src lisp
   (claim Distinguishes
@@ -1313,7 +1313,7 @@ distinguishable unequals.
 And this is certainly one of those cases where the journey is worth
 more than the destination.  The final definition seems /right/, in the
 sense that the proof uses the data its given exactly as you would
-expect. There's a satisfying beauty to it, like all the piece go where
+expect. There's a satisfying beauty to it, like all the pieces go where
 they should.  But the true value of this exercise comes from
 recognizing that having strong deciders sits on a spectrum of
 decidable equality that is not really all that visible in vanilla Pie.
