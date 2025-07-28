@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-06-30 Mon 16:30 -->
+<!-- 2025-07-28 Mon 14:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>On the Papacy of Bertrand Russell</title>
@@ -12,19 +12,19 @@
 <link rel="stylesheet" type="text/css" href="myStyle.css" />
 </head>
 <body>
-<div id="org-div-home-and-up"><a href="index.html">↩</a></div><div id="content" class="content">
+<div id="content" class="content">
 <h1 class="title">On the Papacy of Bertrand Russell</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org9c00eba">Absurdity</a></li>
-<li><a href="#org9435337">Congruence</a></li>
-<li><a href="#orgbfb7d13">Explosives</a></li>
-<li><a href="#org6e8db1c">Intermission</a></li>
-<li><a href="#org2319100">Vectors</a></li>
-<li><a href="#org78bc85e">Lists</a></li>
-<li><a href="#org2ee48ac">Finite Sets</a></li>
+<li><a href="#org2e97847">Absurdity</a></li>
+<li><a href="#orgfc20861">Congruence</a></li>
+<li><a href="#orga706aef">Explosives</a></li>
+<li><a href="#orgd4dbe02">Intermission</a></li>
+<li><a href="#org4373bcf">Vectors</a></li>
+<li><a href="#org2638c3e">Lists</a></li>
+<li><a href="#orgfecdc0e">Finite Sets</a></li>
 </ul>
 </div>
 </div>
@@ -117,9 +117,9 @@ Pie.  I realize this severely limits the scope of this piece, but also
 I don't really care (sorry). That said, please read The Little Typer!
 It's great!
 </p>
-<div id="outline-container-org9c00eba" class="outline-2">
-<h2 id="org9c00eba">Absurdity</h2>
-<div class="outline-text-2" id="text-org9c00eba">
+<div id="outline-container-org2e97847" class="outline-2">
+<h2 id="org2e97847">Absurdity</h2>
+<div class="outline-text-2" id="text-org2e97847">
 <p>
 The principle of explosion appears in Pie as <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Absurd%29%29"><code>ind-Absurd</code></a>, the
 induction principle for <a href="https://docs.racket-lang.org/pie/index.html#%28part._.Absurd%29"><code>Absurd</code></a> (i.e., the empty type).  We can use
@@ -142,29 +142,29 @@ note the standard encoding of negation as implication of absurdity.
 (define 1&lt;&gt;0
   (<span style="color: #a020f0;">lambda</span> (1=0)
     (replace
-      <span style="color: #b22222;">; target</span>
-      1=0
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (n)
+      <span style="color: #b22222;">; target
+</span>      1=0
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (n)
         (which-Nat
-          <span style="color: #b22222;">; target</span>
-          n
-          <span style="color: #b22222;">; base</span>
-          Absurd
-          <span style="color: #b22222;">; step</span>
-          (<span style="color: #a020f0;">lambda</span> (_) Trivial)))
-      <span style="color: #b22222;">; base</span>
-      sole)))
+          <span style="color: #b22222;">; target
+</span>          n
+          <span style="color: #b22222;">; base
+</span>          Absurd
+          <span style="color: #b22222;">; step
+</span>          (<span style="color: #a020f0;">lambda</span> (_) Trivial)))
+      <span style="color: #b22222;">; base
+</span>      sole)))
 
 (claim 1=0-implies-i-am-the-pope-0
   (-&gt; (= Nat 1 0) (= Atom 'me 'pope)))
 (define 1=0-implies-i-am-the-pope-0
   (<span style="color: #a020f0;">lambda</span> (1=0)
     (ind-Absurd
-      <span style="color: #b22222;">; target</span>
-      (1&lt;&gt;0 1=0)
-      <span style="color: #b22222;">; motive</span>
-      (= Atom 'me 'pope))))
+      <span style="color: #b22222;">; target
+</span>      (1&lt;&gt;0 1=0)
+      <span style="color: #b22222;">; motive
+</span>      (= Atom 'me 'pope))))
 </pre>
 </div>
 
@@ -180,9 +180,9 @@ on what I believe is the simplest papacy proof that doesn't use
 </p>
 </div>
 </div>
-<div id="outline-container-org9435337" class="outline-2">
-<h2 id="org9435337">Congruence</h2>
-<div class="outline-text-2" id="text-org9435337">
+<div id="outline-container-orgfc20861" class="outline-2">
+<h2 id="orgfc20861">Congruence</h2>
+<div class="outline-text-2" id="text-orgfc20861">
 <p>
 One crucial feature of natural numbers that they have a distinguished
 element: 0. This number is more than just distinguished (it's the
@@ -220,18 +220,18 @@ prove f(x) = f(y) given x = y.
 (define 1=0-implies-i-am-the-pope-1
   (<span style="color: #a020f0;">lambda</span> (1=0)
     (cong
-      <span style="color: #b22222;">; target</span>
-      1=0
-      <span style="color: #b22222;">; fun</span>
-      (<span style="color: #a020f0;">the</span> (-&gt; Nat Atom)
+      <span style="color: #b22222;">; target
+</span>      1=0
+      <span style="color: #b22222;">; fun
+</span>      (<span style="color: #a020f0;">the</span> (-&gt; Nat Atom)
         (<span style="color: #a020f0;">lambda</span> (n)
           (which-Nat
-            <span style="color: #b22222;">; target</span>
-            n
-            <span style="color: #b22222;">; base</span>
-            'pope
-            <span style="color: #b22222;">; step</span>
-            (<span style="color: #a020f0;">lambda</span> (_) 'me)))))))
+            <span style="color: #b22222;">; target
+</span>            n
+            <span style="color: #b22222;">; base
+</span>            'pope
+            <span style="color: #b22222;">; step
+</span>            (<span style="color: #a020f0;">lambda</span> (_) 'me)))))))
 </pre>
 </div>
 
@@ -253,18 +253,18 @@ nothing!
 (define 1=0-implies-any-equality
   (<span style="color: #a020f0;">lambda</span> (A x y 1=0)
     (cong
-      <span style="color: #b22222;">; target</span>
-      1=0
-      <span style="color: #b22222;">; fun</span>
-      (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
+      <span style="color: #b22222;">; target
+</span>      1=0
+      <span style="color: #b22222;">; fun
+</span>      (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
         (<span style="color: #a020f0;">lambda</span> (n)
           (which-Nat
-            <span style="color: #b22222;">; target</span>
-            n
-            <span style="color: #b22222;">; base</span>
-            y
-            <span style="color: #b22222;">; step</span>
-            (<span style="color: #a020f0;">lambda</span> (_) x)))))))
+            <span style="color: #b22222;">; target
+</span>            n
+            <span style="color: #b22222;">; base
+</span>            y
+            <span style="color: #b22222;">; step
+</span>            (<span style="color: #a020f0;">lambda</span> (_) x)))))))
 
 (claim 1=0-implies-i-am-the-pope-2
   (-&gt; (= Nat 1 0) (= Atom 'me 'pope)))
@@ -290,19 +290,19 @@ want.
 (define explode-1=0
   (<span style="color: #a020f0;">lambda</span> (A 1=0)
     (replace
-      <span style="color: #b22222;">; target</span>
-      1=0
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (a)
+      <span style="color: #b22222;">; target
+</span>      1=0
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (a)
         (which-Nat
-          <span style="color: #b22222;">; target</span>
-          a
-          <span style="color: #b22222;">; base</span>
-          A
-          <span style="color: #b22222;">; step</span>
-          (<span style="color: #a020f0;">lambda</span> (_) Trivial)))
-      <span style="color: #b22222;">; base</span>
-      sole)))
+          <span style="color: #b22222;">; target
+</span>          a
+          <span style="color: #b22222;">; base
+</span>          A
+          <span style="color: #b22222;">; step
+</span>          (<span style="color: #a020f0;">lambda</span> (_) Trivial)))
+      <span style="color: #b22222;">; base
+</span>      sole)))
 
 (claim 1=0-implies-i-am-the-pope-3
   (-&gt; (= Nat 1 0) (= Atom 'me 'pope)))
@@ -318,9 +318,9 @@ with <code>Absurd</code> altogether and used <code>(= Nat 0 1)</code> instead.<s
 </p>
 </div>
 </div>
-<div id="outline-container-orgbfb7d13" class="outline-2">
-<h2 id="orgbfb7d13">Explosives</h2>
-<div class="outline-text-2" id="text-orgbfb7d13">
+<div id="outline-container-orga706aef" class="outline-2">
+<h2 id="orga706aef">Explosives</h2>
+<div class="outline-text-2" id="text-orga706aef">
 <p>
 The first thing to observe is just how lucky Russell was in the choice
 of contradiction from which he needed to prove his papacy. It just so
@@ -407,9 +407,9 @@ to the principle of explosion.<sup><a id="fnr.10" class="footref" href="#fn.10" 
 </p>
 </div>
 </div>
-<div id="outline-container-org6e8db1c" class="outline-2">
-<h2 id="org6e8db1c">Intermission</h2>
-<div class="outline-text-2" id="text-org6e8db1c">
+<div id="outline-container-orgd4dbe02" class="outline-2">
+<h2 id="orgd4dbe02">Intermission</h2>
+<div class="outline-text-2" id="text-orgd4dbe02">
 <p>
 Let's take stock.  What was Russell supposed to accomplish with his
 argument? I've presented things up to now as though our imagined
@@ -436,9 +436,9 @@ interpretation of Russell's meaning of "set."
 </p>
 </div>
 </div>
-<div id="outline-container-org2319100" class="outline-2">
-<h2 id="org2319100">Vectors</h2>
-<div class="outline-text-2" id="text-org2319100">
+<div id="outline-container-org4373bcf" class="outline-2">
+<h2 id="org4373bcf">Vectors</h2>
+<div class="outline-text-2" id="text-org4373bcf">
 <p>
 We begin by putting me and the Pope into a 2-element vector:
 </p>
@@ -475,16 +475,16 @@ with a default value for the empty case.
 (define next
   (<span style="color: #a020f0;">lambda</span> (A n a v)
     (ind-Vec
-      <span style="color: #b22222;">; target-1</span>
-      n
-      <span style="color: #b22222;">; target-2</span>
-      v
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (_ _) A)
-      <span style="color: #b22222;">; base</span>
-      a
-      <span style="color: #b22222;">; step</span>
-      (<span style="color: #a020f0;">lambda</span> (_ a _ _) a))))
+      <span style="color: #b22222;">; target-1
+</span>      n
+      <span style="color: #b22222;">; target-2
+</span>      v
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (_ _) A)
+      <span style="color: #b22222;">; base
+</span>      a
+      <span style="color: #b22222;">; step
+</span>      (<span style="color: #a020f0;">lambda</span> (_ a _ _) a))))
 </pre>
 </div>
 
@@ -507,21 +507,21 @@ this will make using the hypothesis 1 = 0 easier.
 (define empty-tail-implies-head=next
   (<span style="color: #a020f0;">lambda</span> (A n n=0)
     (replace
-      <span style="color: #b22222;">; target</span>
-      (symm n=0)
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (k)
+      <span style="color: #b22222;">; target
+</span>      (symm n=0)
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (k)
         (Pi ((v (Vec A (add1 k))))
           (= A (head v) (next A k (head v) (tail v)))))
-      <span style="color: #b22222;">; base</span>
-      (<span style="color: #a020f0;">lambda</span> (v)
+      <span style="color: #b22222;">; base
+</span>      (<span style="color: #a020f0;">lambda</span> (v)
         (replace
-          <span style="color: #b22222;">; target</span>
-          (<span style="color: #a020f0;">the</span> (= (Vec A 0) vecnil (tail v)) (same vecnil))
-          <span style="color: #b22222;">; motive</span>
-          (<span style="color: #a020f0;">lambda</span> (a) (= A (head v) (next A 0 (head v) a)))
-          <span style="color: #b22222;">; base</span>
-          (same (head v)))))))
+          <span style="color: #b22222;">; target
+</span>          (<span style="color: #a020f0;">the</span> (= (Vec A 0) vecnil (tail v)) (same vecnil))
+          <span style="color: #b22222;">; motive
+</span>          (<span style="color: #a020f0;">lambda</span> (a) (= A (head v) (next A 0 (head v) a)))
+          <span style="color: #b22222;">; base
+</span>          (same (head v)))))))
 </pre>
 </div>
 
@@ -565,9 +565,9 @@ But there is <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28
 </p>
 </div>
 </div>
-<div id="outline-container-org78bc85e" class="outline-2">
-<h2 id="org78bc85e">Lists</h2>
-<div class="outline-text-2" id="text-org78bc85e">
+<div id="outline-container-org2638c3e" class="outline-2">
+<h2 id="org2638c3e">Lists</h2>
+<div class="outline-text-2" id="text-org2638c3e">
 <p>
 Round 2: we begin by putting me and the pope into a 2-element <i>list</i>:
 </p>
@@ -591,12 +591,12 @@ singleton.
 (define length
   (<span style="color: #a020f0;">lambda</span> (A l)
     (rec-List
-      <span style="color: #b22222;">; target</span>
-      l
-      <span style="color: #b22222;">; base</span>
-      0
-      <span style="color: #b22222;">; step</span>
-      (<span style="color: #a020f0;">lambda</span> (_ _ length-tail)
+      <span style="color: #b22222;">; target
+</span>      l
+      <span style="color: #b22222;">; base
+</span>      0
+      <span style="color: #b22222;">; step
+</span>      (<span style="color: #a020f0;">lambda</span> (_ _ length-tail)
         (add1 length-tail)))))
 </pre>
 </div>
@@ -620,12 +620,12 @@ lists.  This predicate says (albeit more verbosely in the Pie version):
 (define Elem-List
   (<span style="color: #a020f0;">lambda</span> (A x l)
     ((rec-List
-       <span style="color: #b22222;">; target</span>
-       l
-       <span style="color: #b22222;">; base</span>
-       (<span style="color: #a020f0;">the</span> (-&gt; A U) (<span style="color: #a020f0;">lambda</span> (_) Absurd))
-       <span style="color: #b22222;">; step</span>
-       (<span style="color: #a020f0;">lambda</span> (x xs elem-xs)
+       <span style="color: #b22222;">; target
+</span>       l
+       <span style="color: #b22222;">; base
+</span>       (<span style="color: #a020f0;">the</span> (-&gt; A U) (<span style="color: #a020f0;">lambda</span> (_) Absurd))
+       <span style="color: #b22222;">; step
+</span>       (<span style="color: #a020f0;">lambda</span> (x xs elem-xs)
          (<span style="color: #a020f0;">lambda</span> (y)
            (Either
              (= A x y)
@@ -660,90 +660,90 @@ if x ∈ [a] and y ∈ [a] then x = a and y = a, so x = y.
 (define singleton-has-unique-element-List
   (<span style="color: #a020f0;">lambda</span> (A x y l)
     (ind-List
-      <span style="color: #b22222;">; target</span>
-      l
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (l)
+      <span style="color: #b22222;">; target
+</span>      l
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (l)
         (-&gt; (= Nat (length A l) 1)
             (Elem-List A x l)
             (Elem-List A y l)
           (= A x y)))
-      <span style="color: #b22222;">; base</span>
-      (<span style="color: #a020f0;">lambda</span> (0=1)
+      <span style="color: #b22222;">; base
+</span>      (<span style="color: #a020f0;">lambda</span> (0=1)
         (explode-1=0
           (-&gt; Absurd
               Absurd
             (= A x y))
           (symm 0=1)))
-      <span style="color: #b22222;">; step</span>
-      (<span style="color: #a020f0;">lambda</span> (a as almost)
+      <span style="color: #b22222;">; step
+</span>      (<span style="color: #a020f0;">lambda</span> (a as almost)
         (ind-List
-          <span style="color: #b22222;">; target</span>
-          as
-          <span style="color: #b22222;">; motive</span>
-          (<span style="color: #a020f0;">lambda</span> (l)
+          <span style="color: #b22222;">; target
+</span>          as
+          <span style="color: #b22222;">; motive
+</span>          (<span style="color: #a020f0;">lambda</span> (l)
             (-&gt; (= Nat (length A (<span style="color: #483d8b;">::</span> a l)) 1)
                   (Elem-List A x (<span style="color: #483d8b;">::</span> a l))
                   (Elem-List A y (<span style="color: #483d8b;">::</span> a l))
                   (= A x y)))
-          <span style="color: #b22222;">; base</span>
-          (<span style="color: #a020f0;">lambda</span> (_ x-in-a y-in-a)
+          <span style="color: #b22222;">; base
+</span>          (<span style="color: #a020f0;">lambda</span> (_ x-in-a y-in-a)
             (ind-Either
-              <span style="color: #b22222;">; target</span>
-              x-in-a
-              <span style="color: #b22222;">; motive</span>
-              (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
-              <span style="color: #b22222;">; on-left</span>
-              (<span style="color: #a020f0;">lambda</span> (a=x)
+              <span style="color: #b22222;">; target
+</span>              x-in-a
+              <span style="color: #b22222;">; motive
+</span>              (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
+              <span style="color: #b22222;">; on-left
+</span>              (<span style="color: #a020f0;">lambda</span> (a=x)
                 (ind-Either
-                  <span style="color: #b22222;">; target</span>
-                  y-in-a
-                  <span style="color: #b22222;">; motive</span>
-                  (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
-                  <span style="color: #b22222;">; on-left</span>
-                  (<span style="color: #a020f0;">lambda</span> (a=y)
+                  <span style="color: #b22222;">; target
+</span>                  y-in-a
+                  <span style="color: #b22222;">; motive
+</span>                  (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
+                  <span style="color: #b22222;">; on-left
+</span>                  (<span style="color: #a020f0;">lambda</span> (a=y)
                     (trans
                       (symm a=x)
                       a=y))
-                  <span style="color: #b22222;">; on-right</span>
-                  (<span style="color: #a020f0;">lambda</span> (false)
+                  <span style="color: #b22222;">; on-right
+</span>                  (<span style="color: #a020f0;">lambda</span> (false)
                     (ind-Absurd
-                      <span style="color: #b22222;">; target</span>
-                      false
-                      <span style="color: #b22222;">; motive</span>
-                      (= A x y)))))
+                      <span style="color: #b22222;">; target
+</span>                      false
+                      <span style="color: #b22222;">; motive
+</span>                      (= A x y)))))
               (<span style="color: #a020f0;">lambda</span> (false)
                 (ind-Absurd
-                  <span style="color: #b22222;">; target</span>
-                  false
-                  <span style="color: #b22222;">; motive</span>
-                  (= A x y)))))
-          <span style="color: #b22222;">; step</span>
-          (<span style="color: #a020f0;">lambda</span> (b bs _ SSk=1)
+                  <span style="color: #b22222;">; target
+</span>                  false
+                  <span style="color: #b22222;">; motive
+</span>                  (= A x y)))))
+          <span style="color: #b22222;">; step
+</span>          (<span style="color: #a020f0;">lambda</span> (b bs _ SSk=1)
             (explode-1=0
               (-&gt; (Elem-List A x (<span style="color: #483d8b;">::</span> a (<span style="color: #483d8b;">::</span> b bs)))
                   (Elem-List A y (<span style="color: #483d8b;">::</span> a (<span style="color: #483d8b;">::</span> b bs)))
                 (= A x y))
               (cong
-                <span style="color: #b22222;">; target</span>
-                SSk=1
-                <span style="color: #b22222;">; fun</span>
-                (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
+                <span style="color: #b22222;">; target
+</span>                SSk=1
+                <span style="color: #b22222;">; fun
+</span>                (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
                   (<span style="color: #a020f0;">lambda</span> (n)
                     (which-Nat
-                      <span style="color: #b22222;">; target</span>
-                      n
-                      <span style="color: #b22222;">; base</span>
-                      0
-                      <span style="color: #b22222;">; step</span>
-                      (<span style="color: #a020f0;">lambda</span> (n-1)
+                      <span style="color: #b22222;">; target
+</span>                      n
+                      <span style="color: #b22222;">; base
+</span>                      0
+                      <span style="color: #b22222;">; step
+</span>                      (<span style="color: #a020f0;">lambda</span> (n-1)
                         (which-Nat
-                          <span style="color: #b22222;">; target</span>
-                          n-1
-                          <span style="color: #b22222;">; base</span>
-                          0
-                          <span style="color: #b22222;">; target</span>
-
+                          <span style="color: #b22222;">; target
+</span>                          n-1
+                          <span style="color: #b22222;">; base
+</span>                          0
+                          <span style="color: #b22222;">; target
+</span>
                           (<span style="color: #a020f0;">lambda</span> (_) 1))))))))))))))
 </pre>
 </div>
@@ -800,14 +800,14 @@ papacy proof:
       'pope
       me-and-the-pope-List
       (cong
-        <span style="color: #b22222;">; target</span>
-        1=0
-        <span style="color: #b22222;">; fun</span>
-        (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
+        <span style="color: #b22222;">; target
+</span>        1=0
+        <span style="color: #b22222;">; fun
+</span>        (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
           (<span style="color: #a020f0;">lambda</span> (n)
             (add1 n))))
-      (left (same 'me))              <span style="color: #b22222;">; 'me is in the list</span>
-      (right (left (same 'pope)))))) <span style="color: #b22222;">; 'pope is in the list</span>
+      (left (same 'me))              <span style="color: #b22222;">; 'me is in the list
+</span>      (right (left (same 'pope)))))) <span style="color: #b22222;">; 'pope is in the list</span>
 </pre>
 </div>
 
@@ -816,9 +816,9 @@ And look! The "add 1 to both sides" part is there!
 </p>
 </div>
 </div>
-<div id="outline-container-org2ee48ac" class="outline-2">
-<h2 id="org2ee48ac">Finite Sets</h2>
-<div class="outline-text-2" id="text-org2ee48ac">
+<div id="outline-container-orgfecdc0e" class="outline-2">
+<h2 id="orgfecdc0e">Finite Sets</h2>
+<div class="outline-text-2" id="text-orgfecdc0e">
 <p>
 What remains is an exercise in taking things too far.  What we've done
 above is all fine and good, but the maximalist in me wants to say: but
@@ -847,13 +847,13 @@ will come back later: it depends on equality.
 (define FiniteSetAndElem
   (<span style="color: #a020f0;">lambda</span> (A n)
     (rec-Nat
-      <span style="color: #b22222;">; target</span>
-      n
-      <span style="color: #b22222;">; base</span>
-      (<span style="color: #a020f0;">the</span> (Sigma ((B U)) (-&gt; A B U))
+      <span style="color: #b22222;">; target
+</span>      n
+      <span style="color: #b22222;">; base
+</span>      (<span style="color: #a020f0;">the</span> (Sigma ((B U)) (-&gt; A B U))
         (cons Trivial (<span style="color: #a020f0;">lambda</span> (x empty) Absurd)))
-      <span style="color: #b22222;">; step</span>
-      (<span style="color: #a020f0;">lambda</span> (n-1 set-and-elem)
+      <span style="color: #b22222;">; step
+</span>      (<span style="color: #a020f0;">lambda</span> (n-1 set-and-elem)
         (cons
           (Sigma ((y A)
                   (set (car set-and-elem)))
@@ -903,14 +903,14 @@ elements are not equal.
         (singleton A y)
         (<span style="color: #a020f0;">lambda</span> (x=y-or-false)
           (ind-Either
-            <span style="color: #b22222;">; target</span>
-            x=y-or-false
-            <span style="color: #b22222;">; motive</span>
-            (<span style="color: #a020f0;">lambda</span> (_) Absurd)
-            <span style="color: #b22222;">; on-left</span>
-            (<span style="color: #a020f0;">lambda</span> (x=y) (x&lt;&gt;y x=y))
-            <span style="color: #b22222;">; on-right</span>
-            (<span style="color: #a020f0;">lambda</span> (false) false)))))))
+            <span style="color: #b22222;">; target
+</span>            x=y-or-false
+            <span style="color: #b22222;">; motive
+</span>            (<span style="color: #a020f0;">lambda</span> (_) Absurd)
+            <span style="color: #b22222;">; on-left
+</span>            (<span style="color: #a020f0;">lambda</span> (x=y) (x&lt;&gt;y x=y))
+            <span style="color: #b22222;">; on-right
+</span>            (<span style="color: #a020f0;">lambda</span> (false) false)))))))
 </pre>
 </div>
 
@@ -952,95 +952,95 @@ The proof is similar to that of the analogous lemma for lists.
 (define singleton-has-unique-element-FiniteSet
   (<span style="color: #a020f0;">lambda</span> (A n x y)
     (ind-Nat
-      <span style="color: #b22222;">; target</span>
-      n
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (k)
+      <span style="color: #b22222;">; target
+</span>      n
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (k)
         (Pi ((s (FiniteSet A k)))
           (-&gt; (= Nat k 1)
               (Elem-FiniteSet A k x s)
               (Elem-FiniteSet A k y s)
             (= A x y))))
-      <span style="color: #b22222;">; base</span>
-      (<span style="color: #a020f0;">lambda</span> (_ 0=1 _ _)
+      <span style="color: #b22222;">; base
+</span>      (<span style="color: #a020f0;">lambda</span> (_ 0=1 _ _)
         (cong
-          <span style="color: #b22222;">; target</span>
-          0=1
-          <span style="color: #b22222;">; fun</span>
-          (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
+          <span style="color: #b22222;">; target
+</span>          0=1
+          <span style="color: #b22222;">; fun
+</span>          (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
             (<span style="color: #a020f0;">lambda</span> (m)
               (which-Nat
-                <span style="color: #b22222;">; target</span>
-                m
-                <span style="color: #b22222;">; base</span>
-                x
-                <span style="color: #b22222;">; step</span>
-                (<span style="color: #a020f0;">lambda</span> (_) y))))))
-      <span style="color: #b22222;">; step</span>
-      (<span style="color: #a020f0;">lambda</span> (n-1 _)
+                <span style="color: #b22222;">; target
+</span>                m
+                <span style="color: #b22222;">; base
+</span>                x
+                <span style="color: #b22222;">; step
+</span>                (<span style="color: #a020f0;">lambda</span> (_) y))))))
+      <span style="color: #b22222;">; step
+</span>      (<span style="color: #a020f0;">lambda</span> (n-1 _)
         (ind-Nat
-          <span style="color: #b22222;">; target</span>
-          n-1
-          <span style="color: #b22222;">; motive</span>
-          (<span style="color: #a020f0;">lambda</span> (k)
+          <span style="color: #b22222;">; target
+</span>          n-1
+          <span style="color: #b22222;">; motive
+</span>          (<span style="color: #a020f0;">lambda</span> (k)
             (Pi ((s (FiniteSet A (add1 k))))
               (-&gt; (= Nat (add1 k) 1)
                   (Elem-FiniteSet A (add1 k) x s)
                   (Elem-FiniteSet A (add1 k) y s)
                 (= A x y))))
-          <span style="color: #b22222;">; base</span>
-          (<span style="color: #a020f0;">lambda</span> (s _ x-in-s y-in-s)
+          <span style="color: #b22222;">; base
+</span>          (<span style="color: #a020f0;">lambda</span> (s _ x-in-s y-in-s)
             (ind-Either
-              <span style="color: #b22222;">; target</span>
-              x-in-s
-              <span style="color: #b22222;">; motive</span>
-              (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
-              <span style="color: #b22222;">; on-left</span>
-              (<span style="color: #a020f0;">lambda</span> (x=r)
+              <span style="color: #b22222;">; target
+</span>              x-in-s
+              <span style="color: #b22222;">; motive
+</span>              (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
+              <span style="color: #b22222;">; on-left
+</span>              (<span style="color: #a020f0;">lambda</span> (x=r)
                 (ind-Either
-                  <span style="color: #b22222;">; target</span>
-                  y-in-s
-                  <span style="color: #b22222;">; motive</span>
-                  (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
-                  <span style="color: #b22222;">; on-left</span>
-                  (<span style="color: #a020f0;">lambda</span> (y=r) (trans x=r (symm y=r)))
-                  <span style="color: #b22222;">; on-right</span>
-                  (<span style="color: #a020f0;">lambda</span> (false)
+                  <span style="color: #b22222;">; target
+</span>                  y-in-s
+                  <span style="color: #b22222;">; motive
+</span>                  (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
+                  <span style="color: #b22222;">; on-left
+</span>                  (<span style="color: #a020f0;">lambda</span> (y=r) (trans x=r (symm y=r)))
+                  <span style="color: #b22222;">; on-right
+</span>                  (<span style="color: #a020f0;">lambda</span> (false)
                     (ind-Absurd
-                      <span style="color: #b22222;">; target</span>
-                      false
-                      <span style="color: #b22222;">; motive</span>
-                      (= A x y)))))
-              <span style="color: #b22222;">; on-right</span>
-              (<span style="color: #a020f0;">lambda</span> (false)
+                      <span style="color: #b22222;">; target
+</span>                      false
+                      <span style="color: #b22222;">; motive
+</span>                      (= A x y)))))
+              <span style="color: #b22222;">; on-right
+</span>              (<span style="color: #a020f0;">lambda</span> (false)
                 (ind-Absurd
-                  <span style="color: #b22222;">; target</span>
-                  false
-                  <span style="color: #b22222;">; motive</span>
-                  (= A x y)))))
-          <span style="color: #b22222;">; step</span>
-          (<span style="color: #a020f0;">lambda</span> (n-2 _)
+                  <span style="color: #b22222;">; target
+</span>                  false
+                  <span style="color: #b22222;">; motive
+</span>                  (= A x y)))))
+          <span style="color: #b22222;">; step
+</span>          (<span style="color: #a020f0;">lambda</span> (n-2 _)
             (<span style="color: #a020f0;">lambda</span> (_ SSk=1 _ _)
               (cong
-                <span style="color: #b22222;">; target</span>
-                SSk=1
-                <span style="color: #b22222;">; fun</span>
-                (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
+                <span style="color: #b22222;">; target
+</span>                SSk=1
+                <span style="color: #b22222;">; fun
+</span>                (<span style="color: #a020f0;">the</span> (-&gt; Nat A)
                   (<span style="color: #a020f0;">lambda</span> (m)
                     (which-Nat
-                      <span style="color: #b22222;">; target</span>
-                      m
-                      <span style="color: #b22222;">; base</span>
-                      x
-                      <span style="color: #b22222;">; step</span>
-                      (<span style="color: #a020f0;">lambda</span> (m-1)
+                      <span style="color: #b22222;">; target
+</span>                      m
+                      <span style="color: #b22222;">; base
+</span>                      x
+                      <span style="color: #b22222;">; step
+</span>                      (<span style="color: #a020f0;">lambda</span> (m-1)
                         (which-Nat
-                          <span style="color: #b22222;">; target</span>
-                          m-1
-                          <span style="color: #b22222;">; base</span>
-                          y
-                          <span style="color: #b22222;">; step</span>
-                          (<span style="color: #a020f0;">lambda</span> (_) x))))))))))))))
+                          <span style="color: #b22222;">; target
+</span>                          m-1
+                          <span style="color: #b22222;">; base
+</span>                          y
+                          <span style="color: #b22222;">; step
+</span>                          (<span style="color: #a020f0;">lambda</span> (_) x))))))))))))))
 </pre>
 </div>
 
@@ -1073,13 +1073,13 @@ I'm not the Pope then the proof goes through.
       'pope
       (pair Atom 'me 'pope me&lt;&gt;pope)
       (cong
-        <span style="color: #b22222;">; target</span>
-        1=0
-        <span style="color: #b22222;">; fun</span>
-        (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
+        <span style="color: #b22222;">; target
+</span>        1=0
+        <span style="color: #b22222;">; fun
+</span>        (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
           (<span style="color: #a020f0;">lambda</span> (k) (add1 k))))
-      (left (same 'me))              <span style="color: #b22222;">; 'me is in the set</span>
-      (right (left (same 'pope)))))) <span style="color: #b22222;">; 'pope is in the set</span>
+      (left (same 'me))              <span style="color: #b22222;">; 'me is in the set
+</span>      (right (left (same 'pope)))))) <span style="color: #b22222;">; 'pope is in the set</span>
 </pre>
 </div>
 <p>
@@ -1113,14 +1113,14 @@ decidable equality.
 (define 1=0-implies-x=y-given-dec-=
   (<span style="color: #a020f0;">lambda</span> (A x y dec-= 1=0)
     (ind-Either
-      <span style="color: #b22222;">; target</span>
-      (dec-= x y)
-      <span style="color: #b22222;">; motive</span>
-      (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
-      <span style="color: #b22222;">; on-left</span>
-      (<span style="color: #a020f0;">lambda</span> (x=y) x=y)
-      <span style="color: #b22222;">; on-right</span>
-      (<span style="color: #a020f0;">lambda</span> (x&lt;&gt;y)
+      <span style="color: #b22222;">; target
+</span>      (dec-= x y)
+      <span style="color: #b22222;">; motive
+</span>      (<span style="color: #a020f0;">lambda</span> (_) (= A x y))
+      <span style="color: #b22222;">; on-left
+</span>      (<span style="color: #a020f0;">lambda</span> (x=y) x=y)
+      <span style="color: #b22222;">; on-right
+</span>      (<span style="color: #a020f0;">lambda</span> (x&lt;&gt;y)
         (singleton-has-unique-element-FiniteSet
           A
           2
@@ -1128,10 +1128,10 @@ decidable equality.
           y
           (pair A x y x&lt;&gt;y)
           (cong
-            <span style="color: #b22222;">; target</span>
-            1=0
-            <span style="color: #b22222;">; fun</span>
-            (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
+            <span style="color: #b22222;">; target
+</span>            1=0
+            <span style="color: #b22222;">; fun
+</span>            (<span style="color: #a020f0;">the</span> (-&gt; Nat Nat)
               (<span style="color: #a020f0;">lambda</span> (k) (add1 k))))
           (left (same x))
           (right (left (same y))))))))

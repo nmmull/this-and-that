@@ -1,0 +1,182 @@
+#+title: What is reverse mathematics?
+#+author: Nathan Mull
+#+date: 2025-07-14
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
+#+OPTIONS: html-style:nil H:1 num:nil
+These are notes for the first session of an informal seminar on
+reverse mathematics at Boston University.  They're pretty rough and
+hand-wavy, but I wanted to make sure those who attended have access.
+* Three Perspectives
+1. as a general concept
+
+2. as a field of mathematics
+
+3. as an explanatory mechanism for foundations
+* The Concept
+"What are the appropriate axioms for mathematics?"  (Simpson)
+
+"When a theorem is proved from the right axioms, the axioms can be
+  proved from the theorem." (Friedman)
+
+The "reversal" of a theorem is the proof of the axioms from a theorem
+* The Reversal
+If 𝒯 ⊬ 𝑃 and 𝒯 ⊬ ¬𝑃 and 𝒯 ⊬ 𝑄 and 𝒯 + 𝑃 ⊢ 𝑄, then the proof of 𝑄 must
+use 𝑃 nontrivially
+
+*Example:*
++ ZF + Choice ⊢ Zorn's Lemma
++ ZF + Zorn's Lemma ⊢ Choice
+
+We see this result in most undergraduate textbooks on abstract algebra
+* A Key Point (in my opinion)
+More than anything, the reversal is /fun/
+
+Reverse mathematics is about doing math with your hands
+tied behind your back
+
+Hilbert calls the set theoretic world "paradise"
+
+Shore calls the reverse mathematical world a "playground"
+* Example (Slicing the Truth)
+*Weak König's Lemma:* Every infinite binary tree has an infinite path
+
+*Linndenbaum's Lemma:* Every consistent set of sentences has a
+complete consistent extension
+
+Weak König's lemma captures the /combinatorial core/ of Linndenbaum's
+lemma
+* Independence Results
+
+There's natural connection to independence:
+
+#+begin_quote
+If 𝒯 ⊬ 𝑃 and 𝒯 ⊬ ¬𝑃, then 𝒯 is a reasonable place to
+compare 𝑃 with other principles
+#+end_quote
+* Key Question
+/How do we choose 𝒯, our BASE system?/
+* A Bit of History
+| 1920s | Grundlagen Der Mathematik (Hilbert, Bernays)                                                 |
+|  1931 | Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I (Gödel) |
+|  1934 | Grundlagen Der Mathematik I (Hilbert, Bernays)                                               |
+|  1936 | Die Widerspruchsfreiheit der reinen Zahlentheorie                                            |
+|  1952 | Recursive Functions and Intuitionistic Mathematics (Kleene)                                  |
+|  1975 | Some Systems of Second Order Arithmetic and Their Use (Friedman)                             |
+* RM as a Mathematical Field
+Reverse mathematics is a young fields with a long prehistory
+
+It develops at the confluence of arithmetization and computable
+counterexamples
+
+"Standard" RM is a field of computability/definability theory with
+flavors of descriptive set theory
+* What is our base system?
+"Which set existence axioms are needed to prove the theorems of
+ordinary mathematics?" (Simpson)
+
+In "standard" RM, base systems are subsystems of second order
+arithmetic with weakened set existence axioms
+
+Particularly comprehension and induction
+* Second Order Arithmetic
+Two-sorted language which is "standard" arithmetic" + Set variables
+and ∈ predicate
+
+*PA (w.o. Ind):*
++ 1 + n ≠ 0
++ 1 + m = 1 + n → m = n
++ 0 + m = m
++ (1 + m) + n = 1 + (m + n)
++ 0 × m = 0
++ (1 + m) × n = n + (m × n)
++ ¬(m < 0)
++ m < n + 1 ↔ (m < n ∨ m = n)
+
+*2nd Ord. Ind:* ∀X[(0 ∈ X ∧ ∀n[n ∈ X → 1 + n ∈ X]) → ∀n(n ∈ X)]
+
+*BASE:* PA (w.o. Ind) + 2nd Ord. Ind
+
+*Π¹∞-Comprehension (scheme):* ∃X ∀n(n ∈ X ↔ ϕ(n))
+
+/Note:/ X cannot appear free in ϕ
+
+*Full second order arithemtic (Z₂ or Π¹∞-CA):* BASE + Π¹∞-CA
+
+* Model Theory
+*Definition.* A *model* of a subsystem of second order arithemtic is:
+
+#+begin_quote
+(X, 𝒳 ⊂ 𝒫(X), 0ₓ, 1ₓ, +ₓ, ×ₓ, <ₓ)
+#+end_quote
+
+Different subsystems allow for different "universes" in the second
+order part
+* The Big Five
+PRA (primitive recursive arithemtic)
+
+1. RCA₀ (recursive comprehension)
+2. WKL₀ ≡ RCA₀ + WKL (weak König's lemma)
+3. ACA₀ (arithmetic comprehension)
+4. ATR₀ (arithemtic transfinite recursion)
+5. Π¹₁-CA (Π¹₁ comprehension)
+
+Z₂ ≡ Π¹∞-CA (full second order arithmetic)
+* The Big Five (Foundations)
+PRA (finitism)
+
+1. RCA₀ (computable mathematics)
+2. WKL₀ ≡ RCA₀ + WKL (finitistic reductionism)
+3. ACA₀ (predicatism)
+4. ATR₀ (predicative reductionism)
+5. Π¹₁-CA (impredicativity)
+
+Z₂ ≡ Π¹∞-CA (full second order arithmetic)
+* The Big Five (Theorems)
+1. RCA₀ (intermediate value theorem)
+2. WKL₀ ≡ RCA₀ + WKL (completeness, compactness)
+3. ACA₀ (Balzano/Weirstrass)
+4. ATR₀ (comparing well-orderings)
+5. Π¹₁-CA (Cantor/Benixson)
+* Philosophical Footnote
+  The big five paint a convenient picture, it fits nicely
+  into the history of foundational systems
+
+  The picture has become more complicated over the years...
+
+  The big five satisfy certain "robustness" properties
+
+  *Question:* Is the "big five" an interesting phenomenon? Why or why
+   not?
+* RCA₀: Computable Mathematics
+Gödel's theorems and independence theorems have lead to a
+study of computable mathematical structures
+
+*Definition.* An ω-model is a model whose first order part is the
+standard natural numbers
+
+*Theorem.* ℳ is a ω-model of RCA₀ if and only if its 2nd order part is
+a Turing Ideal (closed under reducibility and joins)
+
+The minimal ω-model for RCA₀ has the computable sets as its second
+order part
+* Hilbert's Program Revisited
+Primitive recursive arithmetic (PRA) is quantifer free arithmetic +
+primitive recursive functions
+
+Tait argues that PRA capture "finitistic" arguments
+
+PA ⊢ Con(PRA) and Z₂ ⊢ Con(PA) but Gödel's theorems tell use the that
+we can't go the other way
+
+*Question:* How much can we reduce mathematics to PRA?
+
+*Theorem:* WKL₀ is Π₂ conservative over PRA:
+
+#+begin_quote
+If WKL₀ ⊢ ∀x∃yϕ(x, y) then PRA ⊢ ϕ(x, f(x)) for PR function f
+#+end_quote
+
+We can reduce theorems of this form all the way down to finitistic
+reasoning
+
+/July 14, 2025/

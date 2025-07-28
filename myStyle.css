@@ -31,6 +31,15 @@ pre{
     overflow: auto;
 }
 
+a:link, a:visited {
+    color: #328039;
+    text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 @media only screen and (max-width: calc(680px + 24em)) {
     #table-of-contents {
         display: none;

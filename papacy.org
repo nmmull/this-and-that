@@ -1,9 +1,6 @@
 #+TITLE: On the Papacy of Bertrand Russell
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
 #+OPTIONS: html-style:nil H:1 num:nil
-#+HTML_LINK_HOME: index.html
-
-
 /*Abstract.* I present several Pie formalizations of the claim:/
 
 #+begin_quote

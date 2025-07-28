@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-07-22 Tue 18:15 -->
+<!-- 2025-07-28 Mon 14:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Explosives and Distinguishers</title>
@@ -12,19 +12,19 @@
 <link rel="stylesheet" type="text/css" href="myStyle.css" />
 </head>
 <body>
-<div id="org-div-home-and-up"><a href="index.html">↩</a></div><div id="content" class="content">
+<div id="content" class="content">
 <h1 class="title">Explosives and Distinguishers</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge924479">Distinguishers</a></li>
-<li><a href="#org824d9bf">Inequality</a></li>
-<li><a href="#orgb8b936d">Decidability</a></li>
-<li><a href="#org5599681">Deciders</a></li>
-<li><a href="#org5ba8e7f">Distinguishability</a></li>
-<li><a href="#orgcd07d2d">Strong Deciders</a></li>
-<li><a href="#org1d74b4d">Conclusions</a></li>
+<li><a href="#orgfc50534">Distinguishers</a></li>
+<li><a href="#orgf009b5b">Inequality</a></li>
+<li><a href="#org9600595">Decidability</a></li>
+<li><a href="#orgc063360">Deciders</a></li>
+<li><a href="#org9b71dc4">Distinguishability</a></li>
+<li><a href="#org003d894">Strong Deciders</a></li>
+<li><a href="#org5513803">Conclusions</a></li>
 </ul>
 </div>
 </div>
@@ -128,9 +128,9 @@ that anything follows from it in minimal Pie.<sup><a id="fnr.2" class="footref" 
 Thinking about this problem for too long leads to a natural enough
 question: <i>which equalities are explosive?</i>
 </p>
-<div id="outline-container-orge924479" class="outline-2">
-<h2 id="orge924479">Distinguishers</h2>
-<div class="outline-text-2" id="text-orge924479">
+<div id="outline-container-orgfc50534" class="outline-2">
+<h2 id="orgfc50534">Distinguishers</h2>
+<div class="outline-text-2" id="text-orgfc50534">
 <p>
 Its straightforward to generalize the above proof to any fixed pair of
 natural numbers.
@@ -239,8 +239,8 @@ them.
      (&#931; ((f (&#8594; A Bool)))
         (Distinguishes A f x y))))
 
-<span style="color: #b22222;">; </span><span style="color: #b22222;">these are just getters for &#9671;</span>
-
+<span style="color: #b22222;">; </span><span style="color: #b22222;">these are just getters for &#9671;
+</span>
 (claim distinguisher-&#9671;
   (&#928; ((A U)
       (x A)
@@ -294,13 +294,13 @@ case of 5 = 7 and true = false.
   (&#955; (A x y x&#9671;y x=y)
     (explode-true=false
       (trans
-        <span style="color: #b22222;">; true = f x</span>
-        (symm (distinguishes-fst A x y x&#9671;y))
+        <span style="color: #b22222;">; true = f x
+</span>        (symm (distinguishes-fst A x y x&#9671;y))
         (trans
-          <span style="color: #b22222;">; f x = f y</span>
-          (cong x=y (distinguisher-&#9671; A x y x&#9671;y))
-          <span style="color: #b22222;">; f y = false</span>
-          (distinguishes-snd A x y x&#9671;y))))))
+          <span style="color: #b22222;">; f x = f y
+</span>          (cong x=y (distinguisher-&#9671; A x y x&#9671;y))
+          <span style="color: #b22222;">; f y = false
+</span>          (distinguishes-snd A x y x&#9671;y))))))
 </pre>
 </div>
 
@@ -309,9 +309,9 @@ In other words, <i>any equality of distinguishable terms is explosive.</i>
 </p>
 </div>
 </div>
-<div id="outline-container-org824d9bf" class="outline-2">
-<h2 id="org824d9bf">Inequality</h2>
-<div class="outline-text-2" id="text-org824d9bf">
+<div id="outline-container-orgf009b5b" class="outline-2">
+<h2 id="orgf009b5b">Inequality</h2>
+<div class="outline-text-2" id="text-orgf009b5b">
 <p>
 Distinguishability is a strictly stronger relation than inequality
 minimal Pie.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
@@ -373,9 +373,9 @@ theory, has its origins in computability theory.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb8b936d" class="outline-2">
-<h2 id="orgb8b936d">Decidability</h2>
-<div class="outline-text-2" id="text-orgb8b936d">
+<div id="outline-container-org9600595" class="outline-2">
+<h2 id="org9600595">Decidability</h2>
+<div class="outline-text-2" id="text-org9600595">
 <p>
 A type 𝐴 admits <b>decidable equality</b> if for any two terms 𝑎₁ and 𝑎₂ of
 type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This is a restriction of the <a href="https://en.wikipedia.org/wiki/Law_of_excluded_middle">law
@@ -656,8 +656,8 @@ depends crucially on the principle of explosion.
          (&#955; (_) (right (&#955; (_) absurd)))
          sole
          sole
-         <span style="color: #b22222;">; artificial negation proof</span>
-         (&#955; (_) absurd))
+         <span style="color: #b22222;">; artificial negation proof
+</span>         (&#955; (_) absurd))
        (same sole))))
 </pre>
 </div>
@@ -684,16 +684,16 @@ vanilla Pie.
 (define dec&#8316;&#8594;&#8800;&#8594;&#9671;
   (&#955; (A dec&#8316; x y x&#8800;y)
      (ind-&#8869;&#8594;dec&#8316;&#8594;&#8800;&#8594;&#9671;
-       <span style="color: #b22222;">; explicit use of ind-Absurd</span>
-       (&#955; (absurd A) (ind-Absurd absurd A))
+       <span style="color: #b22222;">; explicit use of ind-Absurd
+</span>       (&#955; (absurd A) (ind-Absurd absurd A))
        A
        dec&#8316;
        x
        y
        x&#8800;y)))
 
-<span style="color: #b22222;">; </span><span style="color: #b22222;">postulating the law of excluded middle</span>
-(claim lem (&#928; ((A U)) (&#8744; A (&#172; A))))
+<span style="color: #b22222;">; </span><span style="color: #b22222;">postulating the law of excluded middle
+</span>(claim lem (&#928; ((A U)) (&#8744; A (&#172; A))))
 (define lem TODO)
 
 (claim &#8800;&#8594;&#9671;-classical
@@ -713,9 +713,9 @@ vanilla Pie.
 </div>
 </div>
 </div>
-<div id="outline-container-org5599681" class="outline-2">
-<h2 id="org5599681">Deciders</h2>
-<div class="outline-text-2" id="text-org5599681">
+<div id="outline-container-orgc063360" class="outline-2">
+<h2 id="orgc063360">Deciders</h2>
+<div class="outline-text-2" id="text-orgc063360">
 <p>
 But what about minimal Pie?  We've demonstrated that we can't prove
 ≠→◇ from decidable equality, but is there a <i>stronger</i> notion of
@@ -1044,8 +1044,8 @@ trick again.
                (&#955; (_) (same sole)))))
          sole
          sole
-         <span style="color: #b22222;">; artifical negation proof</span>
-         (&#955; (_) absurd))
+         <span style="color: #b22222;">; artifical negation proof
+</span>         (&#955; (_) absurd))
        (same sole))))
 </pre>
 </div>
@@ -1055,9 +1055,9 @@ Our quest continues.
 </p>
 </div>
 </div>
-<div id="outline-container-org5ba8e7f" class="outline-2">
-<h2 id="org5ba8e7f">Distinguishability</h2>
-<div class="outline-text-2" id="text-org5ba8e7f">
+<div id="outline-container-org9b71dc4" class="outline-2">
+<h2 id="org9b71dc4">Distinguishability</h2>
+<div class="outline-text-2" id="text-org9b71dc4">
 <p>
 But first, a side quest. Let's consider another definition which
 implies decidable equality, and seems promising.  We'll say that a
@@ -1234,9 +1234,9 @@ I couldn't help but take a detour.
 </p>
 </div>
 </div>
-<div id="outline-container-orgcd07d2d" class="outline-2">
-<h2 id="orgcd07d2d">Strong Deciders</h2>
-<div class="outline-text-2" id="text-orgcd07d2d">
+<div id="outline-container-org003d894" class="outline-2">
+<h2 id="org003d894">Strong Deciders</h2>
+<div class="outline-text-2" id="text-org003d894">
 <p>
 There are likely far more intermediate definitions of decidable
 equality we could look at, but let's get to the punchline.  Looking
@@ -1435,9 +1435,9 @@ excluded middle and without explosion).
 </p>
 </div>
 </div>
-<div id="outline-container-org1d74b4d" class="outline-2">
-<h2 id="org1d74b4d">Conclusions</h2>
-<div class="outline-text-2" id="text-org1d74b4d">
+<div id="outline-container-org5513803" class="outline-2">
+<h2 id="org5513803">Conclusions</h2>
+<div class="outline-text-2" id="text-org5513803">
 <p>
 Despite the circuitous nature of this story, the ending is simple: in
 minimal Pie, if a type 𝐴 has a strong equality decider, then it has

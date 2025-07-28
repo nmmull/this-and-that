@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-07-28 Mon 14:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What is reverse mathematics?</title>
+<meta name="author" content="Nathan Mull" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="myStyle.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">What is reverse mathematics?</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org2114157">Three Perspectives</a></li>
+<li><a href="#orgf443faa">The Concept</a></li>
+<li><a href="#org83fc53e">The Reversal</a></li>
+<li><a href="#org843a4c4">A Key Point (in my opinion)</a></li>
+<li><a href="#org23c838d">Example (Slicing the Truth)</a></li>
+<li><a href="#org4f0bc22">Independence Results</a></li>
+<li><a href="#orga3104ae">Key Question</a></li>
+<li><a href="#orgb9ceb01">A Bit of History</a></li>
+<li><a href="#org92ccc03">RM as a Mathematical Field</a></li>
+<li><a href="#orgfd5f82b">What is our base system?</a></li>
+<li><a href="#org17778a1">Second Order Arithmetic</a></li>
+<li><a href="#org5e82b00">Model Theory</a></li>
+<li><a href="#org33c9771">The Big Five</a></li>
+<li><a href="#orgfaf68da">The Big Five (Foundations)</a></li>
+<li><a href="#org5b9a990">The Big Five (Theorems)</a></li>
+<li><a href="#org19aef77">Philosophical Footnote</a></li>
+<li><a href="#org7aef566">RCA₀: Computable Mathematics</a></li>
+<li><a href="#orgf891f73">Hilbert's Program Revisited</a></li>
+</ul>
+</div>
+</div>
+<p>
+These are notes for the first session of an informal seminar on
+reverse mathematics at Boston University.  They're pretty rough and
+hand-wavy, but I wanted to make sure those who attended have access.
+</p>
+<div id="outline-container-org2114157" class="outline-2">
+<h2 id="org2114157">Three Perspectives</h2>
+<div class="outline-text-2" id="text-org2114157">
+<ol class="org-ol">
+<li>as a general concept</li>
+
+<li>as a field of mathematics</li>
+
+<li>as an explanatory mechanism for foundations</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgf443faa" class="outline-2">
+<h2 id="orgf443faa">The Concept</h2>
+<div class="outline-text-2" id="text-orgf443faa">
+<p>
+"What are the appropriate axioms for mathematics?"  (Simpson)
+</p>
+
+<p>
+"When a theorem is proved from the right axioms, the axioms can be
+  proved from the theorem." (Friedman)
+</p>
+
+<p>
+The "reversal" of a theorem is the proof of the axioms from a theorem
+</p>
+</div>
+</div>
+<div id="outline-container-org83fc53e" class="outline-2">
+<h2 id="org83fc53e">The Reversal</h2>
+<div class="outline-text-2" id="text-org83fc53e">
+<p>
+If 𝒯 ⊬ 𝑃 and 𝒯 ⊬ ¬𝑃 and 𝒯 ⊬ 𝑄 and 𝒯 + 𝑃 ⊢ 𝑄, then the proof of 𝑄 must
+use 𝑃 nontrivially
+</p>
+
+<p>
+<b>Example:</b>
+</p>
+<ul class="org-ul">
+<li>ZF + Choice ⊢ Zorn's Lemma</li>
+<li>ZF + Zorn's Lemma ⊢ Choice</li>
+</ul>
+
+<p>
+We see this result in most undergraduate textbooks on abstract algebra
+</p>
+</div>
+</div>
+<div id="outline-container-org843a4c4" class="outline-2">
+<h2 id="org843a4c4">A Key Point (in my opinion)</h2>
+<div class="outline-text-2" id="text-org843a4c4">
+<p>
+More than anything, the reversal is <i>fun</i>
+</p>
+
+<p>
+Reverse mathematics is about doing math with your hands
+tied behind your back
+</p>
+
+<p>
+Hilbert calls the set theoretic world "paradise"
+</p>
+
+<p>
+Shore calls the reverse mathematical world a "playground"
+</p>
+</div>
+</div>
+<div id="outline-container-org23c838d" class="outline-2">
+<h2 id="org23c838d">Example (Slicing the Truth)</h2>
+<div class="outline-text-2" id="text-org23c838d">
+<p>
+<b>Weak König's Lemma:</b> Every infinite binary tree has an infinite path
+</p>
+
+<p>
+<b>Linndenbaum's Lemma:</b> Every consistent set of sentences has a
+complete consistent extension
+</p>
+
+<p>
+Weak König's lemma captures the <i>combinatorial core</i> of Linndenbaum's
+lemma
+</p>
+</div>
+</div>
+<div id="outline-container-org4f0bc22" class="outline-2">
+<h2 id="org4f0bc22">Independence Results</h2>
+<div class="outline-text-2" id="text-org4f0bc22">
+<p>
+There's natural connection to independence:
+</p>
+
+<blockquote>
+<p>
+If 𝒯 ⊬ 𝑃 and 𝒯 ⊬ ¬𝑃, then 𝒯 is a reasonable place to
+compare 𝑃 with other principles
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-orga3104ae" class="outline-2">
+<h2 id="orga3104ae">Key Question</h2>
+<div class="outline-text-2" id="text-orga3104ae">
+<p>
+<i>How do we choose 𝒯, our BASE system?</i>
+</p>
+</div>
+</div>
+<div id="outline-container-orgb9ceb01" class="outline-2">
+<h2 id="orgb9ceb01">A Bit of History</h2>
+<div class="outline-text-2" id="text-orgb9ceb01">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">1920s</td>
+<td class="org-left">Grundlagen Der Mathematik (Hilbert, Bernays)</td>
+</tr>
+
+<tr>
+<td class="org-right">1931</td>
+<td class="org-left">Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I (Gödel)</td>
+</tr>
+
+<tr>
+<td class="org-right">1934</td>
+<td class="org-left">Grundlagen Der Mathematik I (Hilbert, Bernays)</td>
+</tr>
+
+<tr>
+<td class="org-right">1936</td>
+<td class="org-left">Die Widerspruchsfreiheit der reinen Zahlentheorie</td>
+</tr>
+
+<tr>
+<td class="org-right">1952</td>
+<td class="org-left">Recursive Functions and Intuitionistic Mathematics (Kleene)</td>
+</tr>
+
+<tr>
+<td class="org-right">1975</td>
+<td class="org-left">Some Systems of Second Order Arithmetic and Their Use (Friedman)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org92ccc03" class="outline-2">
+<h2 id="org92ccc03">RM as a Mathematical Field</h2>
+<div class="outline-text-2" id="text-org92ccc03">
+<p>
+Reverse mathematics is a young fields with a long prehistory
+</p>
+
+<p>
+It develops at the confluence of arithmetization and computable
+counterexamples
+</p>
+
+<p>
+"Standard" RM is a field of computability/definability theory with
+flavors of descriptive set theory
+</p>
+</div>
+</div>
+<div id="outline-container-orgfd5f82b" class="outline-2">
+<h2 id="orgfd5f82b">What is our base system?</h2>
+<div class="outline-text-2" id="text-orgfd5f82b">
+<p>
+"Which set existence axioms are needed to prove the theorems of
+ordinary mathematics?" (Simpson)
+</p>
+
+<p>
+In "standard" RM, base systems are subsystems of second order
+arithmetic with weakened set existence axioms
+</p>
+
+<p>
+Particularly comprehension and induction
+</p>
+</div>
+</div>
+<div id="outline-container-org17778a1" class="outline-2">
+<h2 id="org17778a1">Second Order Arithmetic</h2>
+<div class="outline-text-2" id="text-org17778a1">
+<p>
+Two-sorted language which is "standard" arithmetic" + Set variables
+and ∈ predicate
+</p>
+
+<p>
+<b>PA (w.o. Ind):</b>
+</p>
+<ul class="org-ul">
+<li>1 + n ≠ 0</li>
+<li>1 + m = 1 + n → m = n</li>
+<li>0 + m = m</li>
+<li>(1 + m) + n = 1 + (m + n)</li>
+<li>0 × m = 0</li>
+<li>(1 + m) × n = n + (m × n)</li>
+<li>¬(m &lt; 0)</li>
+<li>m &lt; n + 1 ↔ (m &lt; n ∨ m = n)</li>
+</ul>
+
+<p>
+<b>2nd Ord. Ind:</b> ∀X[(0 ∈ X ∧ ∀n[n ∈ X → 1 + n ∈ X]) → ∀n(n ∈ X)]
+</p>
+
+<p>
+<b>BASE:</b> PA (w.o. Ind) + 2nd Ord. Ind
+</p>
+
+<p>
+<b>Π¹∞-Comprehension (scheme):</b> ∃X ∀n(n ∈ X ↔ ϕ(n))
+</p>
+
+<p>
+<i>Note:</i> X cannot appear free in ϕ
+</p>
+
+<p>
+<b>Full second order arithemtic (Z₂ or Π¹∞-CA):</b> BASE + Π¹∞-CA
+</p>
+</div>
+</div>
+<div id="outline-container-org5e82b00" class="outline-2">
+<h2 id="org5e82b00">Model Theory</h2>
+<div class="outline-text-2" id="text-org5e82b00">
+<p>
+<b>Definition.</b> A <b>model</b> of a subsystem of second order arithemtic is:
+</p>
+
+<blockquote>
+<p>
+(X, 𝒳 ⊂ 𝒫(X), 0ₓ, 1ₓ, +ₓ, ×ₓ, &lt;ₓ)
+</p>
+</blockquote>
+
+<p>
+Different subsystems allow for different "universes" in the second
+order part
+</p>
+</div>
+</div>
+<div id="outline-container-org33c9771" class="outline-2">
+<h2 id="org33c9771">The Big Five</h2>
+<div class="outline-text-2" id="text-org33c9771">
+<p>
+PRA (primitive recursive arithemtic)
+</p>
+
+<ol class="org-ol">
+<li>RCA₀ (recursive comprehension)</li>
+<li>WKL₀ ≡ RCA₀ + WKL (weak König's lemma)</li>
+<li>ACA₀ (arithmetic comprehension)</li>
+<li>ATR₀ (arithemtic transfinite recursion)</li>
+<li>Π¹₁-CA (Π¹₁ comprehension)</li>
+</ol>
+
+<p>
+Z₂ ≡ Π¹∞-CA (full second order arithmetic)
+</p>
+</div>
+</div>
+<div id="outline-container-orgfaf68da" class="outline-2">
+<h2 id="orgfaf68da">The Big Five (Foundations)</h2>
+<div class="outline-text-2" id="text-orgfaf68da">
+<p>
+PRA (finitism)
+</p>
+
+<ol class="org-ol">
+<li>RCA₀ (computable mathematics)</li>
+<li>WKL₀ ≡ RCA₀ + WKL (finitistic reductionism)</li>
+<li>ACA₀ (predicatism)</li>
+<li>ATR₀ (predicative reductionism)</li>
+<li>Π¹₁-CA (impredicativity)</li>
+</ol>
+
+<p>
+Z₂ ≡ Π¹∞-CA (full second order arithmetic)
+</p>
+</div>
+</div>
+<div id="outline-container-org5b9a990" class="outline-2">
+<h2 id="org5b9a990">The Big Five (Theorems)</h2>
+<div class="outline-text-2" id="text-org5b9a990">
+<ol class="org-ol">
+<li>RCA₀ (intermediate value theorem)</li>
+<li>WKL₀ ≡ RCA₀ + WKL (completeness, compactness)</li>
+<li>ACA₀ (Balzano/Weirstrass)</li>
+<li>ATR₀ (comparing well-orderings)</li>
+<li>Π¹₁-CA (Cantor/Benixson)</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org19aef77" class="outline-2">
+<h2 id="org19aef77">Philosophical Footnote</h2>
+<div class="outline-text-2" id="text-org19aef77">
+<p>
+The big five paint a convenient picture, it fits nicely
+into the history of foundational systems
+</p>
+
+<p>
+The picture has become more complicated over the years&#x2026;
+</p>
+
+<p>
+The big five satisfy certain "robustness" properties
+</p>
+
+<p>
+<b>Question:</b> Is the "big five" an interesting phenomenon? Why or why
+ not?
+</p>
+</div>
+</div>
+<div id="outline-container-org7aef566" class="outline-2">
+<h2 id="org7aef566">RCA₀: Computable Mathematics</h2>
+<div class="outline-text-2" id="text-org7aef566">
+<p>
+Gödel's theorems and independence theorems have lead to a
+study of computable mathematical structures
+</p>
+
+<p>
+<b>Definition.</b> An ω-model is a model whose first order part is the
+standard natural numbers
+</p>
+
+<p>
+<b>Theorem.</b> ℳ is a ω-model of RCA₀ if and only if its 2nd order part is
+a Turing Ideal (closed under reducibility and joins)
+</p>
+
+<p>
+The minimal ω-model for RCA₀ has the computable sets as its second
+order part
+</p>
+</div>
+</div>
+<div id="outline-container-orgf891f73" class="outline-2">
+<h2 id="orgf891f73">Hilbert's Program Revisited</h2>
+<div class="outline-text-2" id="text-orgf891f73">
+<p>
+Primitive recursive arithmetic (PRA) is quantifer free arithmetic +
+primitive recursive functions
+</p>
+
+<p>
+Tait argues that PRA capture "finitistic" arguments
+</p>
+
+<p>
+PA ⊢ Con(PRA) and Z₂ ⊢ Con(PA) but Gödel's theorems tell use the that
+we can't go the other way
+</p>
+
+<p>
+<b>Question:</b> How much can we reduce mathematics to PRA?
+</p>
+
+<p>
+<b>Theorem:</b> WKL₀ is Π₂ conservative over PRA:
+</p>
+
+<blockquote>
+<p>
+If WKL₀ ⊢ ∀x∃yϕ(x, y) then PRA ⊢ ϕ(x, f(x)) for PR function f
+</p>
+</blockquote>
+
+<p>
+We can reduce theorems of this form all the way down to finitistic
+reasoning
+</p>
+
+<p>
+<i>July 14, 2025</i>
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,8 +1,6 @@
 #+TITLE: Explosives and Distinguishers
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
 #+OPTIONS: html-style:nil H:1 num:nil
-#+HTML_LINK_HOME: index.html
-
 /*Abstract.* I examine the relationship between decidable equality,
 inequality, and distinguishability in the minimal fragment of [[https://docs.racket-lang.org/pie/index.html][Pie]]. I
 prove that the statement:/
