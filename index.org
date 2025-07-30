@@ -7,4 +7,5 @@ theory, computation, etc.).
 * 2025
 ** [[file:papacy.org][On the Papacy of Bertrand Russell]]
 ** [[file:distinguish.org][Explosives and Distinguishers]]
-** [[file:rm-1.org][What is reverse mathematics?]]
+** An Informal Seminar on Reverse Mathematics
+*** [[file:rm-1.org][What is reverse mathematics?]]
