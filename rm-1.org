@@ -3,6 +3,7 @@
 #+date: 2025-07-14
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
 #+OPTIONS: html-style:nil H:1 num:nil
+#+HTML_LINK_HOME: index.html
 These are the slides (typed up) for the first session of an informal
 seminar on reverse mathematics at Boston University.  They're pretty
 rough and hand-wavy, but I wanted to make sure those who attended have
