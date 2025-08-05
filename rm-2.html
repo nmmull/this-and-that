@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-08-05 Tue 19:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Doing Reverse Mathematics</title>
+<meta name="author" content="Nathan Mull" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="myStyle.css" />
+</head>
+<body>
+<div id="org-div-home-and-up"><a href="index.html">↩</a></div><div id="content" class="content">
+<h1 class="title">Doing Reverse Mathematics</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgc9bb3e2">Introduction</a></li>
+<li><a href="#org02edbd0">WKL ↔ LL (Informally)</a></li>
+<li><a href="#org519f2c2">Subsystems of Second-Order Arithmetic</a></li>
+<li><a href="#orgd38acd5">RCA₀: Computable Mathematics</a></li>
+</ul>
+</div>
+</div>
+<p>
+These are a typed-up version of the notes taken during the second and
+third session of <i>An Informal Seminar on Reverse Mathematics</i>.
+</p>
+
+<p>
+<b>The usual disclaimer:</b> they're pretty rough, but I want to make sure
+those who attended have access.
+</p>
+<div id="outline-container-orgc9bb3e2" class="outline-2">
+<h2 id="orgc9bb3e2">Introduction</h2>
+<div class="outline-text-2" id="text-orgc9bb3e2">
+<p>
+The goal of this part of the seminar is to "do" some reverse
+mathematics. This isn't so different from doing "normal" mathematics,
+except that you have one hand tied behind your back, so to speak:
+</p>
+<ul class="org-ul">
+<li>We can't just "do" induction or comprehension whenever we want.
+Subsystems of second order arithmetic have restricted induction and
+comprehension principles, and we need to make sure we respect these
+restrictions.</li>
+<li>We can't construct any mathematical structures we want.  We have to
+make sure all the structures we want to work with are <i>encodable</i>
+within second-order arithmetic.</li>
+</ul>
+<p>
+Doing reverse mathematics is also about meta-theory:
+</p>
+<ul class="org-ul">
+<li>reversals, i.e., proving axioms from theorems;</li>
+<li>separations, i.e., showing that an axiom doesn't follow from the
+others.</li>
+</ul>
+<p>
+This is a lot, and not really all that reasonable to cover in two
+hour-long sessions, but to get a <i>taste</i> of all of these components,
+I'd like to look at a particular reversal:<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+</p>
+<blockquote>
+<p>
+<i>Weak König's Lemma (WKL) is equivalent to Lindenbaum's Lemma (LL)
+with respect to computable mathematics (RCA₀).</i>
+</p>
+</blockquote>
+<p>
+We'll begin with an informal presentation of this reversal (i.e., in
+"normal" mathematics) and then look at what needs to be done to make
+this a formal theorem of the meta-theory of RCA₀, the subsystem of
+second-order arithmetic that captures doing mathematics in the world
+where all sets are computable.
+</p>
+</div>
+</div>
+<div id="outline-container-org02edbd0" class="outline-2">
+<h2 id="org02edbd0">WKL ↔ LL (Informally)</h2>
+<div class="outline-text-2" id="text-org02edbd0">
+<p>
+Weak König's Lemma (WKL) is a fairly intuitive set-theoretic result
+about infinite binary trees.
+</p>
+
+<p>
+<b>Lemma.</b> (WLK) Every infinite binary tree has an infinite path.
+</p>
+
+<p>
+<i>Proof sketch.</i> (in "normal" mathematics) Suppose we're given an
+infinite binary tree 𝑇.  Because 𝑇 is infinite, it must have either a
+left subtree 𝑇₀ or a right subtree 𝑇₁. If it has both, then one of
+these two subtrees is infinite.  Without loss of generality, let's say
+the left subtree 𝑇₀ is infinite. By induction, 𝑇₀ has an infinite path
+𝑃 (since it's an infinite binary tree). Therefore, therefore 0𝑃 (i.e.,
+the path 𝑃 with 0 concatenated to the front) is an infinite path in
+𝑇. ∎
+</p>
+
+<p>
+A key feature of this proof: <i>in order to extend the path we're
+building, we need to reason about whether or not a binary tree is
+infinite</i>. That is, if we're given choice between 𝒯₀ and 𝒯₁, we have
+to be able to choose one that's infinite.  We'll come back to
+this. First, in order to aid what follows, we'll make WKL a bit more
+formal.
+</p>
+
+<p>
+<b>Definition.</b> Let 𝑏₁, 𝑏₂ ∈ {0, 1}* be finite binary strings. We say 𝑏₁
+is an <b>initial segment</b> of 𝑏₂, written 𝑏₁ ≺ 𝑏₂, if there is a binary
+string 𝑐 such that 𝑏₁𝑐 = 𝑏₂.  For example, 01100 is an initial segment
+of 011000110.
+</p>
+
+<p>
+<b>Definition.</b> A <b>tree</b> is a set 𝑇 ⊂ {0, 1}* which is closed under
+initial segments, i.e., if 𝑏 ∈ 𝑇 and 𝑐 ≺ 𝑏 then 𝑐 ∈ 𝑇.
+</p>
+
+<p>
+<b>Definition.</b> A <b>path</b> is a function 𝑃 : ℕ → {0, 1} such that
+</p>
+
+<blockquote>
+<p>
+𝑃(0) 𝑃(1) &#x2026; 𝑃(𝑘 - 1) ∈ 𝑇
+</p>
+</blockquote>
+<p>
+for every 𝑘 ∈ ℕ.
+</p>
+
+
+<p>
+<i>Proof sketch.</i> (WKL, slightly more formal) let 𝑇 be an infinite
+binary tree.  Define 𝑇₀ = { 𝑏 : 0𝑏 ∈ 𝑇 } and 𝑇₁ = { 𝑏 : 1𝑏 ∈ 𝑇 }. Note
+that both 𝑇₀ and 𝑇₁ are binary trees. And since 𝑇 is infinite, 𝑇₀ or
+𝑇₁ is infinite.  Suppose without loss of generality that 𝑇₀ is
+infinite.  By induction, there is a path 𝑃′ in 𝑇₀. Define 𝑃(0) = 0
+and, for 𝑖 ∈ ℕ⁺, 𝑃(𝑖 + 1) = 𝑃′(𝑖). Then 𝑃 is a path in 𝑇. ∎
+</p>
+
+<p>
+Next up, Lindenbaum's lemma (LL).
+</p>
+
+<p>
+<b>Definition.</b> A <b>completion</b> of a theory 𝒯 is a theory 𝒯* ⊃ 𝒯 which is
+consistent:
+</p>
+
+<blockquote>
+<p>
+∄ϕ . 𝒯 ⊢ ϕ and 𝒯 ⊢ ¬ϕ
+</p>
+</blockquote>
+
+<p>
+complete:
+</p>
+
+<blockquote>
+<p>
+∀ ϕ . 𝒯 ⊢ ϕ or 𝒯 ⊢ ¬ϕ
+</p>
+</blockquote>
+
+<p>
+and closed under logical consequence.
+</p>
+
+<p>
+<b>Lemma.</b> (LL) Every consistent theory has a completion.
+</p>
+
+<p>
+<i>Proof sketch.</i> We might already see that this lemma has a
+similar flavor to WKL, so let's use WKL to prove it.
+</p>
+
+<p>
+Let 𝒯 be a consistent theory and let ϕ₀, ϕ₁,&#x2026; be an enumeration of
+the sentences in our language.
+</p>
+
+<p>
+Our approach is to build a binary tree in which each branch is a
+decision as to whether we should add a given sentence ϕ or its
+negation ¬ϕ to 𝒯.  An infinite path then represents a choice for all
+sentences, giving us a completion.
+</p>
+
+<p>
+Now let's fix some notation: we'll write ϕ[0] for ¬ϕ and ϕ[1]
+for ϕ. For a binary string 𝑏 ∈ {0, 1}ᵏ, we can consider the theory
+</p>
+
+<p>
+𝒯[𝑏] = 𝒯 + ϕ₀[𝑏(1)] + ϕ₁[𝑏(1)] + &#x2026; + ϕₖ[𝑏(𝑘)]
+</p>
+
+<p>
+Define the set 𝑇 = { 𝑏 : 𝒯[𝑏] is consistent }. This is an infinite
+binary tree (you may need to think about this for a second), so by WKL
+it has a path 𝑃. The set { ϕᵢ[𝑃(i)] : i ∈ ℕ } is a completion of 𝒯. ∎
+</p>
+
+<p>
+There's a fair amount of mathematical symbology in the above proof,
+but it basically says: <i>WKL gives us a way of choosing which sentences
+to add to our completion.</i> And in the same way that proving WKL
+requires us to determine which of two trees is infinite, proving LL
+requires us to determine which of two theories is consistent.
+</p>
+
+<p>
+Now, for the main event of this section, the reversal.
+</p>
+
+<p>
+<b>Theorem.</b> LL implies WLK.
+</p>
+
+<p>
+<i>Proof sketch.</i> Proving a reversal often comes down to a trick, or a
+"gadget." In this case, we need to define a theory whose completion
+defines a path through a given tree 𝑇.
+</p>
+
+<p>
+We work over a theory with nullary relations (i.e., constants) of the
+form 𝐿₀, 𝐿₁, &#x2026;  We think of 𝐿ᵢ as "go left at the 𝑖th level." That
+way, if we get a completion 𝒯* of a theory 𝒯, we can read off a path 𝑃
+as
+</p>
+
+<blockquote>
+<p>
+𝑃(i) = 𝟙[𝐿ᵢ ∈ 𝒯*]
+</p>
+</blockquote>
+
+<p>
+That is, a completion is forced to choose a path (because it can't
+prove both 𝐿ᵢ and ¬𝐿ᵢ, but it must prove one of them).
+</p>
+
+<p>
+It then comes down making sure that these choices "keep us in the
+tree." The trick: our theory describes where <i>not</i> to go to find an
+infinite path.
+</p>
+
+<p>
+Let 𝑏 ∈ {0, 1}ᵏ be a binary string <i>not</i> in 𝑇 and define the sentence:
+</p>
+
+<blockquote>
+<p>
+ψ[𝑏] = ¬(𝐿₀[𝑏(0)] ∧ 𝐿₁[𝑏(1)] ∧ &#x2026; ∧ 𝐿ₖ[𝑏(𝑘)])
+</p>
+</blockquote>
+
+<p>
+This sentences encodes the statement "don't go down a path which
+starts with 𝑏."  We then define the theory
+</p>
+
+<blockquote>
+<p>
+𝒯 = { ψ(𝑏) : 𝑏 ∉ 𝑇 }
+</p>
+</blockquote>
+
+
+<p>
+This is a consistent theory (you may need to think about this for a
+second) so by LL it has a completion 𝒯*. We can define the function
+</p>
+
+<blockquote>
+<p>
+𝑃(𝑖) = 𝟙[𝐿ᵢ ∈ 𝒯*]
+</p>
+</blockquote>
+
+<p>
+Consider the binary string 𝑃(0) &#x2026; 𝑃(𝑘). By definition of 𝑃,
+</p>
+
+<blockquote>
+<p>
+𝒯* ⊢ 𝐿₀[P(0)] ∧ &#x2026; ∧ 𝐿ₖ[P(𝑘)]
+</p>
+</blockquote>
+
+<p>
+If 𝑃(0) &#x2026; 𝑃(𝑘) ∉ 𝑇 then, by definition of 𝒯,
+</p>
+
+<blockquote>
+<p>
+𝒯* ⊢ ¬(𝐿₀[P(0)] ∧ &#x2026; ∧ 𝐿ₖ[P(𝑘)])
+</p>
+</blockquote>
+
+<p>
+contradicting consistency. Therefore, implies 𝑃(0) &#x2026; 𝑃(𝑘) ∈ 𝑇. Since
+𝑘 was arbitrary, it follows that 𝑃 is a path in 𝑇. ∎
+</p>
+
+<p>
+Part of the point here is that 𝑇 may have many paths, but we don't
+necessarily have a way of finding them.  The theory we defined
+says where <i>not</i> to go, but doesn't give us a way of extracting
+an actual path. Applying LL <i>forces</i> a choice.
+</p>
+
+<p>
+All this tells us that WKL and LL are, in some sense, logically
+equivalent. Denis Hirschfeldt says that WKL is the "combinatorial
+core" of LL; it acts like roadmap for what's "actually going on" in
+the proof.  And what amazing, what reverse mathematics tells us, is
+that this roadmap is shared by <i>many</i> theorems, about compactness in
+the topological sense, about completeness in the logical sense, about
+properties of continuous functions, etc., etc.
+</p>
+
+<p>
+But there's one aspect of what we've done so far that's <i>very</i>
+unsatisfying from a mathematical perspective: <i>WKL and LL are already
+theorems of "normal" mathematics.</i> Sure, we used WKL in a nontrivial
+way in the proof of LL, and vice versa, but formally defining "in a
+nontrivial way" is difficult.  Ideally, we could worked in a setting
+where WKL and LL are <i>not</i> theorems but their equivalence still holds.
+In other words, if 𝒮 ⊬ WLK and 𝒮 ⊬ LL but 𝒮 ⊢ WLK ↔ LL, then we're
+<i>guaranteed</i> to have used WKL and LL nontrivially in proving the
+equivalence.
+</p>
+
+<p>
+The system that's traditionally used which has this property is RCA₀,
+a subsystem of second-order arithmetic whose universe of sets is
+computable in a formal sense.  In order to define this subsystem, we
+need to introduce the machinery of second-order arithmetic.
+</p>
+</div>
+</div>
+<div id="outline-container-org519f2c2" class="outline-2">
+<h2 id="org519f2c2">Subsystems of Second-Order Arithmetic</h2>
+<div class="outline-text-2" id="text-org519f2c2">
+<p>
+In this section, we're gonna do something kinda boring, we're gonna
+give a specification of a logical language, like we do in intro logic
+courses.  I hope that this can be skimmed by those familiar with the
+concepts, and can be used as a more complete (albeit somewhat
+pedantic) presentation of second-order arithmetic than is typically
+given in (graduate) texts on reverse mathematics.
+</p>
+
+<p>
+Subsystems of second order arithmetic are defined over the language ℒ₂, which has
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">binary functions</td>
+<td class="org-left">+, *</td>
+</tr>
+
+<tr>
+<td class="org-left">binary relation</td>
+<td class="org-left">&lt;</td>
+</tr>
+
+<tr>
+<td class="org-left">constants</td>
+<td class="org-left">0, 1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+and is defined over a set of number variables 𝕍 (written as lowercase
+letters) and a set of set variables 𝕊 (written as uppercase letters).
+</p>
+
+
+<p>
+The set of terms 𝕋 is defined inductively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">0 ∈ 𝕋</td>
+<td class="org-left">(zero)</td>
+</tr>
+
+<tr>
+<td class="org-left">1 ∈ 𝕋</td>
+<td class="org-left">(one)</td>
+</tr>
+
+<tr>
+<td class="org-left">x ∈ 𝕍 implies x ∈ 𝕋</td>
+<td class="org-left">(number variables)</td>
+</tr>
+
+<tr>
+<td class="org-left">t₁, t₂ ∈ 𝕋 implies (t₁ + t₂) ∈ 𝕋</td>
+<td class="org-left">(addition)</td>
+</tr>
+
+<tr>
+<td class="org-left">t₁, t₂ ∈ 𝕋 implies (t₁ * t₂) ∈ 𝕋</td>
+<td class="org-left">(multiplication)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For example, ((x + 1) * 0) ∈ 𝕋.  The set of atomic formulas 𝔸 is
+defined inductively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">t₁, t₂ ∈ 𝕋 implies (t₁ = t₂) ∈ 𝔸</td>
+<td class="org-left">(equality)</td>
+</tr>
+
+<tr>
+<td class="org-left">t₁, t₂ ∈ 𝕋 implies (t₁ &lt; t₂) ∈ 𝔸</td>
+<td class="org-left">(less-than)</td>
+</tr>
+
+<tr>
+<td class="org-left">t ∈ 𝕋 and X ∈ 𝕊 implies (t ∈ X) ∈ 𝔸</td>
+<td class="org-left">(element-of)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For example, ((1 + y) ∈ X) and (a * 0 = a) are in 𝔸. The set of
+formulas 𝔽 is defined inductively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">ϕ ∈ 𝔸 implies ϕ ∈ 𝔽</td>
+<td class="org-left">(atomic)</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ₁, ϕ₂ ∈ 𝔽 implies (ϕ₁ ∧ ϕ₂) ∈ 𝔽</td>
+<td class="org-left">(conjunction)</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ₁, ϕ₂ ∈ 𝔽 implies (ϕ₁ ∨ ϕ₂) ∈ 𝔽</td>
+<td class="org-left">(disjunction)</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ ∈ 𝔽 implies (¬ϕ) ∈ 𝔽</td>
+<td class="org-left">(negation)</td>
+</tr>
+
+<tr>
+<td class="org-left">x ∈ 𝕍 and ϕ ∈ 𝔽 implies (∀x.ϕ) ∈ 𝔽</td>
+<td class="org-left">(universal number quant.)</td>
+</tr>
+
+<tr>
+<td class="org-left">x ∈ 𝕍 and ϕ ∈ 𝔽 implies (∃x.ϕ) ∈ 𝔽</td>
+<td class="org-left">(existential number quant.)</td>
+</tr>
+
+<tr>
+<td class="org-left">X ∈ 𝕊 and ϕ ∈ 𝔽 implies (∀X.ϕ) ∈ 𝔽</td>
+<td class="org-left">(universal set quant.)</td>
+</tr>
+
+<tr>
+<td class="org-left">X ∈ 𝕊 and ϕ ∈ 𝔽 implies (∃X.ϕ) ∈ 𝔽</td>
+<td class="org-left">(existential set quant.)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For example, ∃X.∀n(n ∈ X → ∃k.(k + k = n)) is a formula in 𝔽 (assuming the
+translation ϕ → ψ ≡ ¬ϕ ∨ ψ) which expresses that there is a set that
+contains only even numbers (though not necessarily all even numbers).
+</p>
+
+<p>
+Every subsystem of second-order arithmetic we'll look at has the same
+base set of axioms ℬ:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">∀n. 1 + n ≠ 0</td>
+<td class="org-left">(succ. is not zero)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.∀n.(1 + m = 1 + n → m = n)</td>
+<td class="org-left">(succ. is injective)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.0 + m = m</td>
+<td class="org-left">(def. addition)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.∀n.((1 + m) + n = 1 + (m + n))</td>
+<td class="org-left">(def. addition)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.0 × m = 0</td>
+<td class="org-left">(def. multiplication)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.∀n.((1 + m) × n = n + (m * n))</td>
+<td class="org-left">(def. multiplication)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.¬(m &lt; 0)</td>
+<td class="org-left">(zero is minimum)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀m.∀n.(m &lt; n + 1 ↔ (m &lt; n ∨ m = n))</td>
+<td class="org-left">(discreteness)</td>
+</tr>
+
+<tr>
+<td class="org-left">∀X.(0 ∈ X ∧ ∀n.(n ∈ X → 1 + n ∈ X) → ∀n(n ∈ X)</td>
+<td class="org-left">(2nd-Ord Induction)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The subsystems we'll consider differ in their induction and
+comprehension principles.  The restriction on these axiom schemas
+comes from how "complex" of formulas we're allowed to use.
+</p>
+
+<p>
+<b>Definition.</b> The ℱ-comprehension schema is the axiom schema
+consisting formulas of the form
+</p>
+
+<blockquote>
+<p>
+∃X.∀n(n ∈ X ↔ ϕ(n))
+</p>
+</blockquote>
+
+<p>
+where ϕ ∈ ℱ.
+</p>
+
+<p>
+<b>Definition.</b> The ℱ-induction schema is the axiom schema
+consisting of formulas of the form
+</p>
+
+<blockquote>
+<p>
+ϕ(0) ∧ ∀n.(ϕ(n) → ϕ(1 + n)) → ∀n.ϕ(n)
+</p>
+</blockquote>
+
+<p>
+where ϕ ∈ ℱ.
+</p>
+
+<p>
+The question then is: <i>what does it mean for a formula to be more or
+less complex?</i> Borrowing intuitions from computability theory, it
+comes down to <i>quantifier alternation</i>. The reason for this is
+deep<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> but for our
+purposes it's sufficient to recognize checking satisfiability of
+∃-statements and unsatisfiability of ∀-statements amounts to a <i>search
+problem</i>.  This, in essence, means that the satisfiability problem
+becomes harder as you alternate quantifiers, which gives us a good
+measure of formula complexity.
+</p>
+
+<p>
+One caveat: if we're using difficulty of the satisfiability problem as
+a measure of complexity, then quantifier-free is not the "least
+complex" class of formulas. This is because we easily solve the satisfiability
+problem for formulas with <i>bounded quantifiers</i>, i.e., when we know
+exactly how much searching we need to do.  We'll use the following
+notation for <i>bounded quantifiers</i>:
+</p>
+
+<blockquote>
+<p>
+∀(n &lt; k).ϕ ≡ ∀n.(n &lt; k → ϕ)
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+∃(n &lt; k).ϕ ≡ ∃n.(n &lt; k ∧ ϕ)
+</p>
+</blockquote>
+
+<p>
+We define Σ⁰₀ = Π⁰₀ inductively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">ϕ ∈ 𝔽 and ϕ is quantifier-free implies ϕ ∈ Σ⁰₀</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ ∈ Σ⁰₀ and x ∈ 𝕍 and k ∈ 𝕋 implies ∀(x &lt; k).ϕ ∈ Σ⁰₀</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ ∈ Σ⁰₀ and x ∈ 𝕍 and k ∈ 𝕋 implies ∃(x &lt; k).ϕ ∈ Σ⁰₀</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+In other words, we close under bounded-quantifiers. This class of
+formulas has the property that the satisfaction problem is computable
+(and with a fairly predictable running time).  For example
+</p>
+<blockquote>
+<p>
+∃k &lt; (1 + n).(k * m = n)
+</p>
+</blockquote>
+<p>
+is a formula in Σ⁰₀ which expresses that m divides n. Note that we
+don't have to search above n for the value of k such that k * m = n,
+since n ≤ n * m.
+</p>
+
+<p>
+We define the sets Σ⁰ᵢ₊₁ and Π⁰ᵢ₊₁ inductively:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">ϕ ∈ Π⁰ᵢ and x ∈ 𝕍  implies ∃x.ϕ ∈ Σ⁰ᵢ₊₁</td>
+</tr>
+
+<tr>
+<td class="org-left">ϕ ∈ Σ⁰ᵢ and x ∈ 𝕍  implies ∀x.ϕ ∈ Π⁰ᵢ₊₁</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For example, a formula in Π⁰₅ is of the form ∀x.∃y.∀z.∃w.∀q.ϕ where ϕ
+has only bounded quantifiers.
+</p>
+
+<p>
+All of this is in the interests of (this corollary of) Post's
+Theorem.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
+</p>
+
+<p>
+<b>Theorem.</b> A set 𝑋 is computably enumerable if and only if it is
+definable by a Σ⁰₁ formula and is computable if it is also definable
+by a Π⁰₁ formula.
+</p>
+
+<p>
+This theorem connects definability with computability. Sets which are
+definable by both a Σ⁰ᵢ and a Π⁰ᵢ formula are called Δ⁰ᵢ. These set
+classifications are part of what is called the <i>arithmetic hierarchy</i>,
+another term with searching if you're interested in the connections
+between computability and definability.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd38acd5" class="outline-2">
+<h2 id="orgd38acd5">RCA₀: Computable Mathematics</h2>
+<div class="outline-text-2" id="text-orgd38acd5">
+<p>
+The last thing we need to define RCA₀ is a special form of
+comprehension.
+</p>
+
+<p>
+<b>Definition.</b> The Δ⁰ᵢ-comprehension schema is the axiom schema
+consisting formulas of the form
+</p>
+
+<blockquote>
+<p>
+∀n.(ϕ(n) ↔ ψ(n)) → ∃X.∀n(n ∈ X ↔ ϕ(n))
+</p>
+</blockquote>
+
+<p>
+where ϕ ∈ Σ⁰ᵢ and ψ ∈ Π⁰ᵢ.
+</p>
+
+<p>
+You may be thinking: <i>why can't we define Δ⁰ᵢ-comprehension as a
+ℱ-comprehension schema like above?</i> This is because Δ⁰ᵢ is not a set
+of formulas, where as Σ⁰ᵢ and Π⁰ᵢ are.
+</p>
+
+
+<p>
+Finally, we have enough machinery to define RCA₀:
+</p>
+
+<blockquote>
+<p>
+RCA₀ ≡ ℬ + Σ⁰₁-induction + Δ⁰₁-comprehension
+</p>
+</blockquote>
+
+<p>
+In light of the discussion above, this means RCA₀ is the subsystem of
+second-order arithmetic in which we can do comprehension for
+<i>computable sets</i> and induction for singly-existential statements.
+</p>
+
+<p>
+<b>(This is where we got in session 2)</b>
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This is a nice reversal
+to look at after having studied Gödel's incompleteness theorems, given
+that the machinery for "doing" logic in second-order arithmetic is
+essentially the same as that needed to define Gödel sentences in
+first-order arithmetic.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If you're interested look up Post's Theorem.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Here I'm assuming some degree of familiarity with basic
+concepts of computability theory. I wanted to avoid making this
+assumption, but I don't think this is possible.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

@@ -10,3 +10,4 @@ theory, computation, etc.).
 ** [[file:distinguish.org][Explosives and Distinguishers]]
 ** An Informal Seminar on Reverse Mathematics
 *** [[file:rm-1.org][What is reverse mathematics?]]
+*** [[file:rm-2.org][Doing Reverse Mathematics]]

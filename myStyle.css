@@ -45,3 +45,7 @@ a:hover {
         display: none;
     }
 }
+
+.subtitle {
+    font-size: 0.8em;
+}
