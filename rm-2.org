@@ -47,11 +47,11 @@ about infinite binary trees.
 *Lemma.* (WLK) Every infinite binary tree has an infinite path.
 
 /Proof sketch./ (in "normal" mathematics) Suppose we're given an
-infinite binary tree 𝑇.  Because 𝑇 is infinite, it must have either a
-left subtree 𝑇₀ or a right subtree 𝑇₁. If it has both, then one of
-these two subtrees is infinite.  Without loss of generality, let's say
-the left subtree 𝑇₀ is infinite. By induction, 𝑇₀ has an infinite path
-𝑃 (since it's an infinite binary tree). Therefore, therefore 0𝑃 (i.e.,
+infinite binary tree 𝑇.  Because 𝑇 is infinite, it must have a left
+subtree 𝑇₀ or a right subtree 𝑇₁. If it has both, then one of these
+two subtrees is infinite.  Without loss of generality, let's say the
+left subtree 𝑇₀ is infinite. By induction, 𝑇₀ has an infinite path 𝑃
+(since 𝑇₀ is an infinite binary tree). Therefore, therefore 0𝑃 (i.e.,
 the path 𝑃 with 0 concatenated to the front) is an infinite path in
 𝑇. ∎
 
@@ -164,7 +164,7 @@ This sentences encodes the statement "don't go down a path which
 starts with 𝑏."  We then define the theory
 
 #+begin_quote
-𝒯 = { ψ(𝑏) : 𝑏 ∉ 𝑇 }
+𝒯 = { ψ[𝑏] : 𝑏 ∉ 𝑇 }
 #+end_quote
 
 
@@ -192,13 +192,13 @@ contradicting consistency. Therefore, implies 𝑃(0) ... 𝑃(𝑘) ∈ 𝑇. S
 
 Part of the point here is that 𝑇 may have many paths, but we don't
 necessarily have a way of finding them.  The theory we defined
-says where /not/ to go, but doesn't give us a way of extracting
+says where /not/ to go, but doesn't give us a way of choosing
 an actual path. Applying LL /forces/ a choice.
 
 All this tells us that WKL and LL are, in some sense, logically
 equivalent. Denis Hirschfeldt says that WKL is the "combinatorial
 core" of LL; it acts like roadmap for what's "actually going on" in
-the proof.  And what amazing, what reverse mathematics tells us, is
+the proof.  And what amazing─what reverse mathematics tells us─is
 that this roadmap is shared by /many/ theorems, about compactness in
 the topological sense, about completeness in the logical sense, about
 properties of continuous functions, etc., etc.
@@ -245,14 +245,15 @@ The set of terms 𝕋 is defined inductively:
 | t₁, t₂ ∈ 𝕋 implies (t₁ + t₂) ∈ 𝕋 | (addition)        |
 | t₁, t₂ ∈ 𝕋 implies (t₁ * t₂) ∈ 𝕋 | (multiplication)  |
 
-For example, ((x + 1) * 0) ∈ 𝕋.  The set of atomic formulas 𝔸 is
-defined inductively:
+For example, (((x + 1) * 0) ∈ 𝕋).[fn::We'll use the usual rules to
+eliminate parentheses and write "((x + 1) * 0) ∈ T" instead.]  The set of
+atomic formulas 𝔸 is defined inductively:
 
 | t₁, t₂ ∈ 𝕋 implies (t₁ = t₂) ∈ 𝔸     | (equality)   |
 | t₁, t₂ ∈ 𝕋 implies (t₁ < t₂) ∈ 𝔸     | (less-than)  |
 | t ∈ 𝕋 and X ∈ 𝕊 implies (t ∈ X) ∈ 𝔸 | (element-of) |
 
-For example, ((1 + y) ∈ X) and (a * 0 = a) are in 𝔸. The set of
+For example, (1 + y) ∈ X and (a * 0) = a are in 𝔸. The set of
 formulas 𝔽 is defined inductively:
 
 | ϕ ∈ 𝔸 implies ϕ ∈ 𝔽                 | (atomic)                    |
@@ -342,7 +343,7 @@ formulas has the property that the satisfaction problem is computable
 #+end_quote
 is a formula in Σ⁰₀ which expresses that m divides n. Note that we
 don't have to search above n for the value of k such that k * m = n,
-since n ≤ n * m.
+since n ≤ n * m when m > 0.
 
 We define the sets Σ⁰ᵢ₊₁ and Π⁰ᵢ₊₁ inductively:
 
@@ -364,7 +365,7 @@ by a Π⁰₁ formula.
 This theorem connects definability with computability. Sets which are
 definable by both a Σ⁰ᵢ and a Π⁰ᵢ formula are called Δ⁰ᵢ. These set
 classifications are part of what is called the /arithmetic hierarchy/,
-another term with searching if you're interested in the connections
+another term worth searching if you're interested in the connections
 between computability and definability.
 
 * RCA₀: Computable Mathematics
