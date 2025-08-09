@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-08-05 Tue 19:36 -->
+<!-- 2025-08-08 Fri 20:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Doing Reverse Mathematics</title>
@@ -18,10 +18,10 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc9bb3e2">Introduction</a></li>
-<li><a href="#org02edbd0">WKL ↔ LL (Informally)</a></li>
-<li><a href="#org519f2c2">Subsystems of Second-Order Arithmetic</a></li>
-<li><a href="#orgd38acd5">RCA₀: Computable Mathematics</a></li>
+<li><a href="#org21f90d3">Introduction</a></li>
+<li><a href="#orge1c6311">WKL ↔ LL (Informally)</a></li>
+<li><a href="#orgd2fae51">Subsystems of Second-Order Arithmetic</a></li>
+<li><a href="#org524c72d">RCA₀: Computable Mathematics</a></li>
 </ul>
 </div>
 </div>
@@ -34,9 +34,9 @@ third session of <i>An Informal Seminar on Reverse Mathematics</i>.
 <b>The usual disclaimer:</b> they're pretty rough, but I want to make sure
 those who attended have access.
 </p>
-<div id="outline-container-orgc9bb3e2" class="outline-2">
-<h2 id="orgc9bb3e2">Introduction</h2>
-<div class="outline-text-2" id="text-orgc9bb3e2">
+<div id="outline-container-org21f90d3" class="outline-2">
+<h2 id="org21f90d3">Introduction</h2>
+<div class="outline-text-2" id="text-org21f90d3">
 <p>
 The goal of this part of the seminar is to "do" some reverse
 mathematics. This isn't so different from doing "normal" mathematics,
@@ -79,9 +79,9 @@ where all sets are computable.
 </p>
 </div>
 </div>
-<div id="outline-container-org02edbd0" class="outline-2">
-<h2 id="org02edbd0">WKL ↔ LL (Informally)</h2>
-<div class="outline-text-2" id="text-org02edbd0">
+<div id="outline-container-orge1c6311" class="outline-2">
+<h2 id="orge1c6311">WKL ↔ LL (Informally)</h2>
+<div class="outline-text-2" id="text-orge1c6311">
 <p>
 Weak König's Lemma (WKL) is a fairly intuitive set-theoretic result
 about infinite binary trees.
@@ -93,11 +93,11 @@ about infinite binary trees.
 
 <p>
 <i>Proof sketch.</i> (in "normal" mathematics) Suppose we're given an
-infinite binary tree 𝑇.  Because 𝑇 is infinite, it must have either a
-left subtree 𝑇₀ or a right subtree 𝑇₁. If it has both, then one of
-these two subtrees is infinite.  Without loss of generality, let's say
-the left subtree 𝑇₀ is infinite. By induction, 𝑇₀ has an infinite path
-𝑃 (since it's an infinite binary tree). Therefore, therefore 0𝑃 (i.e.,
+infinite binary tree 𝑇.  Because 𝑇 is infinite, it must have a left
+subtree 𝑇₀ or a right subtree 𝑇₁. If it has both, then one of these
+two subtrees is infinite.  Without loss of generality, let's say the
+left subtree 𝑇₀ is infinite. By induction, 𝑇₀ has an infinite path 𝑃
+(since 𝑇₀ is an infinite binary tree). Therefore, therefore 0𝑃 (i.e.,
 the path 𝑃 with 0 concatenated to the front) is an infinite path in
 𝑇. ∎
 </p>
@@ -274,7 +274,7 @@ starts with 𝑏."  We then define the theory
 
 <blockquote>
 <p>
-𝒯 = { ψ(𝑏) : 𝑏 ∉ 𝑇 }
+𝒯 = { ψ[𝑏] : 𝑏 ∉ 𝑇 }
 </p>
 </blockquote>
 
@@ -318,7 +318,7 @@ contradicting consistency. Therefore, implies 𝑃(0) &#x2026; 𝑃(𝑘) ∈ �
 <p>
 Part of the point here is that 𝑇 may have many paths, but we don't
 necessarily have a way of finding them.  The theory we defined
-says where <i>not</i> to go, but doesn't give us a way of extracting
+says where <i>not</i> to go, but doesn't give us a way of choosing
 an actual path. Applying LL <i>forces</i> a choice.
 </p>
 
@@ -326,7 +326,7 @@ an actual path. Applying LL <i>forces</i> a choice.
 All this tells us that WKL and LL are, in some sense, logically
 equivalent. Denis Hirschfeldt says that WKL is the "combinatorial
 core" of LL; it acts like roadmap for what's "actually going on" in
-the proof.  And what amazing, what reverse mathematics tells us, is
+the proof.  And what amazing─what reverse mathematics tells us─is
 that this roadmap is shared by <i>many</i> theorems, about compactness in
 the topological sense, about completeness in the logical sense, about
 properties of continuous functions, etc., etc.
@@ -352,9 +352,9 @@ need to introduce the machinery of second-order arithmetic.
 </p>
 </div>
 </div>
-<div id="outline-container-org519f2c2" class="outline-2">
-<h2 id="org519f2c2">Subsystems of Second-Order Arithmetic</h2>
-<div class="outline-text-2" id="text-org519f2c2">
+<div id="outline-container-orgd2fae51" class="outline-2">
+<h2 id="orgd2fae51">Subsystems of Second-Order Arithmetic</h2>
+<div class="outline-text-2" id="text-orgd2fae51">
 <p>
 In this section, we're gonna do something kinda boring, we're gonna
 give a specification of a logical language, like we do in intro logic
@@ -441,8 +441,8 @@ The set of terms 𝕋 is defined inductively:
 </table>
 
 <p>
-For example, ((x + 1) * 0) ∈ 𝕋.  The set of atomic formulas 𝔸 is
-defined inductively:
+For example, (((x + 1) * 0) ∈ 𝕋).<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>  The set of
+atomic formulas 𝔸 is defined inductively:
 </p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -472,7 +472,7 @@ defined inductively:
 </table>
 
 <p>
-For example, ((1 + y) ∈ X) and (a * 0 = a) are in 𝔸. The set of
+For example, (1 + y) ∈ X and (a * 0) = a are in 𝔸. The set of
 formulas 𝔽 is defined inductively:
 </p>
 
@@ -634,7 +634,7 @@ where ϕ ∈ ℱ.
 The question then is: <i>what does it mean for a formula to be more or
 less complex?</i> Borrowing intuitions from computability theory, it
 comes down to <i>quantifier alternation</i>. The reason for this is
-deep<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> but for our
+deep<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> but for our
 purposes it's sufficient to recognize checking satisfiability of
 ∃-statements and unsatisfiability of ∀-statements amounts to a <i>search
 problem</i>.  This, in essence, means that the satisfiability problem
@@ -701,7 +701,7 @@ formulas has the property that the satisfaction problem is computable
 <p>
 is a formula in Σ⁰₀ which expresses that m divides n. Note that we
 don't have to search above n for the value of k such that k * m = n,
-since n ≤ n * m.
+since n ≤ n * m when m &gt; 0.
 </p>
 
 <p>
@@ -732,7 +732,7 @@ has only bounded quantifiers.
 
 <p>
 All of this is in the interests of (this corollary of) Post's
-Theorem.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
+Theorem.<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>
 </p>
 
 <p>
@@ -745,14 +745,14 @@ by a Π⁰₁ formula.
 This theorem connects definability with computability. Sets which are
 definable by both a Σ⁰ᵢ and a Π⁰ᵢ formula are called Δ⁰ᵢ. These set
 classifications are part of what is called the <i>arithmetic hierarchy</i>,
-another term with searching if you're interested in the connections
+another term worth searching if you're interested in the connections
 between computability and definability.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd38acd5" class="outline-2">
-<h2 id="orgd38acd5">RCA₀: Computable Mathematics</h2>
-<div class="outline-text-2" id="text-orgd38acd5">
+<div id="outline-container-org524c72d" class="outline-2">
+<h2 id="org524c72d">RCA₀: Computable Mathematics</h2>
+<div class="outline-text-2" id="text-org524c72d">
 <p>
 The last thing we need to define RCA₀ is a special form of
 comprehension.
@@ -811,9 +811,12 @@ that the machinery for "doing" logic in second-order arithmetic is
 essentially the same as that needed to define Gödel sentences in
 first-order arithmetic.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If you're interested look up Post's Theorem.</p></div></div>
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">We'll use the usual rules to
+eliminate parentheses and write "((x + 1) * 0) ∈ T" instead.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Here I'm assuming some degree of familiarity with basic
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If you're interested look up Post's Theorem.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Here I'm assuming some degree of familiarity with basic
 concepts of computability theory. I wanted to avoid making this
 assumption, but I don't think this is possible.</p></div></div>
 
