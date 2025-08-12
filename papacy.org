@@ -650,7 +650,7 @@ rules of the game we're playing, this is /necessary/. We can
 demonstrate this formally by deriving the principle of explosion from
 the above lemma without using ~ind-Absurd~.  This works by applying
 our lemma to [1], using our false assumption to prove that 0 ∈ [1],
-and then exploding the resulting prove of 1 = 0.
+and then exploding the resulting proof of 1 = 0.
 
 #+begin_src lisp
   (claim singleton-has-unique-element-List-implies-ind-absurd
