@@ -957,7 +957,7 @@ equal or distinguishable.
 It shouldn't be too surprising that having an equality decider is
 equivalent to admitting complete distinguishability in vanilla Pie
 (because of ◇→≠).  What's surprising (at least to me) is that this
-also holds in minimal Pie, i.e., /the ability to use construct an
+also holds in minimal Pie, i.e., /the ability to construct an
 equality decider from complete distinguishability does not depend on
 the principle explosion./ In this sense, complete distinguishability
 is the "correct" lowering of decidable equality into minimal Pie if we
