@@ -575,7 +575,7 @@ depends crucially on the principle of explosion.
        (same sole))))
 #+end_src
 
-Another theme is made visible here: in nearly cases, the ~Trivial~
+Another theme is made visible here: in nearly all cases, the ~Trivial~
 type is sufficient to find a counterexample in minimal Pie of a given
 principle.  And usually this comes down to an artificial proof of a
 negation using our ~Absurd~ assumption (see above).
