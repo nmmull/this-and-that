@@ -1,0 +1,148 @@
+#+TITLE: An OCaml Problem
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
+#+OPTIONS: html-style:nil H:1 num:nil
+#+HTML_LINK_HOME: index.html
+I recently gave the following problem on an exam in a course called
+*Concepts of Programming Languages (CAS CS 320)*.
+
+#+begin_quote
+  /Determine an OCaml expression with the following type (in the sense
+  that, if you typed your expression into Utop, it would report that
+  is has the following type.)/
+
+  #+begin_src ocaml
+    ((('a -> 'b) -> 'b) -> 'c) -> 'a -> 'c
+  #+end_src
+#+end_quote
+
+CS320 is a course about programming language, but we use OCaml both as
+a language for implementing PLs and as a testbed for thinking about
+formalizing syntax, typing, and semantics.  My expectation was that
+this problem would be approachable.  I was categorically wrong
+about this.[fn::In the off chance that a student who took the course
+when I asked this problem came back for more an read this piece, I
+formally apologize for putting you through this.]
+
+Could I have forseen how wrong I would be?  Yes.  I was told by
+several smart folks that this is a difficult problem.  But I didn't
+listen.  And I still have trouble seeing why this is a difficult
+problem.  Here's what I thought students would do (try it yourself
+first!).
+
+* The Approach I Expected
+
+Okay, hmm, so it looks like I need to produce something of type:
+
+#+begin_src ocaml
+  thing -> thing -> thing
+#+end_src
+
+so a natural starting point is something like:
+
+#+begin_src ocaml
+  fun x -> fun y -> ???
+#+end_src
+and if I want to be clear about the types, I'll write something like:
+#+begin_src ocaml
+  fun (x : (('a -> 'b) -> 'b) -> 'c) -> fun (y : 'a) -> (??? : 'c)
+#+end_src
+Great. Now, the body of this function is a ~'c~. And it stands to
+reason that it will depend on ~x~ and ~y~; at least, it will
+/definitely/ depend on ~x~ because ~y~ is just an ~'a~ and I don't yet
+see why that's useful.
+
+*The first maybe non-obvious move:* Hmm, okay, so I see that
+the /only/ way I can get a ~'c~ is if I apply ~x~ to something. I
+don't really have that many moves here. ~y~ is an ~'a~, that's not
+useful. And ~x~ is a function, so I might as well try to apply
+it. And, lo and behold, the output type of ~x~ matches the type that I
+want.  This leads me to:
+
+#+begin_src ocaml
+  fun (x : (('a -> 'b) -> 'b) -> 'c) -> fun (y : 'a) -> (x ??? : 'c)
+#+end_src
+
+Awesome, okay, so what's left is to figure out how to make a function
+of type ~('a -> 'b) -> 'b~, and yeah, that seems kind of impossible,
+but let's just see what happens, for all intents and purposes it's
+going to be a ~thing -> thing~.[fn::Okay, maybe students don't think
+like this.  Maybe this is the second non-obvious move, but I'm not
+sure.] This lead me to (and let me drop some annotations):
+
+#+begin_src ocaml
+  fun x -> fun (y : 'a) -> x (fun (z : 'a -> 'b) -> (??? : 'b))
+#+end_src
+
+Okay, I'm a bit stuck. Now I need a ~'b~, and all I have is this ~z~
+which is a /function/, an ~'a -> 'b~, how is that useful?
+
+*Non-obvious move number two/three depending on how you count:* Wait,
+hold on, I need a ~'b~ and I have a ~'a -> 'b~ but I /also/ have an
+~'a~, the ~y~ from earlier. Eureka! I can feed my ~'a~ to my ~'a ->
+'b~:
+
+#+begin_src ocaml
+  fun x -> fun y -> x (fun z -> z y)
+#+end_src
+
+Or maybe with (very) slightly more suggestive variable names:
+
+#+begin_src ocaml
+  fun f -> fun x -> f (fun g -> g x)
+#+end_src
+
+Great, time to move on and forget this ever happened.
+
+* The Approach Students Took
+
+(cue crickets)
+
+It suffices to say, I have been throughly proven incorrect.  This is
+apparently /not/ an approachable problem, and the above reasoning is
+not obvious. If I were to really force myself into their shoes, I
+might say something like:
+
+#+begin_quote
+/I see why the function has two arguments, but then we're just
+expected to *materialize* the body of the function, choose one of the
+infinite possibilities of ways that we can use those two arguments?
+And what if the trick is that I'm supposed to introduce some
+intermediate object?[fn::And I guess, yeah, that's somewhat true.]
+That means the answer lies in some *unimaginable* space of possible
+programs, and I've only been programming in OCaml for semester, I
+haven't seen that many problems? Who do you think you are, asking
+question that hard?/
+#+end_quote
+
+The point of what follows is not necessarily to be a defensive a** and
+prove anyone wrong. I now concede that this is a difficult problem.
+But, for the fun of it, what I'd like to do next is prove that its
+wrong to say that there are infinite possible answers, in fact there's
+just *one*.
+
+* Interlude: Assert False
+
+One thing I did /not/ think about (but should have) is that the
+problem does not require the program to have a value.  This means the
+following is "technically" a solution:
+#+begin_src ocaml
+  (assert false: ((('a -> 'b) -> 'b) -> 'c) -> 'a -> 'c)
+#+end_src
+Except, if we're already dealing with technicalities, this /isn't/ a
+valid solution; if Utop reports an exception (e.g., an
+~Assert_failure~) then it doesn't report the type of the given
+expression.  Close, but no cigar.
+
+But this isn't a terrible roadblock. In fact, since OCaml doesn't
+evaluate under binders, we can get an expression with a value:
+
+#+begin_src ocaml
+  fun (_ : ((('a -> 'b) -> 'b) -> 'c)) -> (assert false : 'a -> 'c)
+#+end_src
+
+Shoot, okay, so no ~assert false~ allowed.[fn::We did in fact, have
+one student who did this.]  The OCamlers among I'm sure can find other
+ways to break this problem[fn::Maybe a topic for another day.] but for
+now we move on to my main point.
+
+* Parametricity

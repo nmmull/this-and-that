@@ -1,0 +1,16 @@
+#+TITLE: A Learning Model for Fraud
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="myStyle.css" />
+#+OPTIONS: html-style:nil H:1 num:nil
+#+HTML_LINK_HOME: index.html
+
+𝒳 : set of transations
+
+ℱ : (𝒳 ∪ {●} × {0, 1} × {0, 1})* ⟶ 𝒳 ∪ {●}
+
+ℒ : (𝒳 ∪ {●} × {0, 1} × {0, 1})* × 𝒳 ⟶ {0, 1}
+
+𝒟 : distribution over 𝒳 ∪ {●}
+
+Given a sequence of samples 𝑋[1]...𝑋[k] taken from 𝒟, a *transcript* is defined as follows.
+
+ℱ (X[i], f[i], l[i]) =

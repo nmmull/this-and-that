@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-12-28 Sun 14:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>An OCaml Problem</title>
+<meta name="author" content="Nathan" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="myStyle.css" />
+</head>
+<body>
+<div id="org-div-home-and-up"><a href="index.html">↩</a></div><div id="content" class="content">
+<h1 class="title">An OCaml Problem</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org3937ab1">The Approach I Expected</a></li>
+<li><a href="#orgfee9d17">The Approach Students Took</a></li>
+<li><a href="#orgfa88f0c">Interlude: Assert False</a></li>
+<li><a href="#org85f7bc3">Parametricity</a></li>
+</ul>
+</div>
+</div>
+<p>
+I recently gave the following problem on an exam in a course called
+<b>Concepts of Programming Languages (CAS CS 320)</b>.
+</p>
+
+<blockquote>
+<p>
+<i>Determine an OCaml expression with the following type (in the sense
+that, if you typed your expression into Utop, it would report that
+is has the following type.)</i>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml">((('a -&gt; 'b) -&gt; 'b) -&gt; 'c) -&gt; 'a -&gt; 'c
+</pre>
+</div>
+</blockquote>
+
+<p>
+CS320 is a course about programming language, but we use OCaml both as
+a language for implementing PLs and as a testbed for thinking about
+formalizing syntax, typing, and semantics.  My expectation was that
+this problem would be approachable.  I was categorically wrong
+about this.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+</p>
+
+<p>
+Could I have forseen how wrong I would be?  Yes.  I was told by
+several smart folks that this is a difficult problem.  But I didn't
+listen.  And I still have trouble seeing why this is a difficult
+problem.  Here's what I thought students would do (try it yourself
+first!).
+</p>
+<div id="outline-container-org3937ab1" class="outline-2">
+<h2 id="org3937ab1">The Approach I Expected</h2>
+<div class="outline-text-2" id="text-org3937ab1">
+<p>
+Okay, hmm, so it looks like I need to produce something of type:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml">thing -&gt; thing -&gt; thing
+</pre>
+</div>
+
+<p>
+so a natural starting point is something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">x</span> -&gt; <span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">y</span> -&gt; <span style="color: #a52a2a;">???</span>
+</pre>
+</div>
+<p>
+and if I want to be clear about the types, I'll write something like:
+</p>
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">x</span> :<span style="color: #228b22;"> (('a -&gt; 'b) -&gt; 'b) -&gt; 'c</span>) -&gt; <span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">y</span> :<span style="color: #228b22;"> 'a</span>) -&gt; (<span style="color: #a52a2a;">???</span> : <span style="color: #228b22;">'c</span>)
+</pre>
+</div>
+<p>
+Great. Now, the body of this function is a <code>'c</code>. And it stands to
+reason that it will depend on <code>x</code> and <code>y</code>; at least, it will
+<i>definitely</i> depend on <code>x</code> because <code>y</code> is just an <code>'a</code> and I don't yet
+see why that's useful.
+</p>
+
+<p>
+<b>The first maybe non-obvious move:</b> Hmm, okay, so I see that
+the <i>only</i> way I can get a <code>'c</code> is if I apply <code>x</code> to something. I
+don't really have that many moves here. <code>y</code> is an <code>'a</code>, that's not
+useful. And <code>x</code> is a function, so I might as well try to apply
+it. And, lo and behold, the output type of <code>x</code> matches the type that I
+want.  This leads me to:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">x</span> :<span style="color: #228b22;"> (('a -&gt; 'b) -&gt; 'b) -&gt; 'c</span>) -&gt; <span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">y</span> :<span style="color: #228b22;"> 'a</span>) -&gt; (x <span style="color: #a52a2a;">???</span> : <span style="color: #228b22;">'c</span>)
+</pre>
+</div>
+
+<p>
+Awesome, okay, so what's left is to figure out how to make a function
+of type <code>('a -&gt; 'b) -&gt; 'b</code>, and yeah, that seems kind of impossible,
+but let's just see what happens, for all intents and purposes it's
+going to be a <code>thing -&gt; thing</code>.<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> This lead me to (and let me drop some annotations):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">x</span> -&gt; <span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">y</span> :<span style="color: #228b22;"> 'a</span>) -&gt; x (<span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">z</span> :<span style="color: #228b22;"> 'a -&gt; 'b</span>) -&gt; (<span style="color: #a52a2a;">???</span> : <span style="color: #228b22;">'b</span>))
+</pre>
+</div>
+
+<p>
+Okay, I'm a bit stuck. Now I need a <code>'b</code>, and all I have is this <code>z</code>
+which is a <i>function</i>, an <code>'a -&gt; 'b</code>, how is that useful?
+</p>
+
+<p>
+<b>Non-obvious move number two/three depending on how you count:</b> Wait,
+hold on, I need a <code>'b</code> and I have a <code>'a -&gt; 'b</code> but I <i>also</i> have an
+<code>'a</code>, the <code>y</code> from earlier. Eureka! I can feed my <code>'a</code> to my <code>'a -&gt;
+'b</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">x</span> -&gt; <span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">y</span> -&gt; x (<span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">z</span> -&gt; z y)
+</pre>
+</div>
+
+<p>
+Or maybe with (very) slightly more suggestive variable names:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">f</span> -&gt; <span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">x</span> -&gt; f (<span style="color: #a020f0;">fun</span> <span style="color: #a0522d;">g</span> -&gt; g x)
+</pre>
+</div>
+
+<p>
+Great, time to move on and forget this ever happened.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfee9d17" class="outline-2">
+<h2 id="orgfee9d17">The Approach Students Took</h2>
+<div class="outline-text-2" id="text-orgfee9d17">
+<p>
+(cue crickets)
+</p>
+
+<p>
+It suffices to say, I have been throughly proven incorrect.  This is
+apparently <i>not</i> an approachable problem, and the above reasoning is
+not obvious. If I were to really force myself into their shoes, I
+might say something like:
+</p>
+
+<blockquote>
+<p>
+<i>I see why the function has two arguments, but then we're just
+expected to <b>materialize</b> the body of the function, choose one of the
+infinite possibilities of ways that we can use those two arguments?
+And what if the trick is that I'm supposed to introduce some
+intermediate object?<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
+That means the answer lies in some <b>unimaginable</b> space of possible
+programs, and I've only been programming in OCaml for semester, I
+haven't seen that many problems? Who do you think you are, asking
+question that hard?</i>
+</p>
+</blockquote>
+
+<p>
+The point of what follows is not necessarily to be a defensive a** and
+prove anyone wrong. I now concede that this is a difficult problem.
+But, for the fun of it, what I'd like to do next is prove that its
+wrong to say that there are infinite possible answers, in fact there's
+just <b>one</b>.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfa88f0c" class="outline-2">
+<h2 id="orgfa88f0c">Interlude: Assert False</h2>
+<div class="outline-text-2" id="text-orgfa88f0c">
+<p>
+One thing I did <i>not</i> think about (but should have) is that the
+problem does not require the program to have a value.  This means the
+following is "technically" a solution:
+</p>
+<div class="org-src-container">
+<pre class="src src-ocaml">(<span style="color: #a020f0;">assert</span> <span style="color: #008b8b;">false</span>: <span style="color: #228b22;">((('a -&gt; 'b) -&gt; 'b) -&gt; 'c) -&gt; 'a -&gt; 'c</span>)
+</pre>
+</div>
+<p>
+Except, if we're already dealing with technicalities, this <i>isn't</i> a
+valid solution; if Utop reports an exception (e.g., an
+<code>Assert_failure</code>) then it doesn't report the type of the given
+expression.  Close, but no cigar.
+</p>
+
+<p>
+But this isn't a terrible roadblock. In fact, since OCaml doesn't
+evaluate under binders, we can get an expression with a value:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ocaml"><span style="color: #a020f0;">fun</span> (<span style="color: #a0522d;">_</span> :<span style="color: #228b22;"> ((('a -&gt; 'b) -&gt; 'b) -&gt; 'c)</span>) -&gt; (<span style="color: #a020f0;">assert</span> <span style="color: #008b8b;">false</span> : <span style="color: #228b22;">'a -&gt; 'c</span>)
+</pre>
+</div>
+
+<p>
+Shoot, okay, so no <code>assert false</code> allowed.<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>  The OCamlers among I'm sure can find other
+ways to break this problem<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> but for
+now we move on to my main point.
+</p>
+</div>
+</div>
+<div id="outline-container-org85f7bc3" class="outline-2">
+<h2 id="org85f7bc3">Parametricity</h2>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">In the off chance that a student who took the course
+when I asked this problem came back for more an read this piece, I
+formally apologize for putting you through this.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Okay, maybe students don't think
+like this.  Maybe this is the second non-obvious move, but I'm not
+sure.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">And I guess, yeah, that's somewhat true.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">We did in fact, have
+one student who did this.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Maybe a topic for another day.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
