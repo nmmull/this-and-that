@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-12-19 Fri 15:16 -->
+<!-- 2026-02-28 Sat 15:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Explosives and Distinguishers</title>
@@ -12,19 +12,19 @@
 <link rel="stylesheet" type="text/css" href="myStyle.css" />
 </head>
 <body>
-<div id="org-div-home-and-up"><a href="index.html">↩</a></div><div id="content" class="content">
+<div id="org-div-home-and-up">[<a href="index.html">back</a>]</div><div id="content" class="content">
 <h1 class="title">Explosives and Distinguishers</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge7712b8">Distinguishers</a></li>
-<li><a href="#org7ad1fbe">Inequality</a></li>
-<li><a href="#org3ea3749">Decidability</a></li>
-<li><a href="#org34dee08">Deciders</a></li>
-<li><a href="#orga903b94">Distinguishability</a></li>
-<li><a href="#org041f436">Strong Deciders</a></li>
-<li><a href="#orgcafe297">Conclusions</a></li>
+<li><a href="#org8e6375f">Distinguishers</a></li>
+<li><a href="#org5a99f04">Inequality</a></li>
+<li><a href="#orgad1b466">Decidability</a></li>
+<li><a href="#orge415b44">Deciders</a></li>
+<li><a href="#orgb8ad345">Distinguishability</a></li>
+<li><a href="#org5c0b6fa">Strong Deciders</a></li>
+<li><a href="#org524e32f">Conclusions</a></li>
 </ul>
 </div>
 </div>
@@ -128,9 +128,9 @@ that anything follows from it in minimal Pie.<sup><a id="fnr.2" class="footref" 
 Thinking about this problem for too long leads to a natural enough
 question: <i>which equalities are explosive?</i>
 </p>
-<div id="outline-container-orge7712b8" class="outline-2">
-<h2 id="orge7712b8">Distinguishers</h2>
-<div class="outline-text-2" id="text-orge7712b8">
+<div id="outline-container-org8e6375f" class="outline-2">
+<h2 id="org8e6375f">Distinguishers</h2>
+<div class="outline-text-2" id="text-org8e6375f">
 <p>
 Its straightforward to generalize the above proof to any fixed pair of
 natural numbers.
@@ -309,9 +309,9 @@ In other words, <i>any equality of distinguishable terms is explosive.</i>
 </p>
 </div>
 </div>
-<div id="outline-container-org7ad1fbe" class="outline-2">
-<h2 id="org7ad1fbe">Inequality</h2>
-<div class="outline-text-2" id="text-org7ad1fbe">
+<div id="outline-container-org5a99f04" class="outline-2">
+<h2 id="org5a99f04">Inequality</h2>
+<div class="outline-text-2" id="text-org5a99f04">
 <p>
 Distinguishability is a strictly stronger relation than inequality
 minimal Pie.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
@@ -373,9 +373,9 @@ theory, has its origins in computability theory.
 </p>
 </div>
 </div>
-<div id="outline-container-org3ea3749" class="outline-2">
-<h2 id="org3ea3749">Decidability</h2>
-<div class="outline-text-2" id="text-org3ea3749">
+<div id="outline-container-orgad1b466" class="outline-2">
+<h2 id="orgad1b466">Decidability</h2>
+<div class="outline-text-2" id="text-orgad1b466">
 <p>
 A type 𝐴 admits <b>decidable equality</b> if for any two terms 𝑎₁ and 𝑎₂ of
 type 𝐴, we have 𝑎₁ = 𝑎₂ or 𝑎₁ ≠ 𝑎₂.  This is a restriction of the <a href="https://en.wikipedia.org/wiki/Law_of_excluded_middle">law
@@ -401,7 +401,7 @@ function 𝑓 such that 𝑓(𝑥) = 1 if and only if 𝑃(𝑥) holds.
 </blockquote>
 
 <p>
-on the one hand is a prove that 𝐴 admits decidable equality.  On the
+on the one hand is a proof that 𝐴 admits decidable equality.  On the
 other hand, it's a <i>computable function</i> where 𝑓(𝑎, 𝑏) evaluates to a
 left term if 𝑎 = 𝑏 and a right term otherwise.  Since we can determine
 leftness versus rightness programmatically (using <a href="https://docs.racket-lang.org/pie/index.html#%28def._%28%28lib._pie%2Fmain..rkt%29._ind-.Either%29%29"><code>ind-Either</code></a>), the
@@ -713,9 +713,9 @@ vanilla Pie.
 </div>
 </div>
 </div>
-<div id="outline-container-org34dee08" class="outline-2">
-<h2 id="org34dee08">Deciders</h2>
-<div class="outline-text-2" id="text-org34dee08">
+<div id="outline-container-orge415b44" class="outline-2">
+<h2 id="orge415b44">Deciders</h2>
+<div class="outline-text-2" id="text-orge415b44">
 <p>
 But what about minimal Pie?  We've demonstrated that we can't prove
 ≠→◇ from decidable equality, but is there a <i>stronger</i> notion of
@@ -1055,9 +1055,9 @@ Our quest continues.
 </p>
 </div>
 </div>
-<div id="outline-container-orga903b94" class="outline-2">
-<h2 id="orga903b94">Distinguishability</h2>
-<div class="outline-text-2" id="text-orga903b94">
+<div id="outline-container-orgb8ad345" class="outline-2">
+<h2 id="orgb8ad345">Distinguishability</h2>
+<div class="outline-text-2" id="text-orgb8ad345">
 <p>
 But first, a side quest. Let's consider another definition which
 implies decidable equality, and seems promising.  We'll say that a
@@ -1234,9 +1234,9 @@ I couldn't help but take a detour.
 </p>
 </div>
 </div>
-<div id="outline-container-org041f436" class="outline-2">
-<h2 id="org041f436">Strong Deciders</h2>
-<div class="outline-text-2" id="text-org041f436">
+<div id="outline-container-org5c0b6fa" class="outline-2">
+<h2 id="org5c0b6fa">Strong Deciders</h2>
+<div class="outline-text-2" id="text-org5c0b6fa">
 <p>
 There are likely far more intermediate definitions of decidable
 equality we could look at, but let's get to the punchline.  Looking
@@ -1435,9 +1435,9 @@ excluded middle and without explosion).
 </p>
 </div>
 </div>
-<div id="outline-container-orgcafe297" class="outline-2">
-<h2 id="orgcafe297">Conclusions</h2>
-<div class="outline-text-2" id="text-orgcafe297">
+<div id="outline-container-org524e32f" class="outline-2">
+<h2 id="org524e32f">Conclusions</h2>
+<div class="outline-text-2" id="text-org524e32f">
 <p>
 Despite the circuitous nature of this story, the ending is simple: in
 minimal Pie, if a type 𝐴 has a strong equality decider, then it has
